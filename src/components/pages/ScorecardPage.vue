@@ -1,16 +1,32 @@
-<template>
+77<template>
 	<div class="container">
-		<Scorecard class="scorecard" v-for="n in 10" v-bind:key="n"></Scorecard>
+		<Scorecard 
+		class="scorecard"
+		v-for="scorecard in scorecards"
+		v-bind:key="scorecard._id"
+		v-bind:scorecard="scorecard">
+		</Scorecard>
 	</div>
 </template>
 
 <script>
 import Scorecard from '../ui/Scorecard';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
 	name: 'ScorecardPage',
 	components: {
 		Scorecard
+	},
+	methods: {
+		...mapActions(['getScorecards']),
+		test() {
+			console.log('This is a test');
+		}
+	},
+	computed: mapGetters(['scorecards']),
+	created() {
+		this.getScorecards();
 	}
 }
 </script>

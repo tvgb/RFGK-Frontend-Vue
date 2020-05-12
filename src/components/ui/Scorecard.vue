@@ -1,44 +1,88 @@
 <template>
-    <b-table :mobile-cards="false" :data="data" :columns="columns"></b-table>
-</template>
+    <div class="container">
+        <div class="header">
+            {{ this.course.name }}
+        </div>
+        <b-table 
+            :data="rounds" 
+            :default-sort="'sum'"
+            :mobile-cards="false">
 
+            <template slot-scope="props">
+                <b-table-column field="firstName" label="Fornavn">
+                    {{ props.row.firstName }}
+                </b-table-column>
+
+                <b-table-column field="lastName" label="Etternavn">
+                    {{ props.row.lastName }}
+                </b-table-column>
+
+                <b-table-column field="numberOfThrows" label="Antall kast" centered>
+                    {{ props.row.numberOfThrows }}
+                </b-table-column>
+
+                <b-table-column field="sum" label="SUM" centered sortable>
+                {{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
+                </b-table-column>
+
+            </template>
+
+        </b-table>
+    </div>
+  
+</template>
+ 
 <script>
 export default {
     name: 'Scorecard',
+    props: [
+        'scorecard'
+    ],
     data() {
         return {
-            data: [
-                { 'id': 1, 'first_name': 'Jesse', 'last_name': 'Simmons', 'date': '2016-10-15 13:43:27', 'gender': 'Male' },
-                { 'id': 2, 'first_name': 'John', 'last_name': 'Jacobs', 'date': '2016-12-15 06:00:53', 'gender': 'Male' },
-                { 'id': 3, 'first_name': 'Tina', 'last_name': 'Gilbert', 'date': '2016-04-26 06:26:28', 'gender': 'Female' },
-                { 'id': 4, 'first_name': 'Clarence', 'last_name': 'Flores', 'date': '2016-04-10 10:28:46', 'gender': 'Male' },
-                { 'id': 5, 'first_name': 'Anne', 'last_name': 'Lee', 'date': '2016-12-06 14:38:38', 'gender': 'Female' }
-            ],
             columns: [
                 {
-                    field: 'id',
-                    label: 'ID',
-                    width: '40',
-                    numeric: true
+                    field: 'firstName',
+                    label: 'Fornavn',
                 },
                 {
-                    field: 'first_name',
-                    label: 'First Name',
+                    field: 'lastName',
+                    label: 'Etternavn',
                 },
                 {
-                    field: 'last_name',
-                    label: 'Last Name',
-                },
-                {
-                    field: 'date',
-                    label: 'Date',
+                    field: 'numberOfThrows',
+                    label: 'antall_kast',
                     centered: true
                 },
                 {
-                    field: 'gender',
-                    label: 'Gender',
+                    field: 'sum',
+                    label: 'sum',
+                    centered: true
                 }
-            ]
+            ],
+            
+            defaultSort: 'numberOfThrows'
+        }
+    },
+    computed: {
+        rounds: function() {
+           
+            let rounds = [];
+            for (const round of this.scorecard.rounds) {
+                let newRound = {
+                    firstName: round.player.firstName,
+                    lastName: round.player.lastName,
+                    numberOfThrows: round.numberOfThrows,
+                    sum: (round.numberOfThrows - round.course.par)
+                }
+
+                rounds.push(newRound);
+            }
+
+            return rounds;
+        },
+        course: function() {
+            return this.scorecard.rounds[0].course;
         }
     }
 }
