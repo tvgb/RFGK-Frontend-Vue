@@ -1,5 +1,36 @@
-77<template>
+<template>
 	<div class="container">
+		<div>
+			<h1 class="header">
+				Siste runder
+			</h1>
+		</div>
+		
+		<div class="selector-container">
+
+			<b-field class="select-field" label="Bane" horizontal>
+				<b-select
+					expanded
+					placeholder="Alle">
+					<option value="Alle">Alle</option>
+					<option value="Parken Frisbeegolfbane (2019)">Parken Frisbeegolfbane (2019)</option>
+					<option value="Parken Frisbeegolfbane">Parken Frisbeegolfbane</option>
+					<option value="Bratten Frisbeegolfbane">Bratten Frisbeegolfbane</option>
+				</b-select>
+			</b-field>
+			
+			<b-field class="select-field" label="År" horizontal>
+				<b-select
+					expanded
+					placeholder="2020">
+					<option value="Alle">Alle</option>
+					<option value="2020">2020</option>
+					<option value="2019">2019</option>
+					<option value="2018">2018</option>
+					<option value="2017">2017</option>
+				</b-select>
+			</b-field>
+		</div>
 		<Scorecard 
 		class="scorecard"
 		v-for="scorecard in scorecards"
@@ -38,7 +69,26 @@ export default {
 		align-items: center;
 	}
 
+	.selector-container {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.scorecard {
-		margin: 20px;
+		margin: 0 20px 20px 20px;
+	}
+
+	@media only screen and (min-width: 600px) {
+		.container, .selector-container {
+			width: 600px;
+		}
+
+		.selector-container {
+			flex-direction: row;
+		}
+
+		.select-field {
+			width: 300px;
+		}
 	}
 </style>

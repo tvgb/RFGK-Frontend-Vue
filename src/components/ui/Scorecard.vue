@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
-        <div class="header">
-            {{ this.course.name }}
+	<div class="container">
+        <div class="scorecard-header">
+            {{ this.scorecard.course.name }}
         </div>
         <b-table 
             :data="rounds" 
@@ -73,22 +73,24 @@ export default {
                     firstName: round.player.firstName,
                     lastName: round.player.lastName,
                     numberOfThrows: round.numberOfThrows,
-                    sum: (round.numberOfThrows - round.course.par)
+                    sum: (round.numberOfThrows - this.scorecard.course.par)
                 }
 
                 rounds.push(newRound);
             }
 
             return rounds;
-        },
-        course: function() {
-            return this.scorecard.rounds[0].course;
         }
     }
 }
 </script>
 
 <style scoped>
+
+    .b-table {
+        width: 100%;
+    }
+
     .table {
         background-color: transparent;
     }
