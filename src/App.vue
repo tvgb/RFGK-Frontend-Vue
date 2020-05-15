@@ -1,25 +1,31 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <h3>
-      Velkommen til rønvikfrisbeegolf.no! En ny fasade er under utvikling. Venligst vent :D 
-    </h3>
-  </div>
+	<div id="main-container">
+		<AppHeader />
+		<router-view />
+	</div>
 </template>
 
 <script>
+import AppHeader from './components/layout/AppHeader';
+
 export default {
-  name: 'App'
+	name: 'App',
+	components: {
+		AppHeader
+	}
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+	#main-container {
+		min-height: 100vh;
+		width: auto;
+		font-family: 'Poppins', sans-serif;
+		background-color: #F9F9F9;
+	}
+
+	.header {
+		font-size: 1.5em;
+		margin-bottom: 30px;
+	}
 </style>
