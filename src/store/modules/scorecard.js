@@ -1,24 +1,22 @@
-import axios from 'axios';
-import reposirort from '../repository';
+import repository from '../repository';
 
 const state = {
-  scorecards: []
+	scorecards: []
 };
 
 const getters = {
-  scorecards: state => state.scorecards
+	scorecards: state => state.scorecards
 };
 
 const actions = {
-  async getScorecards({ commit }) {
-    const response = await axios.get(
-      'http://localhost:3000/api/scorecard'
-    );
+	async getScorecards({ commit }, {course, year}) {
 
-    console.log(response.data);
+		const response = await repository.get(`/scorecard?course=${course}&year=${year}`);
 
-    commit('setScorecards', response.data);
-  },
+		console.log(response.data);
+
+		commit('setScorecards', response.data);
+	},
 //   async addTodo({ commit }, title) {
 //     const response = await axios.post(
 //       'https://jsonplaceholder.typicode.com/todos',
@@ -57,7 +55,7 @@ const actions = {
 };
 
 const mutations = {
-  setScorecards: (state, scorecards) => (state.scorecards = scorecards),
+	setScorecards: (state, scorecards) => (state.scorecards = scorecards),
 //   newTodo: (state, todo) => state.todos.unshift(todo),
 //   removeTodo: (state, id) =>
 //     (state.todos = state.todos.filter(todo => todo.id !== id)),
@@ -70,8 +68,8 @@ const mutations = {
 };
 
 export default {
-  state,
-  getters,
-  actions,
-  mutations
+	state,
+	getters,
+	actions,
+	mutations
 };

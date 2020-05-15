@@ -26,6 +26,9 @@ module.exports = {
     
         "vue/no-unused-components": "warn",
       
-        "vue/html-indent": ["error", "tab"]
+        "vue/html-indent": ["error", "tab"],
+        "vue/singleline-html-element-content-newline": "off",
+        "vue/max-attributes-per-line": "off",
+        "vue/html-closing-bracket-newline": "off"
     }
   };

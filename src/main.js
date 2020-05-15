@@ -5,12 +5,13 @@ import router from './router'
 import store from './store';
 import 'buefy/dist/buefy.css'
 
-Vue.use(Buefy)
+Vue.use(Buefy);
+Vue.use(require('vue-moment'));
 
 Vue.config.productionTip = false
 
 new Vue({
-  store,
-  router,
-  render: h => h(App),
+	store,
+	router,
+	render: h => h(App),
 }).$mount('#app')
