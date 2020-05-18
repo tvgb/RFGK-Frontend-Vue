@@ -9,7 +9,7 @@
 		</template>
 
 		<template slot="end">
-			<b-navbar-item tag="div">
+			<b-navbar-item tag="router-link" :to="{ path: '/login' }">
 				<div class="buttons">
 					<a class="button is-light">
 						Logg inn

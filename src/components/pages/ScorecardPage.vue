@@ -1,10 +1,8 @@
 <template>
 	<div class="container">
-		<div>
-			<h1 class="header">
-				Siste runder
-			</h1>
-		</div>
+		<h1 class="header">
+			Siste runder
+		</h1>
 
 		<div class="options-container">
 			<button

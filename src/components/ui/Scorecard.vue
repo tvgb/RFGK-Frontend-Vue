@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="scorecard-header">
 			<div>{{ scorecard.course.name }}</div>
-			<div>{{ scorecard.course.holes }} Hull  |  Par {{ scorecard.course.par }}</div>
+			<div>{{ scorecard.datetime | moment("DD-MM-YYYY")}}</div>
 		</div>
 		<b-table :data="rounds" 
 			:default-sort="'sum'"
@@ -29,7 +29,7 @@
 		</b-table>
 		<!-- <div class="scorecard-footer">
 			<div>{{ scorecard.createdBy.firstName }} {{ scorecard.createdBy.lastName }}</div>
-			<div>{{ scorecard.datetime | moment("dddd, MMMM Do YYYY")}}</div>
+			<div>{{ scorecard.course.holes }} Hull  |  Par {{ scorecard.course.par }}</div>
 		</div> -->
 	</div>
 </template>
@@ -96,42 +96,6 @@ export default {
 		getColor(score) {
 			const goodScoore = 5;
 			const okScore = 10;
-			// const redMax = 30;
-			// const greenMax = 0;
-			// const alpha = 0.85;
-
-			// if (score <= goodScoore) {
-			// 	// lightness green range 90 - 70
-			// 	const step = 20 / Math.abs(greenMax - goodScoore);
-			// 	let lightness = 70 + score * step;
-			// 	if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
-
-			// 	return `hsla(120, 70%, ${lightness}%, ${alpha})`;
-
-			// } else if (score <= okScore) {
-			// 	//
-			// 	const step = 20 / (okScore - goodScoore);
-			// 	let lightness = 90 - score + step;
-			// 	if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
-
-			// 	return `hsla(60, 100%, ${lightness}%, ${alpha})`;
-
-			// } else {
-			// 	// lightness red range 90 - 70
-			// 	const step = 20 / (redMax - goodScoore);
-			// 	let lightness = 90 - score * step;
-			// 	if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
-
-			// 	return `hsla(0, 100%, ${lightness}%, ${alpha})`;
-			// }
-
-			// if (score <= goodScoore) {
-			// 	return '#d5f5d5';
-			// } else if (score <= okScore) {
-			// 	return '#fefec8';
-			// } else {
-			// 	return '#fec8c8';
-			// }
 
 			if (score <= goodScoore) {
 				return 'is-success';
