@@ -4,11 +4,9 @@
 			<div>{{ scorecard.course.name }}</div>
 			<div>{{ scorecard.course.holes }} Hull  |  Par {{ scorecard.course.par }}</div>
 		</div>
-		<b-table 
-			:data="rounds" 
+		<b-table :data="rounds" 
 			:default-sort="'sum'"
 			:mobile-cards="false">
-
 			<template slot-scope="props">
 				<b-table-column v-if="!isMobile()" :style="{'background-color': getColor(props.row.sum)}" field="firstName" label="Fornavn">
 					{{ props.row.firstName }}
@@ -22,10 +20,11 @@
 					{{ props.row.numberOfThrows }}
 				</b-table-column>
 
-				<b-table-column :style="{'background-color': getColor(props.row.sum)}" field="sum" label="SUM" centered sortable>
-					{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
+				<b-table-column :style="{'background-color': getColor(props.row.sum)}" field="sum" label="SUM" centered>
+					<span class="tag" :class="getColor(props.row.sum)">
+						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
+					</span>
 				</b-table-column>
-
 			</template>
 		</b-table>
 		<!-- <div class="scorecard-footer">
@@ -83,6 +82,8 @@ export default {
 				rounds.push(newRound);
 			}
 
+			rounds.sort((a, b) => a.sum - b.sum);
+
 			return rounds;
 		}
 	},
@@ -95,33 +96,49 @@ export default {
 		getColor(score) {
 			const goodScoore = 5;
 			const okScore = 10;
-			const redMax = 30;
-			const greenMax = 0;
-			const alpha = 0.85;
+			// const redMax = 30;
+			// const greenMax = 0;
+			// const alpha = 0.85;
+
+			// if (score <= goodScoore) {
+			// 	// lightness green range 90 - 70
+			// 	const step = 20 / Math.abs(greenMax - goodScoore);
+			// 	let lightness = 70 + score * step;
+			// 	if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
+
+			// 	return `hsla(120, 70%, ${lightness}%, ${alpha})`;
+
+			// } else if (score <= okScore) {
+			// 	//
+			// 	const step = 20 / (okScore - goodScoore);
+			// 	let lightness = 90 - score + step;
+			// 	if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
+
+			// 	return `hsla(60, 100%, ${lightness}%, ${alpha})`;
+
+			// } else {
+			// 	// lightness red range 90 - 70
+			// 	const step = 20 / (redMax - goodScoore);
+			// 	let lightness = 90 - score * step;
+			// 	if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
+
+			// 	return `hsla(0, 100%, ${lightness}%, ${alpha})`;
+			// }
+
+			// if (score <= goodScoore) {
+			// 	return '#d5f5d5';
+			// } else if (score <= okScore) {
+			// 	return '#fefec8';
+			// } else {
+			// 	return '#fec8c8';
+			// }
 
 			if (score <= goodScoore) {
-				// lightness green range 90 - 70
-				const step = 20 / Math.abs(greenMax - goodScoore);
-				let lightness = 70 + score * step;
-				if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
-
-				return `hsla(120, 70%, ${lightness}%, ${alpha})`;
-
+				return 'is-success';
 			} else if (score <= okScore) {
-				//
-				const step = 20 / (okScore - goodScoore);
-				let lightness = 90 - score + step;
-				if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
-
-				return `hsla(60, 100%, ${lightness}%, ${alpha})`;
-
+				return 'is-warning';
 			} else {
-				// lightness red range 90 - 70
-				const step = 20 / (redMax - goodScoore);
-				let lightness = 90 - score * step;
-				if (lightness < 70) {lightness = 70; } else if (lightness > 90) {lightness = 90; }
-
-				return `hsla(0, 100%, ${lightness}%, ${alpha})`;
+				return 'is-danger';
 			}
 		}
 	}
@@ -148,17 +165,14 @@ export default {
 		padding: 1px 10px;
 		background-color: #F9F9F9;
 	}
+	
 
 	.b-table {
 		width: 100%;
 	}
 
-	.table {
-		background-color: transparent;
+	.tag {
+		width: 35px;
 	}
 
-	td, th {
-		border-width: 0 !important;
-		border: 0 !important;
-	}
 </style>
