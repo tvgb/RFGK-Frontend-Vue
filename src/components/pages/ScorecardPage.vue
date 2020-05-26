@@ -1,22 +1,20 @@
 <template>
 	<div class="container">
-		<div>
-			<h1 class="header">
-				Siste runder
-			</h1>
-		</div>
+		<h1 class="header">
+			Siste runder
+		</h1>
 
 		<div class="options-container">
-			<button
+			<b-button
 				class="button"
 				@click="toggleFilter()">
 				Filter
-			</button>
-			<button
-				disabled
+			</b-button>
+			<b-button
+				tag="router-link" to="/submitScorecard" type="is-link"
 				class="button is-primary">
 				Add scorecard
-			</button>
+			</b-button>
 		</div>
 		<div class="filter-container" :class="{ hide: hideFilter }">
 			<div class="select-container">
@@ -66,13 +64,19 @@ export default {
 		}
 	},
 
-	computed: mapGetters(['scorecards', 'courses']),
+	computed: {
+		...mapGetters([
+			'scorecards', 
+			'courses'
+		])
+	},
 
 	created() {
 		this.getScorecards({
 			course: this.selectedCourse,
 			year: this.selectedYear
 		});
+
 		this.getCourses();
 	},
 
