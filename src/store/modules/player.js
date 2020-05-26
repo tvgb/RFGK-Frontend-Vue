@@ -1,32 +1,67 @@
 import repository from '../repository';
+import router from '../../router';
+import cookies from 'vue-cookies';
 
 const state = {
-    token
+	isAuthenticated: false,
+	players: []
 };
 
 const getters = {
-    token: state = state.token
+	isAuthenticated: (state) => {
+		return state.isAuthenticated;
+	},
+	players: state => state.players
 };
 
+const endpoint = 'player';
+
 const actions = {
+	async getPlayers({ commit }) {
+		const response = await repository.get(`/${endpoint}`, 
+			{
+				withCredentials: true
+			}
+		);
+		commit('setPlayers', response.data);
+	},
+
 	async login({ commit }, {email, password}) {
 
-		const response = await repository.get(
-            `/player/login`,
+		await repository.post(`/${endpoint}/login`,
             {
-                email: email,
-                password: password
-            }
-        );
+				email: email,
+				password: password
+			},
+			{
+				withCredentials: true
+			}
+		).then(function eat() {
+			state.isAuthenticated = true;
+			router.push(router.currentRoute.query.redirect || '/');
+			return true;
 
-		console.log(response.data);
+		}).catch((error) => {
+			
+			if (error.data.errorcode === 1) {
+				state.isAuthenticated = false;
+				return false;
+			}
+		});
+	},
 
-		commit('setToken', response.data);
+	logout({ commit }) {
+		cookies.remove('token');
+		state.isAuthenticated = false;
+		if (router.currentRoute.path !== '/') {
+			router.push('/');
+		}
 	}
 };
 
 const mutations = {
-	setToken: (state, token) => (state.token = token),
+	setPlayers: (state, players) => (state.players = players),
+	setIsAuthenticated: (state, value) => (state.isAuthenticated = value)
 };
 
 export default {

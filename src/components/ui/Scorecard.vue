@@ -8,19 +8,19 @@
 			:default-sort="'sum'"
 			:mobile-cards="false">
 			<template slot-scope="props">
-				<b-table-column v-if="!isMobile()" :style="{'background-color': getColor(props.row.sum)}" field="firstName" label="Fornavn">
+				<b-table-column width="150" v-if="!isMobile()" field="firstName" label="Fornavn">
 					{{ props.row.firstName }}
 				</b-table-column>
 
-				<b-table-column :style="{'background-color': getColor(props.row.sum)}" field="lastName" label="Etternavn">
+				<b-table-column width="150" field="lastName" label="Etternavn">
 					{{ props.row.lastName }}
 				</b-table-column>
 
-				<b-table-column :style="{'background-color': getColor(props.row.sum)}" field="numberOfThrows" label="Kast" centered>
+				<b-table-column width="50" field="numberOfThrows" label="Kast" centered>
 					{{ props.row.numberOfThrows }}
 				</b-table-column>
 
-				<b-table-column :style="{'background-color': getColor(props.row.sum)}" field="sum" label="SUM" centered>
+				<b-table-column width="50" field="sum" label="SUM" centered>
 					<span class="tag" :class="getColor(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 					</span>

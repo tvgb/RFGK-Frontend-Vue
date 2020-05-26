@@ -5,20 +5,24 @@
 		</h1>
 
 		<b-field label="Email">
-			<b-input expanded="true" type="email" value=""></b-input>
+			<b-input v-model="email" type="email"></b-input>
 		</b-field>
 
 		<b-field label="Passord">
-			<b-input value="" type="password"></b-input>
+			<b-input v-model="password" type="password"></b-input>
 		</b-field>
 
 		<b-field horizontal><!-- Label left empty for spacing -->
 			<p class="control">
-				<button class="button is-primary">
+				<button v-on:keyup.enter="startLogin()" @click="startLogin()" class="button is-primary">
 					Logg inn
 				</button>
 			</p>
 		</b-field>
+
+		<div v-if="!loginSuccessful">
+			Wrong email or password.
+		</div>
 	</div>
 </template>
 
@@ -28,10 +32,29 @@ import { mapActions } from 'vuex';
 export default {
 	name: 'LoginPage',
 	
+	data() {
+		return {
+			email: '',
+			password: '',
+			loginSuccessful: true
+		}
+	},
+	
 	methods: {
 		...mapActions([
-			'login'
-		])
+			'login',
+			'getPlayers'
+		]),
+
+		async startLogin() {
+			this.loginSuccessful = await this.login({
+				email: this.email,
+				password: this.password
+			});
+
+			this.email = '';
+			this.password = '';
+		}
 	}
 }
 </script>

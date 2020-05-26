@@ -11,7 +11,6 @@ const getters = {
 const actions = {
 	async getCourses({ commit }) {
 		const response = await repository.get('/course');
-		console.log(response.data);
 		commit('setCourses', response.data);
 	}
 };

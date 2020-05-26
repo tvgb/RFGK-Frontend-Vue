@@ -7,6 +7,8 @@
 
 <script>
 import AppHeader from './components/layout/AppHeader';
+import axios from 'axios';
+import router from './router';
 
 export default {
 	name: 'App',
@@ -27,6 +29,7 @@ export default {
 	.header {
 		font-size: 1.5em;
 		margin-bottom: 30px;
+		text-align: center;
 	}
 
 	/* th {
@@ -40,6 +43,10 @@ export default {
 
 	.table tbody tr:last-child td, .table tbody tr:last-child th {
 		border-bottom-width: 0 !important;
+	}
+
+	.navbar, .navbar-menu.is-active {
+		background-color: transparent !important;
 	}
 		
 </style>

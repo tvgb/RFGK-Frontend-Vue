@@ -9,9 +9,16 @@
 		</template>
 
 		<template slot="end">
-			<b-navbar-item tag="router-link" :to="{ path: '/login' }">
+			<b-navbar-item v-if="isAuthenticated" @click="startLogout()">
 				<div class="buttons">
-					<a class="button is-light">
+					<a class="button">
+						Logg ut
+					</a>
+				</div>
+			</b-navbar-item>
+			<b-navbar-item v-if="!isAuthenticated" tag="router-link" :to="{ path: '/login' }">
+				<div class="buttons">
+					<a class="button">
 						Logg inn
 					</a>
 				</div>
@@ -21,16 +28,33 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-	name: 'AppHeader'
+	name: 'AppHeader',
+
+	computed: {
+		...mapGetters([
+			'isAuthenticated'
+		])
+	},
+
+	methods: {
+		...mapActions([
+			'logout'
+		]),
+
+		startLogout() {
+			this.logout();
+		}
+	}
 }
 
 </script>
 
 <style scoped>
-.navbar {
-	background-color: transparent;
+.navbar, .navbar-menu.is-active, .navbar-end, .navbar-item, .buttons, .button {
+	background-color: transparent !important;
 }
 
 #logo {

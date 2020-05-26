@@ -1,4 +1,6 @@
 import repository from '../repository';
+import router from '../../router';
+
 
 const state = {
 	scorecards: []
@@ -8,15 +10,33 @@ const getters = {
 	scorecards: state => state.scorecards
 };
 
+
+const endpoint = 'scorecard';
 const actions = {
 	async getScorecards({ commit }, {course, year}) {
-
-		const response = await repository.get(`/scorecard?course=${course}&year=${year}`);
-
-		console.log(response.data);
-
+		const response = await repository.get(`/${endpoint}?course=${course}&year=${year}`);
 		commit('setScorecards', response.data);
 	},
+
+	async postScorecard({commit}, {course, datetime, rounds}) {
+		await repository.post(`/${endpoint}`, 
+			{
+				course,
+				datetime,
+				rounds
+			}, 
+			{
+				withCredentials: true
+			}
+		).then((response) => {
+			commit('addScorecard', response.data);
+			router.push('/');
+
+		}).catch((error) => {
+
+		});
+
+	}
 //   async addTodo({ commit }, title) {
 //     const response = await axios.post(
 //       'https://jsonplaceholder.typicode.com/todos',
@@ -56,6 +76,7 @@ const actions = {
 
 const mutations = {
 	setScorecards: (state, scorecards) => (state.scorecards = scorecards),
+	addScorecard: (state, scorecard) => (state.scorecards.unshift(scorecard))
 //   newTodo: (state, todo) => state.todos.unshift(todo),
 //   removeTodo: (state, id) =>
 //     (state.todos = state.todos.filter(todo => todo.id !== id)),
