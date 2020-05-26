@@ -42,6 +42,9 @@
 			v-for="scorecard in scorecards"
 			:key="scorecard._id"
 			:scorecard="scorecard"/>
+		<div class="no-scorecards-card" v-if="scorecards.length == 0" >
+			Ingen runder finnes for valgte filter
+		</div>
 	</div>
 </template>
 
@@ -104,6 +107,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		padding: 0;
 	}
 
 	.options-container {
@@ -147,6 +151,10 @@ export default {
 
 	.hide {
 		display: none;
+	}
+
+	.no-scorecards-card {
+		padding-top: 100px;
 	}
 
 </style>
