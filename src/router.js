@@ -45,6 +45,12 @@ let router = new Router({
 			name: 'SubmitScorecardPage',
 			component: () => import('./components/pages/SubmitScorecardPage'),
 			beforeEnter: ifAuthenticated
+		},
+		{
+			path: '/profile',
+			name: 'ProfilePage',
+			component: () => import('./components/pages/ProfilePage'),
+			beforeEnter: ifAuthenticated
 		}
 	]
 });

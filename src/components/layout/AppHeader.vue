@@ -9,6 +9,14 @@
 		</template>
 
 		<template slot="end">
+			
+			<!-- <b-navbar-item v-if="isAuthenticated" tag="router-link" :to="{ path: '/profile' }">
+				<div class="buttons">
+					<a class="button">
+						<font-awesome-icon icon="user"/>
+					</a>
+				</div>
+			</b-navbar-item> -->
 			<b-navbar-item v-if="isAuthenticated" @click="startLogout()">
 				<div class="buttons">
 					<a class="button">
@@ -62,4 +70,10 @@ export default {
 	font-size: 1.7em;
 	font-weight: 500;
 }
+
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+}
+
 </style>

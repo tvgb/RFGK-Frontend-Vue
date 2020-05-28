@@ -6,10 +6,11 @@ import store from './store';
 import VueCookies from 'vue-cookies'
 import 'buefy/dist/buefy.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faTrashAlt)
+library.add(faTrashAlt);
+library.add(faUser);
 
 Vue.use(Buefy);
 Vue.use(require('vue-moment'));

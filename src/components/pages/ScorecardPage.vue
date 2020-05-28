@@ -34,7 +34,6 @@
 					<option value="2020">2020</option>
 					<option value="2019">2019</option>
 					<option value="2018">2018</option>
-					<option value="2017">2017</option>
 				</b-select>
 			</div>
 		</div>
@@ -42,9 +41,11 @@
 			v-for="scorecard in scorecards"
 			:key="scorecard._id"
 			:scorecard="scorecard"/>
-		<div class="no-scorecards-card" v-if="scorecards.length == 0" >
+		<div class="no-scorecards-card" v-if="scorecards.length === 0 && !isLoading" >
 			Ingen runder finnes for valgte filter
 		</div>
+		<b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
+
 	</div>
 </template>
 
@@ -63,7 +64,8 @@ export default {
 		return {
 			hideFilter: true,
 			selectedCourse: 'all',
-			selectedYear: 'all'
+			selectedYear: 'all',
+			isLoading: false
 		}
 	},
 
@@ -74,11 +76,13 @@ export default {
 		])
 	},
 
-	created() {
-		this.getScorecards({
+	async created() {
+		this.isLoading = true;
+		await this.getScorecards({
 			course: this.selectedCourse,
 			year: this.selectedYear
 		});
+		this.isLoading = false;
 
 		this.getCourses();
 	},
