@@ -77,8 +77,6 @@ export default {
 	created() {
 		this.getCourses();
 
-		console.log(this.favouriteCourse, this.showLatestYearOnly, this.recieveAddedToScorecardMail);
-		
 		if (this.favouriteCourse === null) {
 			this.selectedFavouriteCourse = 'all';
 		} else {
