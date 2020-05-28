@@ -1,7 +1,6 @@
 import repository from '../repository';
 import router from '../../router';
 import cookies from 'vue-cookies';
-import course from './course';
 
 const state = {
 	isAuthenticated: false,
@@ -95,7 +94,7 @@ const actions = {
 			state.showLatestYearOnly = response.data.showLatestYearOnly;
 
 			return true;
-			
+
 		}).catch((error) => {
 			console.log(error);
 			return false;
