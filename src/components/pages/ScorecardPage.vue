@@ -10,18 +10,32 @@
 				@click="toggleFilter()">
 				Filter
 			</b-button>
+			<b-tooltip
+				v-if="!isVerified || !isAuthenticated"
+				label="Du må være logget inn og ha en verifisert epostadresse for å kunne legge til nye runder."
+				size="is-small"
+				multilined>
+				<b-button
+					:disabled="true"
+					tag="router-link" to="/submitScorecard" type="is-link"
+					class="button is-primary">
+					Legg til runde
+				</b-button>
+			</b-tooltip>
 			<b-button
+				v-if="isVerified && isAuthenticated"
 				tag="router-link" to="/submitScorecard" type="is-link"
 				class="button is-primary">
-				Add scorecard
+				Legg til runde
 			</b-button>
+			
 		</div>
 		<div class="filter-container" :class="{ hide: hideFilter }">
 			<div class="select-container">
 				<div class="select-label"> Bane </div>
 				<b-select v-model="selectedCourse" expanded @input="filterScorecards()">
 					<option value="all"> Alle </option>
-					<option v-for="course in courses" :key="course._id" v-bind:value="course._id">
+					<option v-for="course in courses" :key="course._id" v-bind:value="course">
 						{{ course.name }}
 					</option>
 				</b-select>
@@ -51,7 +65,7 @@
 
 <script>
 import Scorecard from '../ui/Scorecard';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 
 export default {
 	name: 'ScorecardPage',
@@ -73,18 +87,33 @@ export default {
 		...mapGetters([
 			'scorecards', 
 			'courses'
-		])
+		]),
+
+		...mapState({
+			showLatestYearOnly: state => state.player.showLatestYearOnly,
+			favouriteCourse: state => state.player.favouriteCourse,
+			isVerified: state => state.player.isVerified,
+			isAuthenticated: state => state.player.isAuthenticated
+		})
 	},
 
 	async created() {
+		this.getCourses();
+
+		if (this.favouriteCourse !== null) {
+			this.selectedCourse = this.favouriteCourse
+		}
+
+		if (this.showLatestYearOnly) {
+			this.selectedYear = (new Date()).getFullYear(); 
+		}
+
 		this.isLoading = true;
 		await this.getScorecards({
 			course: this.selectedCourse,
 			year: this.selectedYear
 		});
 		this.isLoading = false;
-
-		this.getCourses();
 	},
 
 	methods: {

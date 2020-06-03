@@ -6,9 +6,9 @@ Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
 
-	if (!store.getters.isAuthenticated) {
+	if (!store.state.isAuthenticated) {
 		next();
-		return;
+		return true;
 	}
 
 	next('/');
@@ -16,14 +16,13 @@ const ifNotAuthenticated = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
 
-	if (store.getters.isAuthenticated) {
+	if (store.state.player.isAuthenticated) {
 		next();
-		return;
+		return true;
 	}
 
-	router.push({ path: '/login', query: { redirect: '/submitScorecard'} });
+	router.push({ path: '/login', query: { redirect: to.path} });
 }
-
 
 let router = new Router({
 	mode: 'history',

@@ -27,7 +27,7 @@ repo.interceptors.response.use(
 				break;
 			}
 
-			return Promise.reject(error.response);
+			return Promise.reject(error);
 		}
 	}
 );

@@ -4,34 +4,46 @@
 			Profil
 		</h1>
 
-		<b-field label="Endre email">
-			<b-input />
+		<b-field :message="oneChangeNeededMessage" :type="oneChangeNeededType" label="Endre email">
+			<b-input type="email" v-model="newEmail"/>
 		</b-field>
 
-		<b-field label="Endre passord">
-			<b-input />
+		<b-field :message="oneChangeNeededMessage" :type="oneChangeNeededType" label="Endre passord">
+			<b-input autocomplete="new-password" type="password" v-model="newPassword" />
 		</b-field>
 
-		<b-field label="Gammelt passord">
-			<b-input />
+		<b-field :message="oldPwMessage" :type="oldPwType" label="Gammelt passord">
+			<b-input autocomplete="new-password" type="password" v-model="oldPassword" />
 		</b-field>
 
-		<div class="breaker" />
+		<b-button @click="onUpdatePersonalInfo()" class="save-button">
+			Lagre
+		</b-button>
 
-		<b-button class="verification-button">
+		<div class="feedback-div">
+			{{ feedback_1 }}
+		</div>
+
+		<div v-if="!isVerified" class="breaker" />
+
+		<b-button :disabled="disableSendVerificationMailButton" @click="onSendVerificationMail()" v-if="!isVerified" class="verification-button">
 			Send verifikasjons-epost på nytt
 		</b-button>
 		
+		<div class="feedback-div">
+			{{ feedback_3 }}
+		</div>
+
 		<div class="breaker" />
 
-		<div class="field">
+		<div class="field" v-if="isVerified">
 			<b-checkbox v-model="selectedRecieveAddedToScorecardMail">
 				Motta mail når du har blitt lagt til i en runde.
 			</b-checkbox>
 		</div>
 		<div class="field">
 			<b-checkbox v-model="selectedShowLatestYearOnly">
-				Sett filter automatisk til å vise runder fra siste år. 
+				Sett filter automatisk til å vise runder fra {{ (new Date()).getFullYear() }}. 
 			</b-checkbox>
 		</div>
 	
@@ -47,11 +59,14 @@
 		<b-button class="save-button" @click="onUpdateSettings()">
 			Lagre
 		</b-button>
+		<div class="feedback-div">
+			{{ feedback_2 }}
+		</div>
 	</div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 
 export default {
@@ -61,17 +76,31 @@ export default {
 		return {
 			selectedFavouriteCourse: null,
 			selectedShowLatestYearOnly: false,
-			selectedRecieveAddedToScorecardMail: false
+			selectedRecieveAddedToScorecardMail: false,
+			feedback_1: '',
+			feedback_2: '',
+			feedback_3: '',
+			oldPwMessage: '',
+			oldPwType: '',
+			oneChangeNeededMessage: '',
+			oneChangeNeededType: '',
+			newEmail: '',
+			newPassword: '',
+			oldPassword: '',
+			disableSendVerificationMailButton: false
 		}
 	},
 
 	computed: {
 		...mapGetters([
 			'courses',
-			'favouriteCourse',
-			'recieveAddedToScorecardMail',
-			'showLatestYearOnly'
-		])
+		]),
+		...mapState({
+			favouriteCourse: state => state.player.favouriteCourse,
+			showLatestYearOnly: state => state.player.showLatestYearOnly,
+			recieveAddedToScorecardMail: state => state.player.recieveAddedToScorecardMail,
+			isVerified: state => state.player.isVerified
+		})
 	},
 
 	created() {
@@ -90,7 +119,9 @@ export default {
 	methods: {
 		...mapActions([
 			'getCourses',
-			'updateSettings'
+			'updateSettings',
+			'updatePersonalInfo',
+			'sendVerificationMail'
 		]),
 
 		onUpdateSettings() {
@@ -98,6 +129,80 @@ export default {
 				favouriteCourse: this.selectedFavouriteCourse,
 				recieveAddedToScorecardMail: this.selectedRecieveAddedToScorecardMail,
 				showLatestYearOnly: this.selectedShowLatestYearOnly
+			}).then(() => {
+				this.feedback = 'Lagret!'
+				setTimeout(() => {
+					this.feedback_2 = '';
+				}, 3000);
+			}).catch(() => {
+				this.feedback = 'Noe gikk galt...'
+				setTimeout(() => {
+					this.feedback_2 = '';
+				}, 3000);
+			});
+		},
+
+		onUpdatePersonalInfo() {
+			if (this.oldPassword.trim() === '') {
+				this.oldPwMessage = 'Nåværende passord trengs for å lagre endringer.';
+				this.oldPwType = 'is-danger';
+				return;
+			} else {
+				this.oldPwMessage = '';
+				this.oldPwType = '';
+				this.oneChangeNeededMessage = ''
+				this.oneChangeNeededType = '';
+			}
+
+			if (this.newEmail.trim() === '' && this.newPassword === '') {
+				this.oneChangeNeededMessage = 'Minst ett felt må endres for å lagre endringer.'
+				this.oneChangeNeededType = 'is-danger';
+				return;
+			} else  {
+				this.oneChangeNeededMessage = ''
+				this.oneChangeNeededType = '';
+				this.oldPwMessage = '';
+				this.oldPwType = '';
+			}
+
+
+
+			this.updatePersonalInfo({
+				newEmail: this.newEmail,
+				newPassword: this.newPassword,
+				oldPassword: this.oldPassword
+			}).then(() => {
+				this.feedback_1 = 'Lagret!';
+				setTimeout(() => {
+					this.feedback_1 = '';
+				}, 3000);
+			}).catch((error) => {
+				if (error.response.status === 400) {
+					this.oldPwMessage = 'Feil passord';
+					this.oldPwType = 'is-danger';
+				} else {
+					this.feedback_1 = 'Noe gikk galt...';
+					setTimeout(() => {
+						this.feedback_1 = '';
+					}, 3000);
+				}
+				
+			});
+		},
+
+		onSendVerificationMail() {
+			this.sendVerificationMail().then(() => {
+				this.feedback_3 = 'Mail sendt!';
+				this.disableSendVerificationMailButton = true;
+				setTimeout(() => {
+					this.feedback_3 = '';
+				}, 3000);
+			}).catch(() => {
+				this.feedback_3 = 'Noe gikk galt...';
+				this.disableSendVerificationMailButton = false;
+				setTimeout(() => {
+					this.feedback_3 = '';
+				}, 3000);
 			});
 		}
 	}
@@ -124,6 +229,11 @@ export default {
 	border: 1px lightgray solid;
 	width: 100%;
 	margin: 20px 0;
+}
+
+.feedback-div {
+	text-align: center;
+	color: #7957d5;
 }
 
 @media only screen and (max-width: 600px) {
