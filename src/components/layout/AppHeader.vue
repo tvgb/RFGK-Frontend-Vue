@@ -10,13 +10,13 @@
 
 		<template slot="end">
 			
-			<!-- <b-navbar-item v-if="isAuthenticated" tag="router-link" :to="{ path: '/profile' }">
+			<b-navbar-item v-if="isAuthenticated" tag="router-link" :to="{ path: '/profile' }">
 				<div class="buttons">
 					<a class="button">
 						<font-awesome-icon icon="user"/>
 					</a>
 				</div>
-			</b-navbar-item> -->
+			</b-navbar-item>
 			<b-navbar-item v-if="isAuthenticated" @click="startLogout()">
 				<div class="buttons">
 					<a class="button">
@@ -36,16 +36,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
 	name: 'AppHeader',
 
-	computed: {
-		...mapGetters([
-			'isAuthenticated'
-		])
-	},
+	computed: mapState({
+		isAuthenticated: state => state.player.isAuthenticated
+	}),
 
 	methods: {
 		...mapActions([

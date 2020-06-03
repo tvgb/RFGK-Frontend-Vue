@@ -3,21 +3,16 @@ import router from '../../router';
 import cookies from 'vue-cookies';
 
 const state = {
-	isAuthenticated: false,
+	isAuthenticated: cookies.isKey('token'),
+	isVerified: JSON.parse(cookies.get('isVerified')),
 	favouriteCourse: JSON.parse(localStorage.getItem('favouriteCourse')),
-	recieveAddedToScorecardMail: localStorage.getItem('recieveAddedToScorecardMail'),
-	showLatestYearOnly: localStorage.getItem('showLatestYearOnly'),
+	recieveAddedToScorecardMail: JSON.parse(localStorage.getItem('recieveAddedToScorecardMail')),
+	showLatestYearOnly: JSON.parse(localStorage.getItem('showLatestYearOnly')),
 	players: []
 };
 
 const getters = {
-	isAuthenticated: (state) => {
-		return state.isAuthenticated;
-	},
-	players: state => state.players,
-	favouriteCourse: state => state.favouriteCourse,
-	recieveAddedToScorecardMail: state => state.recieveAddedToScorecardMail,
-	showLatestYearOnly: state => state.showLatestYearOnly
+
 };
 
 const endpoint = 'player';
@@ -44,67 +39,108 @@ const actions = {
 			}
 		).then((response) => {
 
-			state.isAuthenticated = true;
+			commit('setIsAuthenticated', true);
+			commit('setFavouriteCourse', response.data.favouriteCourse);
+			commit('setRecieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
+			commit('setShowLatestYearOnly', response.data.showLatestYearOnly);
+			commit('setIsVerified', JSON.parse(cookies.get('isVerified')));
+
 			localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
 			localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
 			localStorage.setItem('showLatestYearOnly', response.data.showLatestYearOnly);
-			state.favouriteCourse = response.data.favouriteCourse;
-			state.recieveAddedToScorecardMail = response.data.recieveAddedToScorecardMail;
-			state.showLatestYearOnly = response.data.showLatestYearOnly;
 			
 			router.push(router.currentRoute.query.redirect || '/');
 
-			return true;
-
 		}).catch((error) => {
 			
-			if (error.data.errorcode === 1) {
-				state.isAuthenticated = false;
-				return false;
+			if (error.response.status === 400) {
+				commit('setIsAuthenticated', false);
 			}
 		});
 	},
 
 	logout({ commit }) {
 		cookies.remove('token');
-		state.isAuthenticated = false;
+		commit('setIsAuthenticated', false);
+
 		if (router.currentRoute.path !== '/') {
 			router.push('/');
 		}
 	},
 
-	async updateSettings({ commit }, {favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
+	updateSettings({ commit }, {favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
+		return new Promise((resolve, reject) => {
+			repository.put(`/${endpoint}/updateSettings`,
+				{
+					favouriteCourse: favouriteCourse,
+					recieveAddedToScorecardMail: recieveAddedToScorecardMail,
+					showLatestYearOnly: showLatestYearOnly
+				},
+				{
+					withCredentials: true
+				}	
+			).then((response) => {
 
-		await repository.put(`/${endpoint}/updateSettings`,
-			{
-				favouriteCourse: favouriteCourse,
-				recieveAddedToScorecardMail: recieveAddedToScorecardMail,
-				showLatestYearOnly: showLatestYearOnly
-			},
-			{
-				withCredentials: true
-			}	
-		).then((response) => {
+				commit('setFavouriteCourse', response.data.favouriteCourse);
+				commit('setRecieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
+				commit('setShowLatestYearOnly', response.data.showLatestYearOnly);
 
-			localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
-			localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
-			localStorage.setItem('showLatestYearOnly', response.data.showLatestYearOnly);
-			state.favouriteCourse = response.data.favouriteCourse;
-			state.recieveAddedToScorecardMail = response.data.recieveAddedToScorecardMail;
-			state.showLatestYearOnly = response.data.showLatestYearOnly;
+				localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
+				localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
+				localStorage.setItem('showLatestYearOnly', response.data.showLatestYearOnly);
 
-			return true;
+				resolve();
 
-		}).catch((error) => {
-			
-			return false;
+			}).catch((error) => {
+				reject();
+			});
+		});
+	},
+
+	updatePersonalInfo({ commit }, {newEmail, newPassword, oldPassword}) {
+		return new Promise((resolve, reject) => {
+			repository.put(`/${endpoint}/updatePersonalInfo`, 
+				{
+					newEmail: newEmail,
+					newPassword: newPassword,
+					oldPassword: oldPassword
+				},
+				{
+					withCredentials: true
+				}
+			).then(() => {
+				resolve();
+			}).catch((error) => {
+				reject(error);
+			});
+		});
+	},
+
+	sendVerificationMail({commit}) {
+		return new Promise((resolve, reject) => {
+			repository.put(`/${endpoint}/sendVerificationMail`,
+				{
+
+				},
+				{
+					withCredentials: true
+				}
+			).then(() => {
+				resolve();
+			}).catch((error) => {
+				reject(error);
+			});
 		});
 	}
 };
 
 const mutations = {
 	setPlayers: (state, players) => (state.players = players),
-	setIsAuthenticated: (state, value) => (state.isAuthenticated = value)
+	setIsAuthenticated: (state, value) => (state.isAuthenticated = value),
+	setFavouriteCourse: (state, course) => (state.favouriteCourse = course),
+	setRecieveAddedToScorecardMail: (state, value) => (state.recieveAddedToScorecardMail = value),
+	setShowLatestYearOnly: (state, value) => (state.showLatestYearOnly = value),
+	setIsVerified: (state, value) => (state.isVerified = value)
 };
 
 export default {

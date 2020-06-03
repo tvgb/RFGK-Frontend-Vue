@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import {mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
 	name: 'SubmitScorecardPage',
@@ -83,9 +83,11 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'players', 
 			'courses'
-		])
+		]),
+		...mapState({
+			players: state => state.player.players
+		})
 	},
 
 	created() {
