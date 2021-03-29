@@ -13,9 +13,10 @@ const getters = {
 
 const endpoint = 'scorecard';
 const actions = {
-	async getScorecards({ commit }, {course, year}) {
-		const response = await repository.get(`/${endpoint}?course=${course}&year=${year}`);
+	async getScorecards({ commit }, {courseId, year}): Promise<any> {
+		const response = await repository.get(`/${endpoint}?courseId=${courseId}&year=${year}`);
 		commit('setScorecards', response.data);
+		return response;
 	},
 
 	async postScorecard({commit}, {course, datetime, rounds}) {

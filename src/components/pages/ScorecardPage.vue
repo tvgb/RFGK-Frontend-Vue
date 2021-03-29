@@ -45,6 +45,7 @@
 				<div class="select-label"> År </div>
 				<b-select v-model="selectedYear" expanded @input="filterScorecards()">
 					<option value="all">Alle</option>
+					<option value="2021">2021</option>
 					<option value="2020">2020</option>
 					<option value="2019">2019</option>
 					<option value="2018">2018</option>
@@ -97,10 +98,10 @@ export default {
 		})
 	},
 
-	async created() {
+	created() {
 		this.getCourses();
 
-		if (this.favouriteCourse !== null) {
+		if (this.favouriteCourse) {
 			this.selectedCourse = this.favouriteCourse
 		}
 
@@ -109,10 +110,13 @@ export default {
 		}
 
 		this.isLoading = true;
-		await this.getScorecards({
+		console.log('no=')
+		this.getScorecards({
 			course: this.selectedCourse,
 			year: this.selectedYear
-		});
+		}).then(() => {
+			console.log('yaoh')
+		})
 		this.isLoading = false;
 	},
 
@@ -127,7 +131,7 @@ export default {
 		filterScorecards() {
 
 			this.getScorecards({
-				course: this.selectedCourse,
+				courseId: this.selectedCourse,
 				year: this.selectedYear
 			});
 		}

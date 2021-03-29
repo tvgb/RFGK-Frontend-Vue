@@ -3,7 +3,7 @@ import router from '../../router';
 import cookies from 'vue-cookies';
 
 const state = {
-	isAuthenticated: cookies.isKey('token'),
+	isAuthenticated: cookies.isKey('access_token'),
 	isVerified: JSON.parse(cookies.get('isVerified')),
 	favouriteCourse: JSON.parse(localStorage.getItem('favouriteCourse')),
 	recieveAddedToScorecardMail: JSON.parse(localStorage.getItem('recieveAddedToScorecardMail')),
@@ -60,7 +60,7 @@ const actions = {
 	},
 
 	logout({ commit }) {
-		cookies.remove('token');
+		cookies.remove('access_token');
 		commit('setIsAuthenticated', false);
 
 		if (router.currentRoute.path !== '/') {

@@ -50,6 +50,12 @@ let router = new Router({
 			name: 'ProfilePage',
 			component: () => import('./components/pages/ProfilePage'),
 			beforeEnter: ifAuthenticated
+		},
+		{
+			path: '/resetPassword',
+			name: 'ResetPasswordPage',
+			component: () => import('./components/pages/ResetPasswordPage'),
+			beforeEnter: ifAuthenticated
 		}
 	]
 });
