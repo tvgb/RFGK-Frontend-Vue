@@ -6,7 +6,7 @@ Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
 
-	if (!store.state.isAuthenticated) {
+	if (!store.state.player.isAuthenticated) {
 		next();
 		return true;
 	}

@@ -14,13 +14,18 @@ library.add(faUser);
 
 Vue.use(Buefy);
 Vue.use(require('vue-moment'));
+
 Vue.use(VueCookies);
+
+// set default cookie
+// Vue.$cookies.config('7d');
+// set global cookie
+// Vue.$cookies.set('theme','default');
+// Vue.$cookies.set('hover-time','1s');
+
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-
-if (VueCookies.isKey('token')) {
-	store.state.player.isAuthenticated = true
-}
+store.dispatch('setCookieValues');
 
 Vue.config.productionTip = false;
 

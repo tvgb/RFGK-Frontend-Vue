@@ -134,9 +134,7 @@ export default {
 				rounds: this.rounds
 			})
 		}
-	
 	}
-	
 }
 </script>
 

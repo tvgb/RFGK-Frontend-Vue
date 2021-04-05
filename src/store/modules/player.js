@@ -1,13 +1,15 @@
 import repository from '../repository';
 import router from '../../router';
-import cookies from 'vue-cookies';
+import VueCookies from 'vue-cookies';
+import Vue from 'vue';
+import repo from '../repository';
 
 const state = {
-	isAuthenticated: cookies.VueCookies.isKey('token'),
-	isVerified: JSON.parse(cookies.VueCookies.get('isVerified')),
-	favouriteCourse: JSON.parse(localStorage.getItem('favouriteCourse')),
-	recieveAddedToScorecardMail: JSON.parse(localStorage.getItem('recieveAddedToScorecardMail')),
-	showLatestYearOnly: JSON.parse(localStorage.getItem('showLatestYearOnly')),
+	isAuthenticated: false,
+	isVerified: false,
+	favouriteCourse: 'all',
+	recieveAddedToScorecardMail: false,
+	showLatestYearOnly: false,
 	players: []
 };
 
@@ -43,7 +45,10 @@ const actions = {
 			commit('setFavouriteCourse', response.data.favouriteCourse);
 			commit('setRecieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
 			commit('setShowLatestYearOnly', response.data.showLatestYearOnly);
-			commit('setIsVerified', JSON.parse(cookies.VueCookies.get('isVerified')));
+
+
+			console.log(response.data);
+			commit('setIsVerified', response.data.isVerified);
 
 			localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
 			localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
@@ -60,12 +65,29 @@ const actions = {
 	},
 
 	logout({ commit }) {
-		cookies.VueCookies.remove('token');
-		commit('setIsAuthenticated', false);
+		repository.post(`/${endpoint}/logout`,
+		{
+		
+		},
+		{
+			withCredentials: true
+		}).then(() => {
+			commit('setIsAuthenticated', false);
+			VueCookies.remove('access_token');
+			VueCookies.remove('refresh_token');	
+				
+			if (router.currentRoute.path !== '/') {
+				router.push('/');
+			}
+		}).catch(() => {
+			commit('setIsAuthenticated', false);
+			VueCookies.remove('access_token');
+			VueCookies.remove('refresh_token');	
 
-		if (router.currentRoute.path !== '/') {
-			router.push('/');
-		}
+			if (router.currentRoute.path !== '/') {
+				router.push('/');
+			}
+		})
 	},
 
 	updateSettings({ commit }, {favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
@@ -131,7 +153,16 @@ const actions = {
 				reject(error);
 			});
 		});
+	},
+
+	setCookieValues({commit}) {
+		commit('setIsAuthenticated', VueCookies.isKey('refresh_token'));
+		commit('setIsVerified', JSON.parse(VueCookies.get('isVerified')));
+		commit('setFavouriteCourse', JSON.parse(localStorage.getItem('favouriteCourse')));
+		commit('setRecieveAddedToScorecardMail', JSON.parse(localStorage.getItem('recieveAddedToScorecardMail')));
+		commit('setShowLatestYearOnly', JSON.parse(localStorage.getItem('showLatestYearOnly')));
 	}
+
 };
 
 const mutations = {

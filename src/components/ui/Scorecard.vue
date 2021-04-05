@@ -35,6 +35,7 @@
 </template>
  
 <script>
+import scorecard from '../../store/modules/scorecard';
 export default {
 
 	name: 'Scorecard',
@@ -71,7 +72,15 @@ export default {
 		rounds: function() {
 
 			let rounds = [];
+
+			
+			if (!this.scorecard.rounds[0].player) {
+				console.log(this.scorecard);
+			}
+
 			for (const round of this.scorecard.rounds) {
+
+
 				let newRound = {
 					firstName: round.player.firstName,
 					lastName: round.player.lastName,

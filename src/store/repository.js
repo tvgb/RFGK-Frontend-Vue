@@ -1,4 +1,5 @@
 import axios from 'axios';
+import player from './modules/player';
 
 // You can use your own logic to set your local or production domain
 const baseDomain = process.env.VUE_APP_API_URL;
@@ -17,17 +18,26 @@ repo.interceptors.response.use(
 			return Promise.reject(response);
 		}
 	},
-	error => {
+	async error => {
 		if (error.response.status) {
 			switch (error.response.status) {
 				case 400:
-				break;
+					return Promise.reject(error);
 			
 				case 401:
-				break;
-			}
+					return repo.post('/player/refreshToken', {}, {withCredentials: true}).then(async () => {
+						return repo.request(error.config).then((res) => {
+							return Promise.resolve(res);
+						}).catch((error) => {
+							Promise.reject(error);
+						});
+					}).catch((error) => {
+						Promise.reject(error);
+					});
 
-			return Promise.reject(error);
+				default:
+					return Promise.reject(error);
+			}
 		}
 	}
 );

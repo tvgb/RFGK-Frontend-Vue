@@ -45,6 +45,7 @@
 				<div class="select-label"> År </div>
 				<b-select v-model="selectedYear" expanded @input="filterScorecards()">
 					<option value="all">Alle</option>
+					<option value="2021">2021</option>
 					<option value="2020">2020</option>
 					<option value="2019">2019</option>
 					<option value="2018">2018</option>
@@ -55,7 +56,7 @@
 			v-for="scorecard in scorecards"
 			:key="scorecard._id"
 			:scorecard="scorecard"/>
-		<div class="no-scorecards-card" v-if="scorecards.length === 0 && !isLoading" >
+		<div class="no-scorecards-card" v-if="scorecards && scorecards.length === 0 && !isLoading" >
 			Ingen runder finnes for valgte filter
 		</div>
 		<b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
@@ -97,7 +98,7 @@ export default {
 		})
 	},
 
-	async created() {
+	created() {
 		this.getCourses();
 
 		if (this.favouriteCourse !== null) {
@@ -109,11 +110,13 @@ export default {
 		}
 
 		this.isLoading = true;
-		await this.getScorecards({
-			course: this.selectedCourse,
+		const courseId = this.selectedCourse === 'all' ? 'all' : this.selectedCourse._id;
+		this.getScorecards({
+			courseId: courseId,
 			year: this.selectedYear
-		});
-		this.isLoading = false;
+		}).then(() => {
+			this.isLoading = false;
+		})
 	},
 
 	methods: {
@@ -125,9 +128,9 @@ export default {
 			this.hideFilter = !this.hideFilter;
 		},
 		filterScorecards() {
-
+			const courseId = this.selectedCourse === 'all' ? 'all' : this.selectedCourse._id;
 			this.getScorecards({
-				course: this.selectedCourse,
+				courseId: courseId,
 				year: this.selectedYear
 			});
 		}

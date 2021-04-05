@@ -1,11 +1,11 @@
-const GoogleFontsPlugin = require("google-fonts-webpack-plugin");
+const GoogleFontsPlugin = require('google-fonts-webpack-plugin');
 
 module.exports = {
     chainWebpack: config => {
         plugins: [
             new GoogleFontsPlugin({
                 fonts: [
-                    { family: "Poppins" }
+                    { family: 'Poppins' }
                 ]
             })
         ]
