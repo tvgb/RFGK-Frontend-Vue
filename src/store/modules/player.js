@@ -3,8 +3,8 @@ import router from '../../router';
 import cookies from 'vue-cookies';
 
 const state = {
-	isAuthenticated: cookies.isKey('token'),
-	isVerified: JSON.parse(cookies.get('isVerified')),
+	isAuthenticated: cookies.VueCookies.isKey('token'),
+	isVerified: JSON.parse(cookies.VueCookies.get('isVerified')),
 	favouriteCourse: JSON.parse(localStorage.getItem('favouriteCourse')),
 	recieveAddedToScorecardMail: JSON.parse(localStorage.getItem('recieveAddedToScorecardMail')),
 	showLatestYearOnly: JSON.parse(localStorage.getItem('showLatestYearOnly')),
@@ -43,7 +43,7 @@ const actions = {
 			commit('setFavouriteCourse', response.data.favouriteCourse);
 			commit('setRecieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
 			commit('setShowLatestYearOnly', response.data.showLatestYearOnly);
-			commit('setIsVerified', JSON.parse(cookies.get('isVerified')));
+			commit('setIsVerified', JSON.parse(cookies.VueCookies.get('isVerified')));
 
 			localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
 			localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
@@ -60,7 +60,7 @@ const actions = {
 	},
 
 	logout({ commit }) {
-		cookies.remove('token');
+		cookies.VueCookies.remove('token');
 		commit('setIsAuthenticated', false);
 
 		if (router.currentRoute.path !== '/') {
