@@ -1,5 +1,4 @@
 import axios from 'axios';
-import player from './modules/player';
 
 // You can use your own logic to set your local or production domain
 const baseDomain = process.env.VUE_APP_API_URL;

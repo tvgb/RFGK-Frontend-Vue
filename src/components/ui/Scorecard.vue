@@ -2,25 +2,25 @@
 	<div class="container">
 		<div class="scorecard-header">
 			<div>{{ scorecard.course.name }}</div>
-			<div>{{ scorecard.datetime | moment("DD-MM-YYYY")}}</div>
+			<div>{{ scorecard.datetime | moment("DD-MM-YYYY") }}</div>
 		</div>
 		<b-table :data="rounds" 
 			:default-sort="'sum'"
 			:mobile-cards="false">
-			<template slot-scope="props">
-				<b-table-column width="150" v-if="!isMobile()" field="firstName" label="Fornavn">
+			<template>
+				<b-table-column v-if="!isMobile()" v-slot="props" width="150" field="firstName" label="Fornavn">
 					{{ props.row.firstName }}
 				</b-table-column>
 
-				<b-table-column width="150" field="lastName" label="Etternavn">
+				<b-table-column v-slot="props" width="150" field="lastName" label="Etternavn">
 					{{ props.row.lastName }}
 				</b-table-column>
 
-				<b-table-column width="50" field="numberOfThrows" label="Kast" centered>
+				<b-table-column v-slot="props" width="50" field="numberOfThrows" label="Kast" centered>
 					{{ props.row.numberOfThrows }}
 				</b-table-column>
 
-				<b-table-column width="50" field="sum" label="SUM" centered>
+				<b-table-column v-slot="props" width="50" field="sum" label="SUM" centered>
 					<span class="tag" :class="getColor(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 					</span>
@@ -35,7 +35,6 @@
 </template>
  
 <script>
-import scorecard from '../../store/modules/scorecard';
 export default {
 
 	name: 'Scorecard',
@@ -70,17 +69,8 @@ export default {
 	},
 	computed: {
 		rounds: function() {
-
 			let rounds = [];
-
-			
-			if (!this.scorecard.rounds[0].player) {
-				console.log(this.scorecard);
-			}
-
 			for (const round of this.scorecard.rounds) {
-
-
 				let newRound = {
 					firstName: round.player.firstName,
 					lastName: round.player.lastName,

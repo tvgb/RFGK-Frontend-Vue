@@ -28,14 +28,13 @@
 				class="button is-primary">
 				Legg til runde
 			</b-button>
-			
 		</div>
 		<div class="filter-container" :class="{ hide: hideFilter }">
 			<div class="select-container">
 				<div class="select-label"> Bane </div>
 				<b-select v-model="selectedCourse" expanded @input="filterScorecards()">
 					<option value="all"> Alle </option>
-					<option v-for="course in courses" :key="course._id" v-bind:value="course">
+					<option v-for="course in courses" :key="course._id" :value="course">
 						{{ course.name }}
 					</option>
 				</b-select>
@@ -55,12 +54,11 @@
 		<Scorecard
 			v-for="scorecard in scorecards"
 			:key="scorecard._id"
-			:scorecard="scorecard"/>
-		<div class="no-scorecards-card" v-if="scorecards && scorecards.length === 0 && !isLoading" >
+			:scorecard="scorecard" />
+		<div v-if="scorecards && scorecards.length === 0 && !isLoading" class="no-scorecards-card">
 			Ingen runder finnes for valgte filter
 		</div>
-		<b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
-
+		<b-loading :active.sync="isLoading" :is-full-page="true" />
 	</div>
 </template>
 

@@ -5,8 +5,8 @@
 		</h1>
 
 		<b-field horizontal label="Bane">
-			<b-select expanded v-model="selectedCourse">
-				<option v-for="course in courses" :key="course._id" v-bind:value="course">
+			<b-select v-model="selectedCourse" expanded>
+				<option v-for="course in courses" :key="course._id" :value="course">
 					{{ course.name }}
 				</option>
 			</b-select>
@@ -14,50 +14,44 @@
 		
 		<b-field horizontal label="Dato">
 			<b-datetimepicker
+				v-model="datetime"
 				placeholder="Click to select..."
-				horizontal-time-picker
-				v-model="datetime">
-				
-			</b-datetimepicker>
+				horizontal-time-picker />
 		</b-field>
 
-		<div class="breaker"></div>
+		<div class="breaker" />
 
 		<b-field horizontal label="Spiller">
-			<b-select expanded v-model="selectedPlayer">
-				<option v-for="player in players" :key="player._id" v-bind:value="player">
+			<b-select v-model="selectedPlayer" expanded>
+				<option v-for="player in players" :key="player._id" :value="player">
 					{{ player.firstName }} {{ player.lastName }}
 				</option>
 			</b-select>
 		</b-field>
 
 		<b-field horizontal label="Resultat">
-			<b-slider v-model="sum" size="is-medium" :min="-10" :max="30">
-			</b-slider>
-		</b-field>
-
-		<b-field horizontal><!-- Label left empty for spacing -->
-			<p class="control">
-				<b-button outlined @click="addRound()" class="add-round-button button is-primary">
-					Legg til spiller
+			<b-field grouped>
+				<b-numberinput v-model="sum" expanded :min="-99" :max="99" :step="1" :exponential="0.5" controls-alignment="right" />
+				<b-button outlined class="add-round-btn button is-primary" @click="addRound()">
+					<b-icon icon="user-plus" />
 				</b-button>
-			</p>
+			</b-field>
 		</b-field>
 
 		<div class="rounds-container">
-			<div class="round" v-for="round in rounds" :key="round.player._id">
+			<div v-for="round in rounds" :key="round.player._id" class="round">
 				<div>
 					{{ round.player.lastName }}	| Resultat: {{ round.sum }}
 				</div>
-				<div>
-					<font-awesome-icon @click="removeRound(round)" icon="trash-alt"/>
+				<div class="trash-btn" @click="removeRound(round)">
+					<b-icon pack="fas" icon="trash" />
 				</div>
 			</div>
 		</div>
 
-		<b-field v-if="this.rounds.length >= 2" horizontal><!-- Label left empty for spacing -->
+		<b-field v-if="rounds.length >= 2" horizontal>
 			<p class="control">
-				<b-button @click="submitRounds()" class="button is-success">
+				<b-button class="button is-success" @click="submitRounds()">
 					Send inn
 				</b-button>
 			</p>
@@ -120,11 +114,12 @@ export default {
 				this.selectedPlayer = null; 
 
 				this.rounds.unshift(newRound);
+				this.rounds.sort((a, b) => a.sum - b.sum);
 			}
 		},
 
 		removeRound(round) {
-			this.rounds = this.rounds.filter((value, index, arr) => (value.player._id !== round.player._id));
+			this.rounds = this.rounds.filter(r => r.player._id !== round.player._id);
 		},
 
 		submitRounds() {
@@ -166,8 +161,12 @@ export default {
 		margin: 5px 0;
 	}
 
-	.add-round-button {
-		float: right;
+	.add-round-btn {
+		margin-left: auto;
+	}
+
+	.trash-btn {
+		cursor: pointer;
 	}
 
 	@media only screen and (max-width: 600px) {

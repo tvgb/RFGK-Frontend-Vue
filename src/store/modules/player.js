@@ -1,8 +1,6 @@
 import repository from '../repository';
 import router from '../../router';
 import VueCookies from 'vue-cookies';
-import Vue from 'vue';
-import repo from '../repository';
 
 const state = {
 	isAuthenticated: false,
@@ -113,7 +111,7 @@ const actions = {
 
 				resolve();
 
-			}).catch((error) => {
+			}).catch(() => {
 				reject();
 			});
 		});
