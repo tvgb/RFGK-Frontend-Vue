@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '.';
 
 // You can use your own logic to set your local or production domain
 const baseDomain = process.env.VUE_APP_API_URL;
@@ -33,6 +34,10 @@ repo.interceptors.response.use(
 					}).catch((error) => {
 						Promise.reject(error);
 					});
+
+				case 403:
+					store.dispatch('logout');
+					return Promise.reject(error);
 
 				default:
 					return Promise.reject(error);

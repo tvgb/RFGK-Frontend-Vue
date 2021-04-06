@@ -18,7 +18,12 @@ Vue.use(Buefy, {
 });
 Vue.use(require('vue-moment'));
 Vue.use(VueCookies);
-store.dispatch('setCookieValues');
+
+if (VueCookies.isKey('refresh_token')) {
+	store.dispatch('refreshAccessToken').finally(() => {
+		store.dispatch('setCookieValues');
+	});
+}
 
 Vue.config.productionTip = false;
 

@@ -19,9 +19,10 @@ const actions = {
 		})
 	},
 
-	async postScorecard({ commit }, {course, datetime, rounds}) {
+	async postScorecard({ commit }, {course, datetime, rounds, weather}) {
 		await repository.post(`/${endpoint}`, 
 			{
+				weather,
 				course,
 				datetime,
 				rounds

@@ -43,11 +43,9 @@ const actions = {
 			commit('setFavouriteCourse', response.data.favouriteCourse);
 			commit('setRecieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
 			commit('setShowLatestYearOnly', response.data.showLatestYearOnly);
-
-
-			console.log(response.data);
 			commit('setIsVerified', response.data.isVerified);
 
+			localStorage.setItem('isVerified', JSON.stringify(response.data.isVerified));
 			localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
 			localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
 			localStorage.setItem('showLatestYearOnly', response.data.showLatestYearOnly);
@@ -153,7 +151,28 @@ const actions = {
 		});
 	},
 
-	setCookieValues({commit}) {
+	runIndentificationProcess({ commit }) {
+		return new Promise((resolve, reject) => {
+			if (VueCookies.isKey('access_token')) {
+				resolve(true); 
+			} else if (VueCookies.isKey('refresh_token')) {
+				return repository.post(`/${endpoint}/refreshToken`,{}, { withCredentials: true }).then(() => {
+					resolve(true);
+				}).catch(() => {
+					resolve(false);
+				});
+			} else {
+				resolve(false);
+			}
+		})
+	},
+
+
+	refreshAccessToken({ commit }) {
+		return repository.post(`/${endpoint}/refreshToken`,{}, { withCredentials: true });
+	},
+
+	setCookieValues({commit, state}) {
 		commit('setIsAuthenticated', VueCookies.isKey('refresh_token'));
 		commit('setIsVerified', JSON.parse(VueCookies.get('isVerified')));
 		commit('setFavouriteCourse', JSON.parse(localStorage.getItem('favouriteCourse')));

@@ -1,7 +1,10 @@
 <template>
 	<div class="container">
 		<div class="scorecard-header">
-			<div>{{ scorecard.course.name }}</div>
+			<div class="name-and-weather">			
+				{{ isMobile() ? getShortName(scorecard.course.name) : scorecard.course.name }} <span v-if="scorecard.weather" class="weather-icon-spacer">|</span>
+				<b-icon v-if="scorecard.weather" class="weather-icon" :icon="scorecard.weather" />
+			</div>
 			<div>{{ scorecard.datetime | moment("DD-MM-YYYY") }}</div>
 		</div>
 		<b-table :data="rounds" 
@@ -103,6 +106,13 @@ export default {
 			} else {
 				return 'is-danger';
 			}
+		},
+		
+		getShortName(name) {
+			const courseNameParts = name.split(' ');
+			const firstPart = courseNameParts[0];
+
+			return firstPart;
 		}
 	}
 }
@@ -125,10 +135,21 @@ export default {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		padding: 1px 10px;
 		background-color: #F9F9F9;
 	}
+
+	.name-and-weather {
+		display: flex;
+		align-items: center;
+	}
 	
+	.weather-icon-spacer {
+		width: 1px;
+		margin: 0px 5px 0px 7px;
+		color: #A9A9A9;
+	}
 
 	.b-table {
 		width: 100%;
@@ -137,5 +158,4 @@ export default {
 	.tag {
 		width: 35px;
 	}
-
 </style>

@@ -19,6 +19,17 @@
 				horizontal-time-picker />
 		</b-field>
 
+		<b-field label="Værforhold">
+			<div class="weather-div">
+				<b-icon class="weather-icon" icon="cloud" :class="{'selected-weather': selectedWeather === 'cloud'}" @click.native="selectWeather('cloud')" />
+				<b-icon class="weather-icon" icon="wind" :class="{'selected-weather': selectedWeather === 'wind'}" @click.native="selectWeather('wind')" />
+				<b-icon class="weather-icon" icon="sun" :class="{'selected-weather': selectedWeather === 'sun'}" @click.native="selectWeather('sun')" />
+				<b-icon class="weather-icon" icon="cloud-sun" :class="{'selected-weather': selectedWeather === 'cloud-sun'}" @click.native="selectWeather('cloud-sun')" />
+				<b-icon class="weather-icon" icon="cloud-showers-heavy" :class="{'selected-weather': selectedWeather === 'cloud-showers-heavy'}" @click.native="selectWeather('cloud-showers-heavy')" />
+				<b-icon class="weather-icon" icon="snowflake" :class="{'selected-weather': selectedWeather === 'snowflake'}" @click.native="selectWeather('snowflake')" />
+			</div>		
+		</b-field>
+
 		<div class="breaker" />
 
 		<b-field horizontal label="Spiller">
@@ -41,7 +52,10 @@
 		<div class="rounds-container">
 			<div v-for="round in rounds" :key="round.player._id" class="round">
 				<div>
-					{{ round.player.lastName }}	| Resultat: {{ round.sum }}
+					<span class="tag" :class="getColor(round.sum)">
+						{{ round.sum > 0 ? `+${round.sum}` : round.sum }}
+					</span>
+					{{ round.player.lastName }}
 				</div>
 				<div class="trash-btn" @click="removeRound(round)">
 					<b-icon pack="fas" icon="trash" />
@@ -71,7 +85,8 @@ export default {
 			selectedCourse: null,
 			selectedPlayer: null,
 			sum: 0,
-			rounds: []
+			rounds: [],
+			selectedWeather: 'cloud'
 		}
 	},
 
@@ -122,8 +137,26 @@ export default {
 			this.rounds = this.rounds.filter(r => r.player._id !== round.player._id);
 		},
 
+		getColor(score) {
+			const goodScoore = 5;
+			const okScore = 10;
+
+			if (score <= goodScoore) {
+				return 'is-success';
+			} else if (score <= okScore) {
+				return 'is-warning';
+			} else {
+				return 'is-danger';
+			}
+		},
+
+		selectWeather(weather) {
+			this.selectedWeather = weather;
+		},
+
 		submitRounds() {
 			this.postScorecard({
+				weather: this.selectedWeather,
 				datetime: this.datetime,
 				course: this.selectedCourse,
 				rounds: this.rounds
@@ -153,12 +186,26 @@ export default {
 	.round {
 		width: 100%;
 		display: flex;
-		background-color: #7957D5;
-		color: white;
-		padding: 15px 20px;
+		background-color: white;
+		box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.20);
+		color: #363636;
+		padding: 10px 12px;
 		border-radius: 5px;
 		justify-content: space-between;
 		margin: 5px 0;
+	}
+
+	.selected-weather {
+		color: #7957d5;
+		font-size: 1.5rem;
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.weather-icon {
+		cursor: pointer;
+		width: 50px;
+		height: 50px;
 	}
 
 	.add-round-btn {
@@ -167,6 +214,17 @@ export default {
 
 	.trash-btn {
 		cursor: pointer;
+	}
+
+	.tag {
+		width: 35px;
+		margin-right: 12px;
+	}
+
+	.weather-div {
+		display: flex;
+		justify-content: space-evenly;
+		font-size: 1.2rem;
 	}
 
 	@media only screen and (max-width: 600px) {
