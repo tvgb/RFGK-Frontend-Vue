@@ -7,8 +7,6 @@
 
 <script>
 import AppHeader from './components/layout/AppHeader.vue';
-import axios from 'axios';
-import router from './router';
 
 export default {
 	name: 'App',

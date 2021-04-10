@@ -115,6 +115,17 @@ const actions = {
 		});
 	},
 
+	resetPassword({ commit }, {password}) {
+		return repository.put(`${endpoint}/resetPassword`, 
+			{
+				password: password
+			},
+			{
+				withCredentials: true
+			}
+		);
+	},
+
 	updatePersonalInfo({ commit }, {newEmail, newPassword, oldPassword}) {
 		return new Promise((resolve, reject) => {
 			repository.put(`/${endpoint}/updatePersonalInfo`, 
@@ -134,9 +145,20 @@ const actions = {
 		});
 	},
 
-	sendVerificationMail({commit}) {
+	sendResetPasswordEmail({commit}, {email}) {
+		return repository.put(`/${endpoint}/sendResetPasswordEmail`,
+			{
+				email: email
+			},
+			{
+				withCredentials: true
+			}
+		);
+	},
+
+	sendVerificationEmail({commit}) {
 		return new Promise((resolve, reject) => {
-			repository.put(`/${endpoint}/sendVerificationMail`,
+			repository.put(`/${endpoint}/sendVerificationEmail`,
 				{
 
 				},
