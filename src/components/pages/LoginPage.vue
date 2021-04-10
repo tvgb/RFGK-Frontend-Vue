@@ -12,13 +12,6 @@
 			<b-input v-model="password" type="password" />
 		</b-field>
 
-		<!-- Label left empty for spacing -->
-		<!-- <b-field horizontal> 
-			<p class="control">
-				
-			</p>
-		</b-field> -->
-
 		<div class="btn-row">
 			<span class="forgot-pw-text" @click="forgotPwBtnClicked()">
 				Glemt passordet?
@@ -112,10 +105,10 @@ export default {
 		width: 100%;
 	}
 
-	@media only screen and (min-width: 600px) {
+	@media only screen and (max-width: 600px) {
 		.container {
-			width: 300px;
-			padding: 0;
+			width: 100%;
+			padding: 30px;
 		}
 	}
 

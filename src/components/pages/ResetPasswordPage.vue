@@ -68,6 +68,12 @@ export default {
 					});
 			}
 		},
+	},
+
+	beforeRouteLeave (to, from, next) {
+		this.$cookies.remove('access_token');
+		this.$cookies.remove('refresh_token');
+		next();
 	}
 }
 </script>
@@ -107,9 +113,8 @@ export default {
 
 	@media only screen and (max-width: 600px) {
 		.container {
-			width: 300px;
-			padding: 0px;
-			margin: 0px auto;
+			width: 100%;
+			padding: 30px;
 		}
 	}
 

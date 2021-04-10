@@ -49,7 +49,7 @@ let router = new Router({
 			path: '/resetPassword',
 			name: 'ResetPasswordPage',
 			component: () => import('./components/pages/ResetPasswordPage'),
-			// beforeEnter: ifAuthenticated
+			beforeEnter: ifAuthenticated,
 		},
 		{
 			path: '/submitScorecard',
