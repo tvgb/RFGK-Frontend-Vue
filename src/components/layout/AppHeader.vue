@@ -9,7 +9,6 @@
 		</template>
 
 		<template slot="end">
-			
 			<b-navbar-item v-if="isAuthenticated" tag="router-link" :to="{ path: '/profile' }">
 				<div class="buttons">
 					<a class="button">
@@ -62,6 +61,7 @@ export default {
 <style scoped>
 .navbar, .navbar-menu.is-active, .navbar-end, .navbar-item, .buttons, .button {
 	background-color: transparent !important;
+	box-shadow: none;
 }
 
 #logo {
@@ -75,4 +75,12 @@ export default {
 	justify-content: flex-end;
 }
 
+</style>
+
+<style>
+#main-container > .navbar > div.navbar-menu.is-active {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
 </style>

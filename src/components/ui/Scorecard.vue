@@ -16,7 +16,9 @@
 				</b-table-column>
 
 				<b-table-column v-slot="props" width="150" field="lastName" label="Etternavn">
-					{{ props.row.lastName }}
+					{{ props.row.lastName }} 
+					<span v-if="props.row.sum <= -2" style="margin-left: 10px"> &#x1F525; </span>
+					<img v-if="props.row.sum >= 20" src="@/assets/images/richard_emoji.png" alt="Richard Emoji" width="13" style="vertical-align: bottom; margin-left: 10px;">
 				</b-table-column>
 
 				<b-table-column v-slot="props" width="50" field="numberOfThrows" label="Kast" centered>
