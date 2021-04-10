@@ -5,7 +5,7 @@ const state = {
 };
 
 const getters = {
-	courses: state => state.courses
+	courses: state => state.courses.filter(course => !course.isInactive)
 };
 
 const actions = {
