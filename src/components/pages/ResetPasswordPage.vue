@@ -72,6 +72,7 @@ export default {
 
 	beforeRouteLeave (to, from, next) {
 		this.$cookies.remove('access_token');
+		this.$cookies.remove('refresh_token');
 		next();
 	}
 }
