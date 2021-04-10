@@ -5,23 +5,32 @@
 		</h1>
 
 		<b-field label="Email">
-			<b-input v-model="email" type="email"></b-input>
+			<b-input v-model="email" type="email" />
 		</b-field>
 
 		<b-field label="Passord">
-			<b-input v-model="password" type="password"></b-input>
+			<b-input v-model="password" type="password" />
 		</b-field>
 
-		<b-field horizontal><!-- Label left empty for spacing -->
+		<!-- Label left empty for spacing -->
+		<!-- <b-field horizontal> 
 			<p class="control">
-				<button v-on:keyup.enter="startLogin()" @click="startLogin()" class="button is-primary">
-					Logg inn
-				</button>
+				
 			</p>
-		</b-field>
+		</b-field> -->
 
-		<div v-if="!loginSuccessful">
-			Wrong email or password.
+		<div class="btn-row">
+			<span class="forgot-pw-text" @click="forgotPwBtnClicked()">
+				Glemt passordet?
+			</span>
+
+			<button class="button is-primary" @keyup.enter="startLogin()" @click="startLogin()">
+				Logg inn
+			</button>
+		</div>
+
+		<div v-if="!loginSuccessful" class="wrong-email-pw">
+			Feil email eller passord.
 		</div>
 	</div>
 </template>
@@ -46,6 +55,12 @@ export default {
 			'getPlayers'
 		]),
 
+		created() {
+			if (this.$route.query.email) {
+				this.email = this.$route.query.email
+			}
+		},
+
 		async startLogin() {
 			this.loginSuccessful = await this.login({
 				email: this.email,
@@ -54,13 +69,18 @@ export default {
 
 			this.email = '';
 			this.password = '';
+		},
+
+		forgotPwBtnClicked() {
+			this.$router.push({path: 'getResetPasswordEmail', query: {email: this.email}});
 		}
 	}
 }
 </script>
 
-<style>
+<style scoped>
 	.container {
+		width: 400px;
 		padding: 20px;
 		display: flex;
 		flex-direction: column;
@@ -72,8 +92,24 @@ export default {
 		width: 100%;
 	}
 
-	.field p button {
-		float: right;;
+	.forgot-pw-text {
+		color: #7957d5;
+		margin-left: 5px;
+		cursor: pointer;
+	}
+
+	.wrong-email-pw {
+		margin-top: 20px;
+		color: #E85F5C;
+	}
+
+	.btn-row {
+		margin-top: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		color: black;
+		width: 100%;
 	}
 
 	@media only screen and (min-width: 600px) {
