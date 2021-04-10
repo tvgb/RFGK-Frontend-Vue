@@ -94,10 +94,10 @@ export default {
 		font-size: 0.8rem;
 	}
 
-	@media only screen and (min-width: 600px) {
+	@media only screen and (max-width: 600px) {
 		.container {
-			width: 300px;
-			padding: 0;
+			width: 100%;
+			padding: 30px;
 		}
 	}
 

@@ -19,7 +19,7 @@ export default {
 <style>
 	#main-container {
 		min-height: 100vh;
-		width: auto;
+		width: 100%;
 		font-family: 'Poppins', sans-serif;
 		background-color: #F9F9F9;
 	}
@@ -29,10 +29,6 @@ export default {
 		margin-bottom: 30px;
 		text-align: center;
 	}
-
-	/* th {
-		border-width: 0 0 1px !important;
-	} */
 
 	.table td, .table th {
 		border-width: 0 0 1px !important;

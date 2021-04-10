@@ -24,6 +24,12 @@ const ifAuthenticated = (to, from, next) => {
 	router.push({ path: '/login', query: { redirect: to.path} });
 }
 
+const removeTokens = (to, from, next) => {
+	console.log('hello?');
+	VueCookies.removeToken('access_token');
+	VueCookies.removeToken('refresh_token');
+}
+
 let router = new Router({
 	mode: 'history',
 	hash: false,
@@ -49,7 +55,7 @@ let router = new Router({
 			path: '/resetPassword',
 			name: 'ResetPasswordPage',
 			component: () => import('./components/pages/ResetPasswordPage'),
-			// beforeEnter: ifAuthenticated
+			beforeEnter: ifAuthenticated,
 		},
 		{
 			path: '/submitScorecard',

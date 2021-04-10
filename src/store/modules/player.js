@@ -201,7 +201,6 @@ const actions = {
 		commit('setRecieveAddedToScorecardMail', JSON.parse(localStorage.getItem('recieveAddedToScorecardMail')));
 		commit('setShowLatestYearOnly', JSON.parse(localStorage.getItem('showLatestYearOnly')));
 	}
-
 };
 
 const mutations = {
