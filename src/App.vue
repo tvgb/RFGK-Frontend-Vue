@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import AppHeader from './components/layout/AppHeader';
+import AppHeader from './components/layout/AppHeader.vue';
 import axios from 'axios';
 import router from './router';
 

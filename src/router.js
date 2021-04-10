@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from './store';
+import VueCookies from 'vue-cookies';
 
 Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
-
-	if (!store.state.isAuthenticated) {
+	
+	if (!VueCookies.isKey('refresh_token')) {
 		next();
 		return true;
 	}
@@ -16,7 +17,7 @@ const ifNotAuthenticated = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
 
-	if (store.state.player.isAuthenticated) {
+	if (VueCookies.isKey('refresh_token')) {
 		next();
 		return true;
 	}

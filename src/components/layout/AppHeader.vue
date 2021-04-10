@@ -13,7 +13,8 @@
 			<b-navbar-item v-if="isAuthenticated" tag="router-link" :to="{ path: '/profile' }">
 				<div class="buttons">
 					<a class="button">
-						<font-awesome-icon icon="user"/>
+						<!-- <font-awesome-icon icon="user"/> -->
+						<b-icon pack="fas" icon="user" />
 					</a>
 				</div>
 			</b-navbar-item>

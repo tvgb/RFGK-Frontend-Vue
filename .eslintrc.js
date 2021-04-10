@@ -23,6 +23,7 @@ module.exports = {
 
         "quotes": ["error", "single"],
         "no-unused-vars": "warn",
+		"no-unused-labels": "off",
     
         "vue/no-unused-components": "warn",
       

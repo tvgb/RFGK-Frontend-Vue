@@ -5,8 +5,8 @@
 		</h1>
 
 		<b-field horizontal label="Bane">
-			<b-select expanded v-model="selectedCourse">
-				<option v-for="course in courses" :key="course._id" v-bind:value="course">
+			<b-select v-model="selectedCourse" expanded>
+				<option v-for="course in courses" :key="course._id" :value="course">
 					{{ course.name }}
 				</option>
 			</b-select>
@@ -14,50 +14,58 @@
 		
 		<b-field horizontal label="Dato">
 			<b-datetimepicker
+				v-model="datetime"
 				placeholder="Click to select..."
-				horizontal-time-picker
-				v-model="datetime">
-				
-			</b-datetimepicker>
+				horizontal-time-picker />
 		</b-field>
 
-		<div class="breaker"></div>
+		<b-field label="Værforhold">
+			<div class="weather-div">
+				<b-icon class="weather-icon" icon="cloud" :class="{'selected-weather': selectedWeather === 'cloud'}" @click.native="selectWeather('cloud')" />
+				<b-icon class="weather-icon" icon="wind" :class="{'selected-weather': selectedWeather === 'wind'}" @click.native="selectWeather('wind')" />
+				<b-icon class="weather-icon" icon="sun" :class="{'selected-weather': selectedWeather === 'sun'}" @click.native="selectWeather('sun')" />
+				<b-icon class="weather-icon" icon="cloud-sun" :class="{'selected-weather': selectedWeather === 'cloud-sun'}" @click.native="selectWeather('cloud-sun')" />
+				<b-icon class="weather-icon" icon="cloud-showers-heavy" :class="{'selected-weather': selectedWeather === 'cloud-showers-heavy'}" @click.native="selectWeather('cloud-showers-heavy')" />
+				<b-icon class="weather-icon" icon="snowflake" :class="{'selected-weather': selectedWeather === 'snowflake'}" @click.native="selectWeather('snowflake')" />
+			</div>		
+		</b-field>
+
+		<div class="breaker" />
 
 		<b-field horizontal label="Spiller">
-			<b-select expanded v-model="selectedPlayer">
-				<option v-for="player in players" :key="player._id" v-bind:value="player">
+			<b-select v-model="selectedPlayer" expanded>
+				<option v-for="player in players" :key="player._id" :value="player">
 					{{ player.firstName }} {{ player.lastName }}
 				</option>
 			</b-select>
 		</b-field>
 
 		<b-field horizontal label="Resultat">
-			<b-slider v-model="sum" size="is-medium" :min="-10" :max="30">
-			</b-slider>
-		</b-field>
-
-		<b-field horizontal><!-- Label left empty for spacing -->
-			<p class="control">
-				<b-button outlined @click="addRound()" class="add-round-button button is-primary">
-					Legg til spiller
+			<b-field grouped>
+				<b-numberinput v-model="sum" expanded :min="-99" :max="99" :step="1" :exponential="0.5" controls-alignment="right" />
+				<b-button outlined class="add-round-btn button is-primary" @click="addRound()">
+					<b-icon icon="user-plus" />
 				</b-button>
-			</p>
+			</b-field>
 		</b-field>
 
 		<div class="rounds-container">
-			<div class="round" v-for="round in rounds" :key="round.player._id">
+			<div v-for="round in rounds" :key="round.player._id" class="round">
 				<div>
-					{{ round.player.lastName }}	| Resultat: {{ round.sum }}
+					<span class="tag" :class="getColor(round.sum)">
+						{{ round.sum > 0 ? `+${round.sum}` : round.sum }}
+					</span>
+					{{ round.player.lastName }}
 				</div>
-				<div>
-					<font-awesome-icon @click="removeRound(round)" icon="trash-alt"/>
+				<div class="trash-btn" @click="removeRound(round)">
+					<b-icon pack="fas" icon="trash" />
 				</div>
 			</div>
 		</div>
 
-		<b-field v-if="this.rounds.length >= 2" horizontal><!-- Label left empty for spacing -->
+		<b-field v-if="rounds.length >= 2" horizontal>
 			<p class="control">
-				<b-button @click="submitRounds()" class="button is-success">
+				<b-button class="button is-success" @click="submitRounds()">
 					Send inn
 				</b-button>
 			</p>
@@ -77,7 +85,8 @@ export default {
 			selectedCourse: null,
 			selectedPlayer: null,
 			sum: 0,
-			rounds: []
+			rounds: [],
+			selectedWeather: 'cloud'
 		}
 	},
 
@@ -120,23 +129,40 @@ export default {
 				this.selectedPlayer = null; 
 
 				this.rounds.unshift(newRound);
+				this.rounds.sort((a, b) => a.sum - b.sum);
 			}
 		},
 
 		removeRound(round) {
-			this.rounds = this.rounds.filter((value, index, arr) => (value.player._id !== round.player._id));
+			this.rounds = this.rounds.filter(r => r.player._id !== round.player._id);
+		},
+
+		getColor(score) {
+			const goodScoore = 5;
+			const okScore = 10;
+
+			if (score <= goodScoore) {
+				return 'is-success';
+			} else if (score <= okScore) {
+				return 'is-warning';
+			} else {
+				return 'is-danger';
+			}
+		},
+
+		selectWeather(weather) {
+			this.selectedWeather = weather;
 		},
 
 		submitRounds() {
 			this.postScorecard({
+				weather: this.selectedWeather,
 				datetime: this.datetime,
 				course: this.selectedCourse,
 				rounds: this.rounds
 			})
 		}
-	
 	}
-	
 }
 </script>
 
@@ -160,16 +186,45 @@ export default {
 	.round {
 		width: 100%;
 		display: flex;
-		background-color: #7957D5;
-		color: white;
-		padding: 15px 20px;
+		background-color: white;
+		box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.20);
+		color: #363636;
+		padding: 10px 12px;
 		border-radius: 5px;
 		justify-content: space-between;
 		margin: 5px 0;
 	}
 
-	.add-round-button {
-		float: right;
+	.selected-weather {
+		color: #7957d5;
+		font-size: 1.5rem;
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.weather-icon {
+		cursor: pointer;
+		width: 50px;
+		height: 50px;
+	}
+
+	.add-round-btn {
+		margin-left: auto;
+	}
+
+	.trash-btn {
+		cursor: pointer;
+	}
+
+	.tag {
+		width: 35px;
+		margin-right: 12px;
+	}
+
+	.weather-div {
+		display: flex;
+		justify-content: space-evenly;
+		font-size: 1.2rem;
 	}
 
 	@media only screen and (max-width: 600px) {

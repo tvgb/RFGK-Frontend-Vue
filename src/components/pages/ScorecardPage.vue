@@ -28,14 +28,13 @@
 				class="button is-primary">
 				Legg til runde
 			</b-button>
-			
 		</div>
 		<div class="filter-container" :class="{ hide: hideFilter }">
 			<div class="select-container">
 				<div class="select-label"> Bane </div>
 				<b-select v-model="selectedCourse" expanded @input="filterScorecards()">
 					<option value="all"> Alle </option>
-					<option v-for="course in courses" :key="course._id" v-bind:value="course">
+					<option v-for="course in courses" :key="course._id" :value="course">
 						{{ course.name }}
 					</option>
 				</b-select>
@@ -45,6 +44,7 @@
 				<div class="select-label"> År </div>
 				<b-select v-model="selectedYear" expanded @input="filterScorecards()">
 					<option value="all">Alle</option>
+					<option value="2021">2021</option>
 					<option value="2020">2020</option>
 					<option value="2019">2019</option>
 					<option value="2018">2018</option>
@@ -54,12 +54,11 @@
 		<Scorecard
 			v-for="scorecard in scorecards"
 			:key="scorecard._id"
-			:scorecard="scorecard"/>
-		<div class="no-scorecards-card" v-if="scorecards.length === 0 && !isLoading" >
+			:scorecard="scorecard" />
+		<div v-if="scorecards && scorecards.length === 0 && !isLoading" class="no-scorecards-card">
 			Ingen runder finnes for valgte filter
 		</div>
-		<b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
-
+		<b-loading :active.sync="isLoading" :is-full-page="true" />
 	</div>
 </template>
 
@@ -97,7 +96,7 @@ export default {
 		})
 	},
 
-	async created() {
+	created() {
 		this.getCourses();
 
 		if (this.favouriteCourse !== null) {
@@ -109,11 +108,13 @@ export default {
 		}
 
 		this.isLoading = true;
-		await this.getScorecards({
-			course: this.selectedCourse,
+		const courseId = this.selectedCourse === 'all' ? 'all' : this.selectedCourse._id;
+		this.getScorecards({
+			courseId: courseId,
 			year: this.selectedYear
-		});
-		this.isLoading = false;
+		}).then(() => {
+			this.isLoading = false;
+		})
 	},
 
 	methods: {
@@ -125,9 +126,9 @@ export default {
 			this.hideFilter = !this.hideFilter;
 		},
 		filterScorecards() {
-
+			const courseId = this.selectedCourse === 'all' ? 'all' : this.selectedCourse._id;
 			this.getScorecards({
-				course: this.selectedCourse,
+				courseId: courseId,
 				year: this.selectedYear
 			});
 		}
