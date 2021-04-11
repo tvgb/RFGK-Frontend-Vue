@@ -27,9 +27,9 @@ const actions = {
 		commit('setPlayers', response.data);
 	},
 
-	async login({ commit }, {email, password}) {
+	login({ commit, dispatch }, {email, password}) {
 
-		await repository.post(`/${endpoint}/login`,
+		return repository.post(`/${endpoint}/login`,
             {
 				email: email,
 				password: password
@@ -37,48 +37,39 @@ const actions = {
 			{
 				withCredentials: true
 			}
-		).then((response) => {
+		).then((res) => {
 
-			commit('setIsAuthenticated', true);
-			commit('setFavouriteCourse', response.data.favouriteCourse);
-			commit('setRecieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
-			commit('setShowLatestYearOnly', response.data.showLatestYearOnly);
-			commit('setIsVerified', response.data.isVerified);
+			dispatch('setCookieValues', {
+				isAuthenticated: true,
+				isVerified: JSON.parse(res.data.isVerified),
+				favouriteCourse: JSON.parse(res.data.favouriteCourse),
+				recieveAddedToScorecardMail: JSON.parse(res.data.recieveAddedToScorecardMail),
+				showLatestYearOnly: JSON.parse(res.data.showLatestYearOnly)
+			});	
 
-			localStorage.setItem('isVerified', JSON.stringify(response.data.isVerified));
-			localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
-			localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
-			localStorage.setItem('showLatestYearOnly', response.data.showLatestYearOnly);
-			
 			router.push(router.currentRoute.query.redirect || '/');
-
-		}).catch((error) => {
-			
-			if (error.response.status === 400) {
-				commit('setIsAuthenticated', false);
-			}
+			return res;
 		});
 	},
 
-	logout({ commit }) {
+	logout({ dispatch }) {
 		repository.post(`/${endpoint}/logout`,
 		{
 		
 		},
 		{
 			withCredentials: true
-		}).then(() => {
-			commit('setIsAuthenticated', false);
+		}).finally(() => {
 			VueCookies.remove('access_token');
 			VueCookies.remove('refresh_token');	
-				
-			if (router.currentRoute.path !== '/') {
-				router.push('/');
-			}
-		}).catch(() => {
-			commit('setIsAuthenticated', false);
-			VueCookies.remove('access_token');
-			VueCookies.remove('refresh_token');	
+
+			dispatch('setCookieValues', {
+				isAuthenticated: false,
+				isVerified: false,
+				favouriteCourse: 'all',
+				recieveAddedToScorecardMail: false,
+				showLatestYearOnly: false
+			});	
 
 			if (router.currentRoute.path !== '/') {
 				router.push('/');
@@ -102,11 +93,6 @@ const actions = {
 				commit('setFavouriteCourse', response.data.favouriteCourse);
 				commit('setRecieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
 				commit('setShowLatestYearOnly', response.data.showLatestYearOnly);
-
-				localStorage.setItem('favouriteCourse', JSON.stringify(response.data.favouriteCourse));
-				localStorage.setItem('recieveAddedToScorecardMail', response.data.recieveAddedToScorecardMail);
-				localStorage.setItem('showLatestYearOnly', response.data.showLatestYearOnly);
-
 				resolve();
 
 			}).catch(() => {
@@ -115,7 +101,7 @@ const actions = {
 		});
 	},
 
-	resetPassword({ commit }, {password}) {
+	resetPassword({}, {password}) {
 		return repository.put(`${endpoint}/resetPassword`, 
 			{
 				password: password
@@ -126,7 +112,7 @@ const actions = {
 		);
 	},
 
-	updatePersonalInfo({ commit }, {newEmail, newPassword, oldPassword}) {
+	updatePersonalInfo({}, {newEmail, newPassword, oldPassword}) {
 		return new Promise((resolve, reject) => {
 			repository.put(`/${endpoint}/updatePersonalInfo`, 
 				{
@@ -145,7 +131,7 @@ const actions = {
 		});
 	},
 
-	sendResetPasswordEmail({commit}, {email}) {
+	sendResetPasswordEmail({}, {email}) {
 		return repository.put(`/${endpoint}/sendResetPasswordEmail`,
 			{
 				email: email
@@ -156,7 +142,7 @@ const actions = {
 		);
 	},
 
-	sendVerificationEmail({commit}) {
+	sendVerificationEmail({}) {
 		return new Promise((resolve, reject) => {
 			repository.put(`/${endpoint}/sendVerificationEmail`,
 				{
@@ -173,33 +159,34 @@ const actions = {
 		});
 	},
 
-	runIndentificationProcess({ commit }) {
-		return new Promise((resolve, reject) => {
-			if (VueCookies.isKey('access_token')) {
-				resolve(true); 
-			} else if (VueCookies.isKey('refresh_token')) {
-				return repository.post(`/${endpoint}/refreshToken`,{}, { withCredentials: true }).then(() => {
-					resolve(true);
-				}).catch(() => {
-					resolve(false);
-				});
-			} else {
-				resolve(false);
-			}
-		})
+	refreshAccessToken({ dispatch }) {
+		return repository.post(`/${endpoint}/refreshToken`,{}, { withCredentials: true })
+			.then((res) => {
+				dispatch('setCookieValues', {
+					isAuthenticated: true,
+					isVerified: JSON.parse(res.data.isVerified),
+					favouriteCourse: JSON.parse(res.data.favouriteCourse),
+					recieveAddedToScorecardMail: JSON.parse(res.data.recieveAddedToScorecardMail),
+					showLatestYearOnly: JSON.parse(res.data.showLatestYearOnly)
+				});				
+			})
+			.catch(() => {
+				dispatch('setCookieValues', {
+					isAuthenticated: false,
+					isVerified: false,
+					favouriteCourse: 'all',
+					recieveAddedToScorecardMail: false,
+					showLatestYearOnly: false
+				});	
+			})
 	},
 
-
-	refreshAccessToken({ commit }) {
-		return repository.post(`/${endpoint}/refreshToken`,{}, { withCredentials: true });
-	},
-
-	setCookieValues({commit, state}) {
-		commit('setIsAuthenticated', VueCookies.isKey('refresh_token'));
-		commit('setIsVerified', JSON.parse(VueCookies.get('isVerified')));
-		commit('setFavouriteCourse', JSON.parse(localStorage.getItem('favouriteCourse')));
-		commit('setRecieveAddedToScorecardMail', JSON.parse(localStorage.getItem('recieveAddedToScorecardMail')));
-		commit('setShowLatestYearOnly', JSON.parse(localStorage.getItem('showLatestYearOnly')));
+	setCookieValues({ commit },  {isAuthenticated, isVerified, favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
+		commit('setIsAuthenticated', isAuthenticated);
+		commit('setIsVerified', isVerified);
+		commit('setFavouriteCourse', favouriteCourse);
+		commit('setRecieveAddedToScorecardMail', recieveAddedToScorecardMail);
+		commit('setShowLatestYearOnly', showLatestYearOnly);
 	}
 };
 

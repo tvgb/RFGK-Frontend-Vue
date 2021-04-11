@@ -54,14 +54,17 @@ export default {
 			}
 		},
 
-		async startLogin() {
-			this.loginSuccessful = await this.login({
+		startLogin() {
+			this.login({
 				email: this.email,
 				password: this.password
+			}).then(() => {
+				this.loginSuccessful = true;
+				this.email = '';
+				this.password = '';
+			}).catch(() => {
+				this.loginSuccessful = false;
 			});
-
-			this.email = '';
-			this.password = '';
 		},
 
 		forgotPwBtnClicked() {
