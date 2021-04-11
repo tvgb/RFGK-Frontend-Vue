@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import store from './store';
 import VueCookies from 'vue-cookies';
 
 Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
-	
-	if (!(VueCookies.isKey('refresh_token') || VueCookies.isKey('access_token'))) {
+	if (!store.isAuthenticated) {
 		next();
 		return true;
 	}
@@ -16,12 +16,21 @@ const ifNotAuthenticated = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
 
-	if (VueCookies.isKey('refresh_token') || VueCookies.isKey('access_token')) {
+	if (store.state.player.isAuthenticated) {
 		next();
 		return true;
 	}
 
 	router.push({ path: '/login', query: { redirect: to.path} });
+}
+
+const ifHasAccessCookie = (to, form, next) => {
+	if (VueCookies.isKey('access_token')) {
+		next();
+		return true;
+	}
+
+	router.push({ path: '/' });
 }
 
 let router = new Router({
@@ -49,7 +58,7 @@ let router = new Router({
 			path: '/resetPassword',
 			name: 'ResetPasswordPage',
 			component: () => import('./components/pages/ResetPasswordPage'),
-			beforeEnter: ifAuthenticated,
+			beforeEnter: ifHasAccessCookie,
 		},
 		{
 			path: '/submitScorecard',

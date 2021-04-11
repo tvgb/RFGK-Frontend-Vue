@@ -19,16 +19,23 @@ Vue.use(Buefy, {
 Vue.use(require('vue-moment'));
 Vue.use(VueCookies);
 
-if (VueCookies.isKey('refresh_token')) {
-	store.dispatch('refreshAccessToken').finally(() => {
-		store.dispatch('setCookieValues');
-	});
-}
-
 Vue.config.productionTip = false;
 
-new Vue({
-	router,
-	store,
-	render: h => h(App),
-}).$mount('#app');
+
+if (VueCookies.isKey('refresh_token')) {
+	store.dispatch('refreshAccessToken').finally(() => {
+		new Vue({
+			router,
+			store,
+			render: h => h(App),
+		}).$mount('#app');
+	})
+} else {
+	new Vue({
+		router,
+		store,
+		render: h => h(App),
+	}).$mount('#app');
+}
+
+
