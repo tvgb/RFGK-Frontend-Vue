@@ -33,7 +33,7 @@
 		<div class="breaker" />
 
 		<b-field horizontal label="Spiller">
-			<b-select v-model="selectedPlayer" expanded>
+			<b-select ref="playerSelector" v-model="selectedPlayer" expanded placeholder="Velg en spiller" @focus="playerSelectFocus()" @input="selectedPlayerChanged($event)">
 				<option v-for="player in players" :key="player._id" :value="player">
 					{{ player.firstName }} {{ player.lastName }}
 				</option>
@@ -41,8 +41,8 @@
 		</b-field>
 
 		<b-field horizontal label="Resultat">
-			<b-field grouped>
-				<b-numberinput v-model="sum" expanded :min="-99" :max="99" :step="1" :exponential="0.5" controls-alignment="right" />
+			<b-field grouped :type="numberInputType" :message="numberInputMessage">
+				<b-numberinput ref="resultInput" v-model.number="sum" expanded :step="1" :exponential="0.5" controls-alignment="right" />
 				<b-button outlined class="add-round-btn button is-primary" @click="addRound()">
 					<b-icon icon="user-plus" />
 				</b-button>
@@ -86,8 +86,10 @@ export default {
 			selectedPlayer: null,
 			sum: 0,
 			rounds: [],
-			selectedWeather: 'cloud'
-		}
+			selectedWeather: 'cloud',
+			numberInputType: 'is-primary',
+			numberInputMessage: ''
+		};
 	},
 
 	computed: {
@@ -113,6 +115,17 @@ export default {
 
 		addRound() {
 
+			console.log(this.sum);
+
+			if (this.sum > 99 && this.sum > -99) {
+				this.numberInputMessage = 'Tallet må være mellom -99 og 99.';
+				this.numberInputType = 'is-danger';
+				return;
+			} else {
+				this.numberInputMessage = '';
+				this.numberInputType = 'is-primary';
+			}
+
 			for (const round of this.rounds) {
 				if (round.player._id === this.selectedPlayer._id) {
 					return;
@@ -123,18 +136,28 @@ export default {
 				const newRound = {
 					sum: this.sum,
 					player: this.selectedPlayer
-				}
+				};
 
 				this.sum = 0;
 				this.selectedPlayer = null; 
 
 				this.rounds.unshift(newRound);
 				this.rounds.sort((a, b) => a.sum - b.sum);
+
+				this.$refs.playerSelector.focus();
 			}
 		},
 
 		removeRound(round) {
 			this.rounds = this.rounds.filter(r => r.player._id !== round.player._id);
+		},
+
+		playerSelectFocus() {
+			this.selectedPlayer = this.players[0];
+		},
+
+		selectedPlayerChanged() {
+			this.$refs.resultInput.focus();
 		},
 
 		getColor(score) {
@@ -160,10 +183,10 @@ export default {
 				datetime: this.datetime,
 				course: this.selectedCourse,
 				rounds: this.rounds
-			})
+			});
 		}
 	}
-}
+};
 </script>
 
 <style scoped>

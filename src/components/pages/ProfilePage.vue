@@ -4,39 +4,37 @@
 			Profil
 		</h1>
 
-		<b-field :message="oneChangeNeededMessage" :type="oneChangeNeededType" label="Endre email">
-			<b-input type="email" v-model="newEmail"/>
+		<b-field label="Endre email">
+			<b-input ref="emailInput" v-model="newEmail" type="email" />
 		</b-field>
 
-		<b-field :message="oneChangeNeededMessage" :type="oneChangeNeededType" label="Endre passord">
-			<b-input autocomplete="new-password" type="password" v-model="newPassword" />
-		</b-field>
-
-		<b-field :message="oldPwMessage" :type="oldPwType" label="Gammelt passord">
-			<b-input autocomplete="new-password" type="password" v-model="oldPassword" />
-		</b-field>
-
-		<b-button @click="onUpdatePersonalInfo()" class="save-button">
+		<b-button class="save-button" @click="updateEmail()">
 			Lagre
 		</b-button>
 
-		<div class="feedback-div">
-			{{ feedback_1 }}
-		</div>
+		<div class="breaker" />
+
+		<b-field label="Nytt passord">
+			<b-input ref="newPwInput" v-model="newPassword" required minlength="8" autocomplete="new-password" type="password" />
+		</b-field>
+
+		<b-field :message="oldPwMessage" :type="oldPwType" label="Gammelt passord">
+			<b-input ref="oldPwInput" v-model="oldPassword" required minlength="8" autocomplete="new-password" type="password" />
+		</b-field>
+
+		<b-button class="save-button" @click="updatePassword()">
+			Lagre
+		</b-button>
 
 		<div v-if="!isVerified" class="breaker" />
 
-		<b-button :disabled="disableSendVerificationMailButton" @click="onSendVerificationMail()" v-if="!isVerified" class="verification-button">
+		<b-button v-if="!isVerified" :disabled="disableSendVerificationMailButton" class="verification-button" @click="onSendVerificationMail()">
 			Send verifikasjons-epost på nytt
 		</b-button>
-		
-		<div class="feedback-div">
-			{{ feedback_3 }}
-		</div>
 
 		<div class="breaker" />
 
-		<div class="field" v-if="isVerified">
+		<div v-if="isVerified" class="field">
 			<b-checkbox v-model="selectedRecieveAddedToScorecardMail">
 				Motta mail når du har blitt lagt til i en runde.
 			</b-checkbox>
@@ -59,9 +57,6 @@
 		<b-button class="save-button" @click="onUpdateSettings()">
 			Lagre
 		</b-button>
-		<div class="feedback-div">
-			{{ feedback_2 }}
-		</div>
 	</div>
 </template>
 
@@ -77,18 +72,13 @@ export default {
 			selectedFavouriteCourse: null,
 			selectedShowLatestYearOnly: false,
 			selectedRecieveAddedToScorecardMail: false,
-			feedback_1: '',
-			feedback_2: '',
-			feedback_3: '',
 			oldPwMessage: '',
 			oldPwType: '',
-			oneChangeNeededMessage: '',
-			oneChangeNeededType: '',
 			newEmail: '',
 			newPassword: '',
 			oldPassword: '',
 			disableSendVerificationMailButton: false
-		}
+		};
 	},
 
 	computed: {
@@ -130,79 +120,69 @@ export default {
 				recieveAddedToScorecardMail: this.selectedRecieveAddedToScorecardMail,
 				showLatestYearOnly: this.selectedShowLatestYearOnly
 			}).then(() => {
-				this.feedback = 'Lagret!'
-				setTimeout(() => {
-					this.feedback_2 = '';
-				}, 3000);
+				this.openToast('Lagret!', 'is-success');
 			}).catch(() => {
-				this.feedback = 'Noe gikk galt...'
-				setTimeout(() => {
-					this.feedback_2 = '';
-				}, 3000);
+				this.openToast('Noe gikk galt...', 'is-danger');
 			});
 		},
 
-		onUpdatePersonalInfo() {
-			if (this.oldPassword.trim() === '') {
-				this.oldPwMessage = 'Nåværende passord trengs for å lagre endringer.';
-				this.oldPwType = 'is-danger';
+		updateEmail() {
+			if (this.newEmail.trim() === '' || !this.$refs.emailInput.checkHtml5Validity()) {
 				return;
-			} else {
-				this.oldPwMessage = '';
-				this.oldPwType = '';
-				this.oneChangeNeededMessage = ''
-				this.oneChangeNeededType = '';
 			}
-
-			if (this.newEmail.trim() === '' && this.newPassword === '') {
-				this.oneChangeNeededMessage = 'Minst ett felt må endres for å lagre endringer.'
-				this.oneChangeNeededType = 'is-danger';
-				return;
-			} else  {
-				this.oneChangeNeededMessage = ''
-				this.oneChangeNeededType = '';
-				this.oldPwMessage = '';
-				this.oldPwType = '';
-			}
-
-
 
 			this.updatePersonalInfo({
 				newEmail: this.newEmail,
+				newPassword: undefined,
+				oldPassword: undefined
+			}).then(() => {
+				this.openToast('Lagret!', 'is-success');
+			}).catch(() => {
+				this.openToast('Noe gikk galt...', 'is-danger');
+			});
+		},
+
+		updatePassword() {
+
+			this.oldPwMessage = '';
+			this.oldPwType = '';
+
+			if (!this.$refs.newPwInput.checkHtml5Validity() || !this.$refs.oldPwInput.checkHtml5Validity()) {
+				return;
+			}
+
+			this.updatePersonalInfo({
+				newEmail: undefined,
 				newPassword: this.newPassword,
 				oldPassword: this.oldPassword
 			}).then(() => {
-				this.feedback_1 = 'Lagret!';
-				setTimeout(() => {
-					this.feedback_1 = '';
-				}, 3000);
+				this.openToast('Lagret!', 'is-success');
 			}).catch((error) => {
 				if (error.response.status === 400) {
 					this.oldPwMessage = 'Feil passord';
 					this.oldPwType = 'is-danger';
 				} else {
-					this.feedback_1 = 'Noe gikk galt...';
-					setTimeout(() => {
-						this.feedback_1 = '';
-					}, 3000);
+					this.openToast('Noe gikk galt...', 'is-danger');
 				}
-				
 			});
 		},
 
 		onSendVerificationMail() {
 			this.sendVerificationMail().then(() => {
-				this.feedback_3 = 'Mail sendt!';
 				this.disableSendVerificationMailButton = true;
-				setTimeout(() => {
-					this.feedback_3 = '';
-				}, 3000);
+				this.openToast('Mail sendt!', 'is-success');
 			}).catch(() => {
-				this.feedback_3 = 'Noe gikk galt...';
 				this.disableSendVerificationMailButton = false;
-				setTimeout(() => {
-					this.feedback_3 = '';
-				}, 3000);
+				this.openToast('Noe gikk galt...', 'is-danger');
+			});
+		},
+
+		openToast(message, type) {
+			this.$buefy.toast.open({
+				message: message,
+				type: type,
+				position: 'is-bottom',
+				duration: 3000
 			});
 		}
 	}
@@ -229,11 +209,6 @@ export default {
 	border: 1px lightgray solid;
 	width: 100%;
 	margin: 20px 0;
-}
-
-.feedback-div {
-	text-align: center;
-	color: #7957d5;
 }
 
 @media only screen and (max-width: 600px) {
