@@ -115,8 +115,6 @@ export default {
 
 		addRound() {
 
-			console.log(this.sum);
-
 			if (this.sum > 99 && this.sum > -99) {
 				this.numberInputMessage = 'Tallet må være mellom -99 og 99.';
 				this.numberInputType = 'is-danger';
