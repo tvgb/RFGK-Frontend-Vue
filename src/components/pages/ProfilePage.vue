@@ -82,9 +82,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'courses',
-		]),
+		...mapGetters({
+			courses: 'allCourses'
+		}),
 		...mapState({
 			favouriteCourse: state => state.player.favouriteCourse,
 			showLatestYearOnly: state => state.player.showLatestYearOnly,

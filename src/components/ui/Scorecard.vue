@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="scorecard-header">
 			<div class="name-and-weather">			
-				{{ isMobile() ? getShortName(scorecard.course.name) : scorecard.course.name }} <span v-if="scorecard.weather" class="weather-icon-spacer">|</span>
+				{{ scorecard.course.name }} <span v-if="scorecard.weather" class="weather-icon-spacer">|</span>
 				<b-icon v-if="scorecard.weather" class="weather-icon" :icon="scorecard.weather" />
 			</div>
 			<div>{{ scorecard.datetime | moment("DD-MM-YYYY") }}</div>

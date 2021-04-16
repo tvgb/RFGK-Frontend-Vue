@@ -79,14 +79,14 @@ export default {
 			selectedCourse: 'all',
 			selectedYear: 'all',
 			isLoading: false
-		}
+		};
 	},
 
 	computed: {
-		...mapGetters([
-			'scorecards', 
-			'courses'
-		]),
+		...mapGetters({
+			courses: 'allCourses',
+			scorecards: 'scorecards'   
+		}),
 
 		...mapState({
 			showLatestYearOnly: state => state.player.showLatestYearOnly,
@@ -100,7 +100,7 @@ export default {
 		this.getCourses();
 
 		if (this.favouriteCourse !== null) {
-			this.selectedCourse = this.favouriteCourse
+			this.selectedCourse = this.favouriteCourse;
 		}
 
 		if (this.showLatestYearOnly) {
@@ -114,7 +114,7 @@ export default {
 			year: this.selectedYear
 		}).then(() => {
 			this.isLoading = false;
-		})
+		});
 	},
 
 	methods: {

@@ -12,7 +12,32 @@ const state = {
 };
 
 const getters = {
+	players: state => {
+		let players = state.players;
+		const mostUsed = JSON.parse(localStorage.getItem('mostUsed'));
 
+		if (mostUsed) {
+			players = players.map((player) => {
+				const usedPlayer = mostUsed.players.find(p => p._id === player._id);
+				const uses = usedPlayer ? usedPlayer.uses : 0;
+				Object.assign(player, {uses: uses});
+
+				return player;
+			});
+
+			players = players.sort((a, b) => {
+				if (a.uses > b.uses) {
+					return -1;
+				} else if (a.uses < b.uses) {
+					return 1;
+				} else {
+					return 0;
+				}
+			});
+		}
+
+		return players;
+	} 
 };
 
 const endpoint = 'player';
@@ -27,7 +52,7 @@ const actions = {
 		commit('setPlayers', response.data);
 	},
 
-	login({ commit, dispatch }, {email, password}) {
+	login({ dispatch }, {email, password}) {
 
 		return repository.post(`/${endpoint}/login`,
             {
@@ -38,13 +63,12 @@ const actions = {
 				withCredentials: true
 			}
 		).then((res) => {
-
 			dispatch('setCookieValues', {
 				isAuthenticated: true,
-				isVerified: JSON.parse(res.data.isVerified),
-				favouriteCourse: JSON.parse(res.data.favouriteCourse),
-				recieveAddedToScorecardMail: JSON.parse(res.data.recieveAddedToScorecardMail),
-				showLatestYearOnly: JSON.parse(res.data.showLatestYearOnly)
+				isVerified: res.data.isVerified,
+				favouriteCourse: res.data.favouriteCourse,
+				recieveAddedToScorecardMail: res.data.recieveAddedToScorecardMail,
+				showLatestYearOnly: res.data.showLatestYearOnly
 			});	
 
 			router.push(router.currentRoute.query.redirect || '/');
@@ -74,7 +98,7 @@ const actions = {
 			if (router.currentRoute.path !== '/') {
 				router.push('/');
 			}
-		})
+		});
 	},
 
 	updateSettings({ commit }, {favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
@@ -164,10 +188,10 @@ const actions = {
 			.then((res) => {
 				dispatch('setCookieValues', {
 					isAuthenticated: true,
-					isVerified: JSON.parse(res.data.isVerified),
-					favouriteCourse: JSON.parse(res.data.favouriteCourse),
-					recieveAddedToScorecardMail: JSON.parse(res.data.recieveAddedToScorecardMail),
-					showLatestYearOnly: JSON.parse(res.data.showLatestYearOnly)
+					isVerified: res.data.isVerified,
+					favouriteCourse: res.data.favouriteCourse,
+					recieveAddedToScorecardMail: res.data.recieveAddedToScorecardMail,
+					showLatestYearOnly: res.data.showLatestYearOnly
 				});				
 			})
 			.catch(() => {
@@ -178,7 +202,7 @@ const actions = {
 					recieveAddedToScorecardMail: false,
 					showLatestYearOnly: false
 				});	
-			})
+			});
 	},
 
 	setCookieValues({ commit },  {isAuthenticated, isVerified, favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
