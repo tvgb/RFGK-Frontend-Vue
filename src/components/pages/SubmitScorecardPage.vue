@@ -62,19 +62,17 @@
 				</div>
 			</div>
 		</div>
-
-		<b-field v-if="rounds.length >= 2" horizontal>
-			<p class="control">
-				<b-button class="button is-success" @click="submitRounds()">
-					Send inn
-				</b-button>
-			</p>
-		</b-field>
+		
+		<div v-if="rounds.length > 1" class="btn-wrapper">
+			<b-button class="button is-success" @click="submitRounds()">
+				Send inn
+			</b-button>
+		</div>
 	</div>
 </template>
 
 <script>
-import {mapState, mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions } from 'vuex';
 
 export default {
 	name: 'SubmitScorecardPage',
@@ -93,11 +91,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'courses'
-		]),
-		...mapState({
-			players: state => state.player.players
+		...mapGetters({
+			courses: 'activeCourses',
+			players: 'players'
 		})
 	},
 
@@ -240,6 +236,13 @@ export default {
 	.tag {
 		width: 35px;
 		margin-right: 12px;
+	}
+
+	.btn-wrapper {
+		width: 100%;
+		display: flex;
+		flex-direction: row-reverse;
+		margin-top: 15px;
 	}
 
 	.weather-div {
