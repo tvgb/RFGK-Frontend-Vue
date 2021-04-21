@@ -1,22 +1,29 @@
 <template>
 	<div id="main-container">
 		<AppHeader />
+		<Navigator />
 		<router-view />
 	</div>
 </template>
 
 <script>
 import AppHeader from './components/layout/AppHeader.vue';
+import Navigator from './components/layout/Navigator.vue';
 
 export default {
 	name: 'App',
 	components: {
-		AppHeader
+		AppHeader,
+		Navigator
 	}
 }
 </script>
 
 <style>
+	html, body {
+		background-color: #F9F9F9;
+	}
+
 	#main-container {
 		min-height: 100vh;
 		width: 100%;

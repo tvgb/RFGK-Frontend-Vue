@@ -12,7 +12,7 @@ const ifNotAuthenticated = (to, from, next) => {
 	}
 
 	next('/');
-}
+};
 
 const ifAuthenticated = (to, from, next) => {
 
@@ -22,7 +22,7 @@ const ifAuthenticated = (to, from, next) => {
 	}
 
 	router.push({ path: '/login', query: { redirect: to.path} });
-}
+};
 
 const ifHasAccessCookie = (to, form, next) => {
 	if (VueCookies.isKey('access_token')) {
@@ -31,7 +31,7 @@ const ifHasAccessCookie = (to, form, next) => {
 	}
 
 	router.push({ path: '/' });
-}
+};
 
 let router = new Router({
 	mode: 'history',
@@ -41,6 +41,11 @@ let router = new Router({
 			path: '/',
 			name: 'Scorecard',
 			component: () => import('./components/pages/ScorecardPage')
+		},
+		{
+			path: '/league',
+			name: 'LeaguePage',
+			component: () => import('./components/pages/LeaguePage')
 		},
 		{
 			path: '/login',

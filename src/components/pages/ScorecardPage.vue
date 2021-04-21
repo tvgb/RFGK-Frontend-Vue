@@ -1,9 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			Siste runder
-		</h1>
-
 		<div class="options-container">
 			<b-button
 				class="button"

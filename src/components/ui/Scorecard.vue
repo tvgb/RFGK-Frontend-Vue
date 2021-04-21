@@ -70,7 +70,7 @@ export default {
 			],
 			
 			defaultSort: 'numberOfThrows'
-		}
+		};
 	},
 	computed: {
 		rounds: function() {
@@ -81,7 +81,7 @@ export default {
 					lastName: round.player.lastName,
 					numberOfThrows: round.numberOfThrows,
 					sum: (round.numberOfThrows - this.scorecard.course.par)
-				}
+				};
 
 				rounds.push(newRound);
 			}
@@ -149,7 +149,7 @@ export default {
 	
 	.weather-icon-spacer {
 		width: 1px;
-		margin: 0px 5px 0px 7px;
+		margin: 0px 7px;
 		color: #A9A9A9;
 	}
 
