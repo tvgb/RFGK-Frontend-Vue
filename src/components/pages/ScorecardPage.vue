@@ -1,5 +1,8 @@
 <template>
 	<div class="container">
+		<h1>
+			SCORECARDS
+		</h1>
 		<div class="options-container">
 			<b-button
 				class="button"
@@ -11,19 +14,18 @@
 				label="Du må være logget inn og ha en verifisert epostadresse for å kunne legge til nye runder."
 				size="is-small"
 				multilined>
-				<b-button
+				<button
 					:disabled="true"
-					tag="router-link" to="/submitScorecard" type="is-link"
-					class="button is-primary">
-					Legg til runde
-				</b-button>
+					class="add-scorecard-btn">
+					LEGG TIL RUNDE
+				</button>
 			</b-tooltip>
-			<b-button
+			<button
 				v-if="isVerified && isAuthenticated"
-				tag="router-link" to="/submitScorecard" type="is-link"
-				class="button is-primary">
-				Legg til runde
-			</b-button>
+				class="add-scorecard-btn"
+				@click="navTo('/submitScorecard')">
+				LEGG TIL RUNDE
+			</button>
 		</div>
 		<div class="filter-container" :class="{ hide: hideFilter }">
 			<div class="select-container">
@@ -127,6 +129,10 @@ export default {
 				courseId: courseId,
 				year: this.selectedYear
 			});
+		},
+
+		navTo(route) {
+			this.$router.push({path: route});
 		}
 	}
 }
@@ -138,6 +144,44 @@ export default {
 		flex-direction: column;
 		align-items: center;
 		padding: 0;
+	}
+
+	h1 {
+		font-size: 28px;
+		font-family: 'Montserrat';
+		font-weight: 800;
+		font-style: italic;
+		padding: 20px;
+
+		background-image: linear-gradient(90deg, rgba(60,109,125,1) 0%, rgba(126,222,254,1) 100%);
+		background-clip: text;
+		color: transparent;
+		background-size: 400%;
+
+		animation: bg-animation 5s infinite alternate;
+	}
+
+	@keyframes bg-animation {
+		0% {
+			background-position: left;
+		}
+		100% {
+			background-position: right;
+		}
+	}
+
+	.add-scorecard-btn {
+		width: 140px;
+		height: 40px;
+		font-family: 'Montserrat';
+		color: white;
+		font-weight: 500;
+		background-color: #70C8E5;
+		box-shadow: none;
+		border: 0;
+		border-radius: 4px;
+		font-size: 0.9rem;
+		letter-spacing: -1px;
 	}
 
 	.options-container {

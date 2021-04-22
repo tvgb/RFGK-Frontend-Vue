@@ -1,6 +1,6 @@
 <template>
-	<div v-if="currentHeader" class="container">
-		<b-dropdown aria-role="menu" @change="onHeaderChange($event)">
+	<div class="bottom-nav-bar">
+		<!-- <b-dropdown aria-role="menu" @change="onHeaderChange($event)">
 			<template #trigger="{ active }">
 				<div class="navigator-container">
 					<span style="width: 40px" />
@@ -15,7 +15,19 @@
 			</template>
 				
 			<b-dropdown-item v-for="header in currentHeaders" :key="header" aria-role="menuitem" :value="header"> {{ header }} </b-dropdown-item>
-		</b-dropdown>
+		</b-dropdown> -->
+		<router-link class="nav-icon" :style="getColour('ProfilePage')" to="profile">
+			<b-icon class="nav-icon" icon="user" />
+		</router-link>
+		<router-link class="nav-icon rfgk-icon" :style="getColour('Scorecard')" to="/">
+			RF<br>GK
+		</router-link>
+		<router-link class="nav-icon" :style="getColour('LeaguePage')" to="league">
+			<b-icon class="nav-icon" icon="trophy" />
+		</router-link>
+		<router-link class="nav-icon" :style="getColour('SubmitScorecardPage')" to="submitScorecard">
+			<b-icon class="nav-icon" icon="plus" />
+		</router-link>
 	</div>
 </template>
 
@@ -26,45 +38,27 @@ export default {
 
 	data: () => {
 		return {
-			headers: [
-				'RFGK Parken Closed 2021',
-				'Siste runder'
-			],
-			currentHeaders: [],
-			currentHeader: null
+			currentRoute: null
 		};
-	},	
+	},
 
 	watch:{
 		$route (to, from) {
-			let header = null;
-
-			switch (to.name) {
-				case 'LeaguePage':
-					header = 'RFGK Parken Closed 2021';
-					break;
-
-				case 'Scorecard':
-					header = 'Siste runder';
-					break;
-			}
-
-			this.currentHeader = header;
-			this.currentHeaders = this.headers.filter(h => h !== header);
+			this.currentRoute = to.name;
 		}
 	},
 
 	methods: {
-		onHeaderChange(header) {
-			switch (header) {
-				case 'RFGK Parken Closed 2021':
-					this.$router.push({path: 'league'});
-					break;
-
-				case 'Siste runder':
-					this.$router.push({path: '/'});
-					break;
+		getColour(route) {
+			if (this.currentRoute === route) {
+				return 'color: #7EDEFE;';
 			}
+
+			return 'color: #4A4A4A;';
+		},
+
+		navToRoute(route) {
+			this.$router.push({path: route});
 		}
 	}
 };
@@ -72,38 +66,31 @@ export default {
 </script>
 
 <style scoped>
-	.container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+	.bottom-nav-bar {
+		position: fixed;
+		z-index: 9999;
+		background-color: #f9f9f9;
+		bottom: 0;
+		left: 0;
 		width: 100%;
 		height: 50px;
-		margin-bottom: 15px;
-	}
 
-	.current-header {
-		font-size: 1.3rem;
-		height: 100%;
-		margin: 0px 5px;
-	}
-
-	.navigator-container {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
+		padding: 0px 20px;
+	}
+
+	.nav-icon {
+		width: 50px;
+		font-size: 1rem;
 		cursor: pointer;
 	}
-</style>
 
-<style>
-	@media only screen and (min-width: 600px) {
-		.dropdown-menu {
-			width: 100%;
-		}
-
-		.dropdown-content {
-			width: fit-content;
-			margin: 0px auto;
-		}
+	.rfgk-icon {
+		line-height: 73%;
+		text-align: center;
+		font-weight: 600;
+		letter-spacing: -1%;
 	}
 </style>

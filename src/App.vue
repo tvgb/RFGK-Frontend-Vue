@@ -1,7 +1,7 @@
 <template>
 	<div id="main-container">
-		<AppHeader />
-		<Navigator />
+		<AppHeader v-if="!isMobile()" />
+		<Navigator v-if="isMobile()" />
 		<router-view />
 	</div>
 </template>
@@ -15,8 +15,14 @@ export default {
 	components: {
 		AppHeader,
 		Navigator
+	},
+
+	methods: {
+		isMobile() {
+			return screen.width <= 600;
+		}
 	}
-}
+};
 </script>
 
 <style>

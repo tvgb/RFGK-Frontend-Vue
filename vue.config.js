@@ -5,7 +5,8 @@ module.exports = {
         plugins: [
             new GoogleFontsPlugin({
                 fonts: [
-                    { family: 'Poppins' }
+                    { family: 'Poppins' },
+					{ family: 'Montserrat'}
                 ]
             })
         ]
