@@ -25,9 +25,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 	html, body {
-		background-color: #F9F9F9;
+		background-color: $main-grey-100;
 	}
 
 	#main-container {

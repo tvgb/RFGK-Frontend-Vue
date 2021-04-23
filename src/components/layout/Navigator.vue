@@ -1,33 +1,14 @@
 <template>
 	<div class="bottom-nav-bar">
-		<!-- <b-dropdown aria-role="menu" @change="onHeaderChange($event)">
-			<template #trigger="{ active }">
-				<div class="navigator-container">
-					<span style="width: 40px" />
-					<span class="current-header" role="button">
-						{{ currentHeader }}
-					</span>
-					<span style="width: 40px; display: flex; align-items: center;"> 
-						<b-icon v-if="active" icon="angle-up" />
-						<b-icon v-if="!active" icon="angle-down" />
-					</span>
-				</div>
-			</template>
-				
-			<b-dropdown-item v-for="header in currentHeaders" :key="header" aria-role="menuitem" :value="header"> {{ header }} </b-dropdown-item>
-		</b-dropdown> -->
-		<router-link class="nav-icon" :style="getColour('ProfilePage')" to="profile">
-			<b-icon class="nav-icon" icon="user" />
-		</router-link>
-		<router-link class="nav-icon rfgk-icon" :style="getColour('Scorecard')" to="/">
-			RF<br>GK
-		</router-link>
-		<router-link class="nav-icon" :style="getColour('LeaguePage')" to="league">
-			<b-icon class="nav-icon" icon="trophy" />
-		</router-link>
-		<router-link class="nav-icon" :style="getColour('SubmitScorecardPage')" to="submitScorecard">
-			<b-icon class="nav-icon" icon="plus" />
-		</router-link>
+		<div class="gradient" />
+		<div class="icons-wrapper">
+			<b-icon class="nav-icon" icon="user" :class="{selected: currentRoute === 'ProfilePage'}" @click.native="goToRoute('/profile')" />
+			<span class="rfgk-icon nav-icon" :class="{selected: currentRoute === 'Scorecard'}" @click="goToRoute('/')">
+				RF<br>GK
+			</span>
+			<b-icon class="nav-icon" :class="{selected: currentRoute === 'LeaguePage'}" icon="trophy" @click.native="goToRoute('/league')" />
+			<b-icon class="nav-icon" icon="plus" :class="{selected: currentRoute === 'SubmitScorecardPage'}" @click.native="goToRoute('/submitscorecard')" />
+		</div>
 	</div>
 </template>
 
@@ -49,48 +30,65 @@ export default {
 	},
 
 	methods: {
-		getColour(route) {
-			if (this.currentRoute === route) {
-				return 'color: #7EDEFE;';
-			}
-
-			return 'color: #4A4A4A;';
-		},
-
-		navToRoute(route) {
+		goToRoute(route) {
 			this.$router.push({path: route});
 		}
 	}
-};
-
+}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.bottom-nav-bar {
 		position: fixed;
 		z-index: 9999;
-		background-color: #f9f9f9;
+		background-color: transparent;
 		bottom: 0;
 		left: 0;
 		width: 100%;
-		height: 50px;
+		height: 100px;
+	}
 
+	.gradient {
+		background-image: linear-gradient(0deg, $main-grey-100 0%, $main-grey-100 20%, rgba(0, 0, 0, 0) 100%);
+		height: 50%;
+	}
+
+	.icons-wrapper {
+		height: 50%;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		padding: 0px 20px;
+		align-items: center;
+		text-align: center;
+		background-color: $main-grey-100;
 	}
 
 	.nav-icon {
 		width: 50px;
 		font-size: 1rem;
 		cursor: pointer;
+		color: $main-grey-500;
+	}
+
+	.rfgk-link {
+		width: 50px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding-top: 3px;
 	}
 
 	.rfgk-icon {
-		line-height: 73%;
+		line-height: 70%;
 		text-align: center;
+		cursor: pointer;
 		font-weight: 600;
-		letter-spacing: -1%;
+		font-size: 13px;
+		font-family: 'Montserrat';
+	}
+
+	.selected {
+		color: $main-blue-100;
 	}
 </style>

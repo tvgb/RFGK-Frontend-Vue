@@ -9,23 +9,24 @@
 		</div>
 		<b-table :data="rounds" 
 			:default-sort="'sum'"
-			:mobile-cards="false">
+			:mobile-cards="false"
+			:scrollable="false">
 			<template>
-				<b-table-column v-if="!isMobile()" v-slot="props" width="150" field="firstName" label="Fornavn">
+				<b-table-column v-if="!isMobile()" v-slot="props" field="firstName" label="Fornavn">
 					{{ props.row.firstName }}
 				</b-table-column>
 
-				<b-table-column v-slot="props" width="150" field="lastName" label="Etternavn">
+				<b-table-column v-slot="props" field="lastName" label="Etternavn">
 					{{ props.row.lastName }} 
 					<span v-if="props.row.sum <= -2" style="margin-left: 10px"> &#x1F525; </span>
 					<img v-if="props.row.sum >= 20" src="@/assets/images/richard_emoji.png" alt="Richard Emoji" width="13" style="vertical-align: bottom; margin-left: 10px;">
 				</b-table-column>
 
-				<b-table-column v-slot="props" width="50" field="numberOfThrows" label="Kast" centered>
+				<b-table-column v-slot="props" field="numberOfThrows" label="Kast" centered>
 					{{ props.row.numberOfThrows }}
 				</b-table-column>
 
-				<b-table-column v-slot="props" width="50" field="sum" label="SUM" centered>
+				<b-table-column v-slot="props" field="sum" label="SUM" centered>
 					<span class="tag" :class="getColor(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 					</span>

@@ -4,11 +4,11 @@
 			SCORECARDS
 		</h1>
 		<div class="options-container">
-			<b-button
-				class="button"
+			<button
+				class="btn filter-btn"
 				@click="toggleFilter()">
-				Filter
-			</b-button>
+				FILTER
+			</button>
 			<b-tooltip
 				v-if="!isVerified || !isAuthenticated"
 				label="Du må være logget inn og ha en verifisert epostadresse for å kunne legge til nye runder."
@@ -16,13 +16,13 @@
 				multilined>
 				<button
 					:disabled="true"
-					class="add-scorecard-btn">
+					class="btn add-scorecard-btn">
 					LEGG TIL RUNDE
 				</button>
 			</b-tooltip>
 			<button
 				v-if="isVerified && isAuthenticated"
-				class="add-scorecard-btn"
+				class="btn add-scorecard-btn"
 				@click="navTo('/submitScorecard')">
 				LEGG TIL RUNDE
 			</button>
@@ -138,7 +138,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.container {
 		display: flex;
 		flex-direction: column;
@@ -172,16 +172,12 @@ export default {
 
 	.add-scorecard-btn {
 		width: 140px;
-		height: 40px;
-		font-family: 'Montserrat';
-		color: white;
-		font-weight: 500;
-		background-color: #70C8E5;
-		box-shadow: none;
-		border: 0;
-		border-radius: 4px;
-		font-size: 0.9rem;
-		letter-spacing: -1px;
+	}
+
+	.filter-btn {
+		background-color: white;
+		color: $main-blue-200;
+		border: 1px solid $main-blue-200;
 	}
 
 	.options-container {
