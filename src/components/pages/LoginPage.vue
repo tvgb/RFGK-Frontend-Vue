@@ -74,7 +74,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.container {
 		width: 400px;
 		padding: 20px;
@@ -89,7 +89,8 @@ export default {
 	}
 
 	.forgot-pw-text {
-		color: #7957d5;
+		color: $main-blue-100;
+		font-weight: 500;
 		margin-left: 5px;
 		cursor: pointer;
 	}

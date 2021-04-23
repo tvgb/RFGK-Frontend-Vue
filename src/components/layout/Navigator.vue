@@ -66,7 +66,7 @@ export default {
 
 	.nav-icon {
 		width: 50px;
-		font-size: 1rem;
+		font-size: 1.1rem;
 		cursor: pointer;
 		color: $main-grey-500;
 	}
@@ -83,7 +83,7 @@ export default {
 		line-height: 70%;
 		text-align: center;
 		cursor: pointer;
-		font-weight: 600;
+		font-weight: 700;
 		font-size: 13px;
 		font-family: 'Montserrat';
 	}

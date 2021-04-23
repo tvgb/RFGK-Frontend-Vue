@@ -3,6 +3,9 @@
 		<AppHeader v-if="!isMobile()" />
 		<Navigator v-if="isMobile()" />
 		<router-view />
+
+		<!-- To account for bottom navbar on mobile -->
+		<div v-if="isMobile()" style="height: 100px" /> 
 	</div>
 </template>
 

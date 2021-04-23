@@ -8,9 +8,9 @@
 			<b-input ref="emailInput" v-model="newEmail" type="email" />
 		</b-field>
 
-		<b-button class="save-button" @click="updateEmail()">
-			Lagre
-		</b-button>
+		<button class="btn save-button" @click="updateEmail()">
+			LAGRE
+		</button>
 
 		<div class="breaker" />
 
@@ -22,15 +22,15 @@
 			<b-input ref="oldPwInput" v-model="oldPassword" required minlength="8" autocomplete="new-password" type="password" />
 		</b-field>
 
-		<b-button class="save-button" @click="updatePassword()">
-			Lagre
-		</b-button>
+		<button class="btn save-button" @click="updatePassword()">
+			LAGRE
+		</button>
 
 		<div v-if="!isVerified" class="breaker" />
 
-		<b-button v-if="!isVerified" :disabled="disableSendVerificationMailButton" class="verification-button" @click="onSendVerificationMail()">
+		<button v-if="!isVerified" :disabled="disableSendVerificationMailButton" class="verification-button btn" @click="onSendVerificationMail()">
 			Send verifikasjons-epost på nytt
-		</b-button>
+		</button>
 
 		<div class="breaker" />
 
@@ -54,9 +54,13 @@
 			</b-select>
 		</b-field>
 
-		<b-button class="save-button" @click="onUpdateSettings()">
-			Lagre
-		</b-button>
+		<button class="btn save-button" @click="onUpdateSettings()">
+			LAGRE
+		</button>
+		<div class="breaker" />
+		<button class="btn log-out-btn" @click="logout()">
+			LOGG UT
+		</button>
 	</div>
 </template>
 
@@ -111,7 +115,9 @@ export default {
 			'getCourses',
 			'updateSettings',
 			'updatePersonalInfo',
-			'sendVerificationMail'
+			'sendVerificationMail',
+			'logout'
+
 		]),
 
 		onUpdateSettings() {
@@ -197,8 +203,9 @@ export default {
 	flex-direction: column;
 }
 
-.verification-button {
+.verification-button, .log-out-btn {
 	align-self: center;
+	width: 90%;
 }
 
 .save-button {
@@ -214,7 +221,7 @@ export default {
 @media only screen and (max-width: 600px) {
 	.container {
 		width: 100%;
-		padding: 10px 30px;
+		padding: 0px 30px;
 	}
 }
 </style>

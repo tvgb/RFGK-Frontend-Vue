@@ -1,3 +1,4 @@
+/* eslint-disable vue/attributes-order */
 <template>
 	<div class="container">
 		<h1 class="header">
@@ -42,8 +43,8 @@
 
 		<b-field horizontal label="Resultat">
 			<b-field grouped :type="numberInputType" :message="numberInputMessage">
-				<b-numberinput ref="resultInput" v-model.number="sum" expanded :step="1" :exponential="0.5" controls-alignment="right" />
-				<b-button outlined class="add-round-btn button is-primary" @click="addRound()">
+				<b-numberinput ref="resultInput" v-model.number="sum" type="light-grey" expanded :step="1" :exponential="0.5" controls-alignment="right" />
+				<b-button class="add-round-btn is-primary" @click="addRound()">
 					<b-icon icon="user-plus" />
 				</b-button>
 			</b-field>
@@ -183,7 +184,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.container {
 		width: 500px;
 	}
@@ -213,7 +214,7 @@ export default {
 	}
 
 	.selected-weather {
-		color: #7957d5;
+		color: $main-blue-100;
 		font-size: 1.5rem;
 		width: 1.5rem;
 		height: 1.5rem;
@@ -254,7 +255,7 @@ export default {
 	@media only screen and (max-width: 600px) {
 		.container {
 			width: 100%;
-			padding: 10px;
+			padding: 0px 10px;
 		}
 	}
 </style>

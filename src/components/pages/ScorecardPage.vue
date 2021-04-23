@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<h1>
+		<h1 class="header">
 			SCORECARDS
 		</h1>
 		<div class="options-container">
@@ -144,30 +144,6 @@ export default {
 		flex-direction: column;
 		align-items: center;
 		padding: 0;
-	}
-
-	h1 {
-		font-size: 28px;
-		font-family: 'Montserrat';
-		font-weight: 800;
-		font-style: italic;
-		padding: 20px;
-
-		background-image: linear-gradient(90deg, rgba(60,109,125,1) 0%, rgba(126,222,254,1) 100%);
-		background-clip: text;
-		color: transparent;
-		background-size: 400%;
-
-		animation: bg-animation 5s infinite alternate;
-	}
-
-	@keyframes bg-animation {
-		0% {
-			background-position: left;
-		}
-		100% {
-			background-position: right;
-		}
 	}
 
 	.add-scorecard-btn {
