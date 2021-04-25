@@ -1,33 +1,31 @@
 <template>
 	<div class="container">
 		<h1 class="header">
-			Siste runder
+			SCORECARDS
 		</h1>
-
 		<div class="options-container">
-			<b-button
-				class="button"
+			<button
+				class="btn filter-btn"
 				@click="toggleFilter()">
-				Filter
-			</b-button>
+				FILTER
+			</button>
 			<b-tooltip
 				v-if="!isVerified || !isAuthenticated"
 				label="Du må være logget inn og ha en verifisert epostadresse for å kunne legge til nye runder."
 				size="is-small"
 				multilined>
-				<b-button
+				<button
 					:disabled="true"
-					tag="router-link" to="/submitScorecard" type="is-link"
-					class="button is-primary">
-					Legg til runde
-				</b-button>
+					class="btn add-scorecard-btn-disabled">
+					LEGG TIL RUNDE
+				</button>
 			</b-tooltip>
-			<b-button
+			<button
 				v-if="isVerified && isAuthenticated"
-				tag="router-link" to="/submitScorecard" type="is-link"
-				class="button is-primary">
-				Legg til runde
-			</b-button>
+				class="btn add-scorecard-btn"
+				@click="navTo('/submitScorecard')">
+				LEGG TIL RUNDE
+			</button>
 		</div>
 		<div class="filter-container" :class="{ hide: hideFilter }">
 			<div class="select-container">
@@ -131,17 +129,36 @@ export default {
 				courseId: courseId,
 				year: this.selectedYear
 			});
+		},
+
+		navTo(route) {
+			this.$router.push({path: route});
 		}
 	}
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.container {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		padding: 0;
+	}
+
+	.add-scorecard-btn, .add-scorecard-btn-disabled {
+		width: 140px;
+	}
+
+	.add-scorecard-btn-disabled {
+		background-color: $main-grey-200;
+		cursor: not-allowed;
+	}
+
+	.filter-btn {
+		background-color: white;
+		color: $main-blue-200;
+		border: 1px solid $main-blue-200;
 	}
 
 	.options-container {

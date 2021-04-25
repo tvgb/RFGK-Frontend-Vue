@@ -43,8 +43,10 @@ const getters = {
 
 const actions = {
 	async getCourses({ commit }) {
-		const response = await repository.get('/course');
-		commit('setCourses', response.data);
+		return repository.get('/course').then((res) => {
+			commit('setCourses', res.data);
+			return res.data;
+		});
 	}
 };
 

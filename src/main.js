@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
 import store from './store';
-import VueCookies from 'vue-cookies'
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VueCookies from 'vue-cookies';
+import Buefy from 'buefy';
+import '@/assets/scss/main.scss';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(fas);
-Vue.component('vue-fontawesome', FontAwesomeIcon)
+Vue.component('vue-fontawesome', FontAwesomeIcon);
 
 Vue.use(Buefy, {
 	defaultIconComponent: 'vue-fontawesome',

@@ -1,22 +1,38 @@
 <template>
 	<div id="main-container">
-		<AppHeader />
+		<AppHeader v-if="!isMobile()" />
+		<Navigator v-if="isMobile()" />
 		<router-view />
+
+		<!-- To account for bottom navbar on mobile -->
+		<div v-if="isMobile()" style="height: 100px" /> 
 	</div>
 </template>
 
 <script>
 import AppHeader from './components/layout/AppHeader.vue';
+import Navigator from './components/layout/Navigator.vue';
 
 export default {
 	name: 'App',
 	components: {
-		AppHeader
+		AppHeader,
+		Navigator
+	},
+
+	methods: {
+		isMobile() {
+			return screen.width <= 600;
+		}
 	}
-}
+};
 </script>
 
-<style>
+<style lang="scss">
+	html, body {
+		background-color: $main-grey-100;
+	}
+
 	#main-container {
 		min-height: 100vh;
 		width: 100%;
