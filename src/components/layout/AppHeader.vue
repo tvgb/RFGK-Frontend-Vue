@@ -9,10 +9,16 @@
 		</template>
 
 		<template slot="end">
+			<b-navbar-item tag="router-link" :to="{ path: '/league' }">
+				<div class="buttons">
+					<a class="button">
+						<b-icon pack="fas" icon="trophy" />
+					</a>
+				</div>
+			</b-navbar-item>
 			<b-navbar-item v-if="isAuthenticated" tag="router-link" :to="{ path: '/profile' }">
 				<div class="buttons">
 					<a class="button">
-						<!-- <font-awesome-icon icon="user"/> -->
 						<b-icon pack="fas" icon="user" />
 					</a>
 				</div>

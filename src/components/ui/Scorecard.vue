@@ -12,31 +12,31 @@
 			:mobile-cards="false"
 			:scrollable="false">
 			<template>
-				<b-table-column v-if="!isMobile()" v-slot="props" field="firstName" label="Fornavn">
+				<b-table-column v-slot="props" cell-class="pos-col" width="6%" field="pos" label="Pos." centered @click="test(props)">
+					{{ rounds.indexOf(props.row) + 1 }}
+				</b-table-column>
+
+				<b-table-column v-if="!isMobile()" v-slot="props" width="35%" field="firstName" label="Fornavn">
 					{{ props.row.firstName }}
 				</b-table-column>
 
-				<b-table-column v-slot="props" field="lastName" label="Etternavn">
+				<b-table-column v-slot="props" :width="isMobile() ? '70%' : '35%'" field="lastName" label="Etternavn">
 					{{ props.row.lastName }} 
 					<span v-if="props.row.sum <= -2" style="margin-left: 10px"> &#x1F525; </span>
 					<img v-if="props.row.sum >= 20" src="@/assets/images/richard_emoji.png" alt="Richard Emoji" width="13" style="vertical-align: bottom; margin-left: 10px;">
 				</b-table-column>
 
-				<b-table-column v-slot="props" field="numberOfThrows" label="Kast" centered>
+				<b-table-column v-slot="props" width="12%" field="numberOfThrows" label="Kast" centered>
 					{{ props.row.numberOfThrows }}
 				</b-table-column>
 
-				<b-table-column v-slot="props" field="sum" label="SUM" centered>
+				<b-table-column v-slot="props" width="12%" field="sum" label="SUM" centered>
 					<span class="tag" :class="getColor(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 					</span>
 				</b-table-column>
 			</template>
 		</b-table>
-		<!-- <div class="scorecard-footer">
-			<div>{{ scorecard.createdBy.firstName }} {{ scorecard.createdBy.lastName }}</div>
-			<div>{{ scorecard.course.holes }} Hull  |  Par {{ scorecard.course.par }}</div>
-		</div> -->
 	</div>
 </template>
  
@@ -49,27 +49,6 @@ export default {
 	],
 	data() {
 		return {
-			columns: [
-				{
-					field: 'firstName',
-					label: 'Fornavn',
-				},
-				{
-					field: 'lastName',
-					label: 'Etternavn',
-				},
-				{
-					field: 'numberOfThrows',
-					label: 'antall_kast',
-					centered: true
-				},
-				{
-					field: 'sum',
-					label: 'sum',
-					centered: true
-				}
-			],
-			
 			defaultSort: 'numberOfThrows'
 		};
 	},
@@ -110,7 +89,7 @@ export default {
 				return 'is-danger';
 			}
 		},
-		
+
 		getShortName(name) {
 			const courseNameParts = name.split(' ');
 			const firstPart = courseNameParts[0];
@@ -121,7 +100,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.container {
 		background-color: white;
 		margin: 10px;
@@ -152,6 +131,10 @@ export default {
 		width: 1px;
 		margin: 0px 7px;
 		color: #A9A9A9;
+	}
+
+	::v-deep .pos-col {
+		font-weight: 500;
 	}
 
 	.b-table {

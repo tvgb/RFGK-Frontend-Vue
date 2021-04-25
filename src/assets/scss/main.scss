@@ -89,8 +89,13 @@ $link-focus-border: $primary;
 
 $input-border-color: $main-grey-200;
 $family-primary: 'Montserrat';
+
 .b-numberinput .input.is-primary {
 	border-color: $main-grey-200;
+}
+
+.table-wrapper {
+	overflow-x: hidden !important;
 }
 
 

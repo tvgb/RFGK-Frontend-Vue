@@ -1,30 +1,43 @@
 <template>
 	<div class="container">
-		<div class="info-box">
-			
+		<h1 class="header">
+			RFGK Parken Closed 2021
+		</h1>
+		<div class="info-text">
+			Oppsett:
+			<ul>
+				<li> De 5 beste rundene fra Parken Frisbeegolfbane teller. </li>
+				<li> Serien varer fra 1. mai til 1. september 2021. </li>
+				<li> En runde må minst ha 3 spillere med for å telle. </li>
+				<li> Man får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
+				<li> Det blir gitt 20 bonuspoeng til vinneren av en runde. </li>
+			</ul>
 		</div>
-		<b-table v-if="!isLoading" :data="players" :mobile-cards="false">
+		<b-table v-if="!isLoading && players.length > 0" :data="players" :mobile-cards="false" :scrollable="false">
 			<template>
-				<b-table-column v-slot="props" :width="10" field="posistion" label="Pos" centered>
+				<b-table-column v-slot="props" class="t-col" field="posistion" label="Pos" centered>
 					{{ getPlayerIndex(props.row.player) + 1 }} 
 				</b-table-column>
-				<b-table-column v-slot="props" :width="20" field="lastName" label="Etternavn">
+				<b-table-column v-slot="props" field="firstName" label="Fornavn">
 					{{ getFirstFirstName(props.row.player.firstName) }} 
 				</b-table-column>
+				<b-table-column v-if="!isMobile" v-slot="props" field="lastName" label="Etternavn">
+					{{ props.row.player.lastName }} 
+				</b-table-column>
 
-				<b-table-column v-slot="props" :width="50" field="points" label="Poeng">
+				<b-table-column v-slot="props" field="points" label="Poeng">
 					<div class="points-container">
 						<span 
 							v-for="(score, index) in props.row.scores"
 							:key="`score-${index}-${props.row.player._id}`" 
 							class="point"
-							:style="getColour(score, 125)">
+							:style="getColour(score, 200)">
 							{{ score > 0 ? score : '-' }} 
 						</span>
 					</div>
 				</b-table-column>
 
-				<b-table-column v-slot="props" :width="50" field="sum" label="SUM" centered>
+				<b-table-column v-slot="props" field="sum" label="SUM" centered>
 					<span class="sum-col" :style="getColour(props.row.sum, 1000)">
 						{{ props.row.sum }} 
 					</span>
@@ -44,7 +57,8 @@ export default {
 	data() {
 		return {
 			course: null,
-			isLoading: true
+			isLoading: true,
+			isMobile: window.innerWidth < 600
 		};
 	},
 
@@ -96,7 +110,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.container {
 		width: 700px;
 	}
@@ -113,18 +127,40 @@ export default {
 		font-weight: 500;
 	}
 
+	.header {
+		font-size: 1.5rem;
+		background-image: $main-gradient-blue-red;
+	}
+
 	.sum-col {
 		font-weight: 500;
 	}
 
-	.info-box {
-		margin-bottom: 10px;
+	.info-text {
+		padding: 0px 10px 20px 10px;
+		font-weight: 500;
+
+		ul {
+			list-style-type: circle;
+			font-weight: 400;
+			font-size: 0.9rem;
+			padding-left: 15px;
+			color: $main-grey-900;
+		}
 	}
 
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 800px) {
 		.container {
 			width: 100%;
 			padding: 0px 5px;
+		}
+
+		.b-table {
+			font-size: 0.9rem;
+		}
+
+		.t-col {
+			display: none;
 		}
 	}
 

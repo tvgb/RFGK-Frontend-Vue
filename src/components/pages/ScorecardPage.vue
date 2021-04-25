@@ -16,7 +16,7 @@
 				multilined>
 				<button
 					:disabled="true"
-					class="btn add-scorecard-btn">
+					class="btn add-scorecard-btn-disabled">
 					LEGG TIL RUNDE
 				</button>
 			</b-tooltip>
@@ -146,8 +146,13 @@ export default {
 		padding: 0;
 	}
 
-	.add-scorecard-btn {
+	.add-scorecard-btn, .add-scorecard-btn-disabled {
 		width: 140px;
+	}
+
+	.add-scorecard-btn-disabled {
+		background-color: $main-grey-200;
+		cursor: not-allowed;
 	}
 
 	.filter-btn {

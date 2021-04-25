@@ -12,14 +12,17 @@ const getters = {
 
 		if (state.scorecards.length > 0) {
 			const players = [];
-			const range = 50;
-			const maxScore = 125;
-			const pointsList = createPointsList(maxScore, range);
+			const winnersBonus = 20;
 
 			for (let scorecard of state.scorecards) {
 				if (scorecard.rounds.length > 2) {
-					for (let round of scorecard.rounds) {
+					const rounds = scorecard.rounds.sort((a, b) => a.numberOfThrows - b.numberOfThrows);
+					const winningNumberOfThrows = rounds[0].numberOfThrows;
+					const winnersCount = rounds.filter(r => r.numberOfThrows === winningNumberOfThrows).length;
+					
+					for (let round of rounds) {
 						const existingPlayer = players.find(p => p.player._id === round.player._id);
+						Object.assign(round, {bonus: round.numberOfThrows === winningNumberOfThrows ? winnersBonus / winnersCount : 0});
 						if (existingPlayer) {
 							existingPlayer.rounds.push(round);
 						} else {
@@ -35,9 +38,8 @@ const getters = {
 			}
 	
 			for (let player of players) {
-				const scores = calculateScores(player.rounds, state.scorecards[0].course, pointsList, range).sort((a, b) => b - a);
-				Object.assign(player, {scores: scores, sum: scores.reduce((a, b) => a + b, 0)});
-				// Object.assign(player, {scores: scores, sum: Math.floor(Math.random() * 1000)});
+				const scores = calculateScores(player.rounds, state.scorecards[0].course).sort((a, b) => b - a);
+				Object.assign(player, {scores: scores.sort((a, b) => b - a), sum: scores.reduce((a, b) => a + b, 0)});
 			}
 			return players.sort((a, b) => {
 				if (a.sum < b.sum) {
@@ -79,7 +81,7 @@ const actions = {
 			let mostUsed = JSON.parse(localStorage.getItem('mostUsed'));
 
 			if (mostUsed) {
-				const usedCourse = mostUsed.courses.find(c => c._id === course._id)
+				const usedCourse = mostUsed.courses.find(c => c._id === course._id);
 				if (usedCourse) {
 					usedCourse.uses ++;
 				} else {
@@ -120,54 +122,32 @@ const mutations = {
 	addScorecard: (state, scorecard) => (state.scorecards.unshift(scorecard))
 };
 
-function calculateScores(rounds, course, pointsList, range) {
+/**
+ *	f(x) = {
+ *		 		g(x):	x <= 20 , 
+ *				h(x):	x > 20 
+ *			}
+ *
+ *	g(x) = 0.3x^2 - 13.5x + 180
+ *	h(x) = -0.375x + 37.5
+ */
+function calculateScores(rounds, course) {
 	const scores = [];
 
-	rounds = rounds.sort((a, b) => {
-		if (a.numberOfThrows > b.numberOfThrows) {
-			return -1;
-		} else if (a.numberOfThrows < b.numberOfThrows) {
-			return 1;
-		} else {
-			return 0;
-		}
-	});
-	
-	const shift = course.holes;
+	rounds = rounds.sort((a, b) => a.numberOfThrows - b.numberOfThrows);
 
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < 5; i++) {
 		if (i < rounds.length) {
-			const sumAfterShift = (rounds[i].numberOfThrows - course.par) + shift;
-			scores.push(calculateScore(pointsList, sumAfterShift, range));
+			const sum = rounds[i].numberOfThrows - course.par;
+			let score = sum <= 20 ? 0.3 * sum * sum - 13.5 * sum + 180 : -0.375 * sum + 37.5;
+			score += rounds[i].bonus;
+			scores.push(Math.floor(score));
 		} else {
 			scores.push(0);
 		}
 	}
 
 	return scores;
-}
-
-function createPointsList(maxScore, range) {
-	const point = maxScore/range;
-	const pointsList = [];
-	const factor = 0.01;
-	let counter = range/2;
-
-	for (let i = 0; i < range; i++) {
-		pointsList.push(point + factor * counter);
-		counter--;
-		counter = counter === 0 ? -1 : counter;
-	}
-
-	return pointsList;
-}
-
-function calculateScore(pointsList, sumAfterShift, range) {
-	let sum = 0;
-	for (let i = 0; i < range - sumAfterShift; i++) {
-		sum += pointsList[i];
-	}
-	return Math.floor(sum);
 }
 
 export default {
