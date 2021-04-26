@@ -36,7 +36,7 @@ export default {
 	#main-container {
 		min-height: 100vh;
 		width: 100%;
-		font-family: 'Poppins', sans-serif;
+		font-family: 'Poppins', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;;
 		background-color: #F9F9F9;
 	}
 

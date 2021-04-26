@@ -3,7 +3,7 @@
 .btn {
 	width: 100px;
 	height: 40px;
-	font-family: 'Montserrat', 'Poppins';
+	font-family: "Montserrat", 'Poppins', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 	color: white;
 	font-weight: 500;
 	background-color: $main-blue-100;
@@ -13,22 +13,6 @@
 	font-size: 0.9rem;
 	letter-spacing: -1px;
 	cursor: pointer;
-}
-
-.header {
-	font-size: 28px;
-	font-family: 'Montserrat';
-	font-weight: 800;
-	font-style: italic;
-	padding: 20px;
-	margin: 0;
-
-	background-image: $main-gradient-blue;
-	background-clip: text;
-	color: transparent;
-	background-size: 400%;
-
-	animation: bg-animation 5s infinite alternate;
 }
 
 @keyframes bg-animation {
