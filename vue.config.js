@@ -6,8 +6,8 @@ module.exports = {
 			new GoogleFontsPlugin({
 				fonts: [
 					{ family: 'Poppins' },
-					{ family: 'Montserrat'}
-				]
+					{ family: 'montserrat'}
+				],
 			})
 		];
 	},

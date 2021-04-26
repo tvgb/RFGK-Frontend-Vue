@@ -45,20 +45,20 @@ export default {
 		bottom: 0;
 		left: 0;
 		width: 100%;
-		height: 100px;
+		height: 120px;
 	}
 
 	.gradient {
-		background-image: linear-gradient(0deg, $main-grey-100 0%, $main-grey-100 20%, rgba(0, 0, 0, 0) 100%);
-		height: 50%;
+		background-image: linear-gradient(0deg, $main-grey-100 0%, $main-grey-100 20%, rgba(255, 255, 255, 0) 100%);
+		height: 50px;
 	}
 
 	.icons-wrapper {
-		height: 50%;
+		height: 70px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0px 20px;
+		padding: 0px 20px 20px 20px;
 		align-items: center;
 		text-align: center;
 		background-color: $main-grey-100;
@@ -85,7 +85,7 @@ export default {
 		cursor: pointer;
 		font-weight: 700;
 		font-size: 13px;
-		font-family: 'Montserrat';
+		font-family: 'Montserrat', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 	}
 
 	.selected {

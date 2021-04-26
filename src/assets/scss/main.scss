@@ -88,7 +88,7 @@ $link-focus-border: $primary;
    = = = = = = = = = = = = = = = = =  */
 
 $input-border-color: $main-grey-200;
-$family-primary: 'Montserrat';
+$family-primary: 'Montserrat', 'Poppins', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
 .b-numberinput .input.is-primary {
 	border-color: $main-grey-200;

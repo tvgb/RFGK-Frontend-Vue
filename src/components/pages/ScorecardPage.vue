@@ -168,6 +168,30 @@ export default {
 		padding: 0 20px 10px 20px;
 	}
 
+	.header {
+		font-size: 28px;
+		font-weight: 800;
+		font-family: sans-serif;
+		padding: 20px;
+		margin: 0;
+
+		background-image: $main-gradient-blue;
+		background-clip: text;
+		color: transparent;
+		background-size: 400%;
+
+		animation: bg-animation 5s infinite alternate;
+	}
+
+	@keyframes bg-animation {
+		0% {
+			background-position: left;
+		}
+		100% {
+			background-position: right;
+		}
+	}
+
 	.filter-container {
 		width: 100%;
 	}
