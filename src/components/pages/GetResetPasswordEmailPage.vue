@@ -1,9 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			Gjenopprett passordet
-		</h1>
-
 		<h2 style="font-size: 0.9rem; margin-bottom: 15px;">
 			Få tilsendt en link til din email-adresse som lar deg endre passordet ditt. 
 		</h2>
@@ -61,7 +57,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.container {
 		width: 400px;
 		padding: 20px;

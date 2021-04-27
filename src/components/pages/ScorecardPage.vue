@@ -1,8 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			SCORECARDS
-		</h1>
 		<div class="options-container">
 			<button
 				class="btn filter-btn"
@@ -13,7 +10,8 @@
 				v-if="!isVerified || !isAuthenticated"
 				label="Du må være logget inn og ha en verifisert epostadresse for å kunne legge til nye runder."
 				size="is-small"
-				multilined>
+				multilined
+				position="is-bottom">
 				<button
 					:disabled="true"
 					class="btn add-scorecard-btn-disabled">

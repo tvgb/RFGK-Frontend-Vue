@@ -1,9 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			Lag nytt passord
-		</h1>
-
 		<b-field label="Nytt passord">
 			<b-input v-model="newPassword" type="password" />
 		</b-field>

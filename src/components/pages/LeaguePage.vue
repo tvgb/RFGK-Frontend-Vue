@@ -1,8 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			RFGK Parken Closed 2021
-		</h1>
 		<div class="info-text">
 			Oppsett:
 			<ul>
@@ -125,11 +122,6 @@ export default {
 		text-align: center;
 		color: white;
 		font-weight: 500;
-	}
-
-	.header {
-		font-size: 1.5rem;
-		background-image: $main-gradient-blue-red;
 	}
 
 	.sum-col {

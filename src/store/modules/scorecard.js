@@ -59,16 +59,9 @@ const getters = {
 const endpoint = 'scorecard';
 const actions = {
 	async getScorecards({ commit }, {courseId, year}) {
-		console.log('helo?');
-		console.log('Gettings scorecards!');
-		console.log(`/${endpoint}?courseId=${courseId}&year=${year}`);
 		return repository.get(`/${endpoint}?courseId=${courseId}&year=${year}`).then((response) => {
-			console.log(response);
 			commit('setScorecards', response.data);
 			return response.data;
-		}).catch((res) => {
-			console.log('error:');
-			console.log(res);
 		});
 	},
 

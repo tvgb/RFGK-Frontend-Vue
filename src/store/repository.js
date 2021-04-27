@@ -11,8 +11,6 @@ let repo = axios.create({
 	baseURL
 });
 
-console.log(baseURL);
-
 repo.interceptors.response.use(
 	response => {
 		if (response.status === 200 || response.status === 201) {

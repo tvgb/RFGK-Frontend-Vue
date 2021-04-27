@@ -1,11 +1,8 @@
 <template>
 	<div id="main-container">
 		<AppHeader v-if="!isMobile()" />
-		<Navigator v-if="isMobile()" />
+		<Navigator />
 		<router-view />
-
-		<!-- To account for bottom navbar on mobile -->
-		<div v-if="isMobile()" style="height: 100px" /> 
 	</div>
 </template>
 
@@ -38,12 +35,6 @@ export default {
 		width: 100%;
 		font-family: 'Poppins', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;;
 		background-color: #F9F9F9;
-	}
-
-	.header {
-		font-size: 1.5em;
-		margin-bottom: 30px;
-		text-align: center;
 	}
 
 	.table td, .table th {

@@ -99,24 +99,6 @@ $family-primary: 'Montserrat', 'Poppins', 'Franklin Gothic Medium', 'Arial Narro
 	overflow-x: hidden !important;
 }
 
-.header {
-	font-size: 28px;
-	font-weight: bolder;
-	font-style: italic;
-	font-family: 'Montserrat', 'Poppins', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-	padding: 20px;
-	margin: 0;
-
-	background-image: $main-gradient-blue;
-	background-clip: text;
-	color: transparent;
-	background-size: 400%;
-
-	animation: bg-animation 5s infinite alternate;
-}
-
-
-
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";

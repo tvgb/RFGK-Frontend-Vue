@@ -1,9 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			Profil
-		</h1>
-
 		<b-field label="Endre email">
 			<b-input ref="emailInput" v-model="newEmail" type="email" />
 		</b-field>
