@@ -4,11 +4,14 @@ import store from '.';
 // You can use your own logic to set your local or production domain
 const baseDomain = process.env.VUE_APP_API_URL;
 // The base URL is empty this time due we are using the jsonplaceholder API
-const baseURL = `${baseDomain}/api`;
+// const baseURL = `${baseDomain}/api`;
+const baseURL = 'http://192.168.0.195:3000/api';
 
 let repo = axios.create({
 	baseURL
 });
+
+console.log(baseURL);
 
 repo.interceptors.response.use(
 	response => {
