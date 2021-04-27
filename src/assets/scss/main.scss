@@ -1,6 +1,7 @@
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 @import "@/assets/scss/colours.scss";
+@import "@/assets/scss/classes.scss";
 
 // Set your colors
 $primary: $main-blue-100;
@@ -97,8 +98,6 @@ $family-primary: 'Montserrat', 'Poppins', 'Franklin Gothic Medium', 'Arial Narro
 .table-wrapper {
 	overflow-x: hidden !important;
 }
-
-
 
 // Import Bulma and Buefy styles
 @import "~bulma";

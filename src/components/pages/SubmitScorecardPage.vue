@@ -1,10 +1,6 @@
 /* eslint-disable vue/attributes-order */
 <template>
 	<div class="container">
-		<h1 class="header">
-			Legg til runde
-		</h1>
-
 		<b-field horizontal label="Bane">
 			<b-select v-model="selectedCourse" expanded>
 				<option v-for="course in courses" :key="course._id" :value="course">

@@ -1,8 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			SCORECARDS
-		</h1>
 		<div class="options-container">
 			<button
 				class="btn filter-btn"
@@ -13,7 +10,8 @@
 				v-if="!isVerified || !isAuthenticated"
 				label="Du må være logget inn og ha en verifisert epostadresse for å kunne legge til nye runder."
 				size="is-small"
-				multilined>
+				multilined
+				position="is-bottom">
 				<button
 					:disabled="true"
 					class="btn add-scorecard-btn-disabled">
@@ -166,30 +164,6 @@ export default {
 		width: 100%;
 		justify-content: space-between;
 		padding: 0 20px 10px 20px;
-	}
-
-	.header {
-		font-size: 28px;
-		font-weight: 800;
-		font-family: sans-serif;
-		padding: 20px;
-		margin: 0;
-
-		background-image: $main-gradient-blue;
-		background-clip: text;
-		color: transparent;
-		background-size: 400%;
-
-		animation: bg-animation 5s infinite alternate;
-	}
-
-	@keyframes bg-animation {
-		0% {
-			background-position: left;
-		}
-		100% {
-			background-position: right;
-		}
 	}
 
 	.filter-container {

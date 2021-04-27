@@ -1,9 +1,5 @@
 <template>
 	<div class="container">
-		<h1 class="header">
-			Logg inn
-		</h1>
-
 		<b-field label="Email">
 			<b-input v-model="email" type="email" />
 		</b-field>
