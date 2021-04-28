@@ -12,8 +12,9 @@
 		<b-field horizontal label="Dato">
 			<b-datetimepicker
 				v-model="datetime"
-				placeholder="Click to select..."
-				horizontal-time-picker />
+				placeholder="Trykk for å velge dato..."
+				horizontal-time-picker
+				locale="no-NB" />
 		</b-field>
 
 		<b-field label="Værforhold">
@@ -182,7 +183,8 @@ export default {
 
 <style lang="scss" scoped>
 	.container {
-		width: 500px;
+		width: 100%;
+		padding: 0px 30px;
 	}
 	
 	.breaker {
@@ -248,10 +250,9 @@ export default {
 		font-size: 1.2rem;
 	}
 
-	@media only screen and (max-width: 600px) {
+	@media only screen and (min-width: 600px) {
 		.container {
-			width: 100%;
-			padding: 0px 10px;
+			width: 500px;
 		}
 	}
 </style>

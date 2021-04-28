@@ -11,9 +11,10 @@
 	background-image: $main-gradient-blue;
 	background-clip: text;
 	color: transparent;
-	background-size: 400%;
+	background-size: 100%;
+	// background-size: 400%;
 
-	animation: bg-animation 5s infinite alternate;
+	// animation: bg-animation 5s infinite alternate;
 }
 
 @keyframes bg-animation {

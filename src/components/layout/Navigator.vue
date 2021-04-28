@@ -4,8 +4,8 @@
 			<span class="icon-span" />
 			<h1 class="header" :class="{'league-page-header': currentRoute === 'LeaguePage', 'small-header': currentRoute === 'GetResetPasswordEmailPage'}">
 				{{ getCurrentHeader() }}
+				<b-icon v-if="!navBarExpanded" icon="chevron-down" class="nav-chevron" :class="{'league-page-chevron': currentRoute === 'LeaguePage'}" @click.native="toggleNavBar()" />
 			</h1>
-			<b-icon v-if="!navBarExpanded" icon="chevron-down" class="nav-chevron" :class="{'league-page-chevron': currentRoute === 'LeaguePage'}" @click.native="toggleNavBar()" />
 			<b-icon v-if="navBarExpanded" icon="chevron-up" class="nav-chevron" :class="{'league-page-chevron': currentRoute === 'LeaguePage'}" @click.native="toggleNavBar()" />
 		</div>
 		
@@ -93,8 +93,8 @@ export default {
 
 	.league-page-header {
 		font-size: 1.6rem;
-		background-image: $main-gradient-blue-red;
-		background-size: 500%;
+		background-image: $main-gradient-yellow-red;
+		background-size: 100%;
 	}
 
 	.icon-span {
@@ -107,39 +107,15 @@ export default {
 	.nav-chevron {
 		width: 50px;
 		height: 100%;
-		color: #9BE5FD;
+		color: $main-blue-100;
 		font-weight: 900;
 		font-size: 20px;
 		cursor: pointer;
-		animation: colour-animation 5s infinite alternate;
+		// animation: colour-animation 5s infinite alternate;
 	}
 
 	.league-page-chevron {
-		animation: league-page-colour-animation 5s infinite alternate;
-	}
-
-	@keyframes colour-animation {
-		0% {
-			color: #3c6d7d;
-		}
-		100% {
-			color: #7edefb;
-		}
-	}
-
-	@keyframes league-page-colour-animation {
-		0% {
-			color: #7edefb;
-		}
-		33% {
-			color: #8fe67b;
-		}
-		66% {
-			color: #e9e55a;
-		}
-		100% {
-			color: #eb774d;
-		}
+		color: #eb774d;
 	}
 
 	.scroll-div {
