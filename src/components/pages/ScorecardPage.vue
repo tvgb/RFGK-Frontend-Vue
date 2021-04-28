@@ -28,7 +28,7 @@
 		<div class="filter-container" :class="{ hide: hideFilter }">
 			<div class="select-container">
 				<div class="select-label"> Bane </div>
-				<b-select v-model="selectedCourse" expanded @input="filterScorecards()">
+				<b-select v-model="selectedCourse" @input="filterScorecards()">
 					<option value="all"> Alle </option>
 					<option v-for="course in courses" :key="course._id" :value="course">
 						{{ course.name }}
@@ -38,7 +38,7 @@
 
 			<div class="select-container">
 				<div class="select-label"> År </div>
-				<b-select v-model="selectedYear" expanded @input="filterScorecards()">
+				<b-select v-model="selectedYear" @input="filterScorecards()">
 					<option value="all">Alle</option>
 					<option value="2021">2021</option>
 					<option value="2020">2020</option>
@@ -206,4 +206,7 @@ export default {
 		padding-top: 100px;
 	}
 
+	div.select-container:nth-child(1) > div:nth-child(2) {
+		width: calc(100% - 100px);
+	}
 </style>

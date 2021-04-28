@@ -16,5 +16,6 @@ $main-grey-900: #4A4A4A;
 /* ===========
 	GRADIENTS
    =========== */
-$main-gradient-blue: linear-gradient(90deg, #3c6d7d 0%, #7edefb 100%);
+$main-gradient-blue: linear-gradient(90deg, #65b3cb 0%, $main-blue-100 100%);
 $main-gradient-blue-red: linear-gradient(90deg, #7edefb 0%, #8fe67b 33%, #e9e55a 66%, #eb774d 100%);
+$main-gradient-yellow-red: linear-gradient(90deg, #e9e55a 0%, #eb774d 100%);

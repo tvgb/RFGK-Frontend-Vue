@@ -192,11 +192,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .container {
-	width: 500px;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
+	padding: 0px 30px 30px 30px;
 }
 
 .verification-button, .log-out-btn {
@@ -214,10 +215,9 @@ export default {
 	margin: 20px 0;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (min-width: 600px) {
 	.container {
-		width: 100%;
-		padding: 0px 30px;
+		width: 400px;
 	}
 }
 </style>

@@ -1,46 +1,66 @@
 <template>
 	<div class="container">
-		<div class="info-text">
-			Oppsett:
-			<ul>
-				<li> De 5 beste rundene fra Parken Frisbeegolfbane teller. </li>
-				<li> Serien varer fra 1. mai til 1. september 2021. </li>
-				<li> En runde må minst ha 3 spillere med for å telle. </li>
-				<li> Man får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
-				<li> Det blir gitt 20 bonuspoeng til vinneren av en runde. </li>
-			</ul>
-		</div>
-		<b-table v-if="!isLoading && players.length > 0" :data="players" :mobile-cards="false" :scrollable="false">
-			<template>
-				<b-table-column v-slot="props" class="t-col" field="posistion" label="Pos" centered>
-					{{ getPlayerIndex(props.row.player) + 1 }} 
-				</b-table-column>
-				<b-table-column v-slot="props" field="firstName" label="Fornavn">
-					{{ getFirstFirstName(props.row.player.firstName) }} 
-				</b-table-column>
-				<b-table-column v-if="!isMobile" v-slot="props" field="lastName" label="Etternavn">
-					{{ props.row.player.lastName }} 
-				</b-table-column>
+		<div class="table-wrapper">
+			<b-table v-if="!isLoading && players.length > 0" :data="players" :mobile-cards="false" :scrollable="false">
+				<template>
+					<b-table-column v-slot="props" class="t-col" field="posistion" label="Pos" centered>
+						{{ getPlayerIndex(props.row.player) + 1 }} 
+					</b-table-column>
+					<b-table-column v-slot="props" field="firstName" label="Fornavn">
+						{{ getFirstFirstName(props.row.player.firstName) }} 
+					</b-table-column>
+					<b-table-column v-if="!isMobile" v-slot="props" field="lastName" label="Etternavn">
+						{{ props.row.player.lastName }} 
+					</b-table-column>
 
-				<b-table-column v-slot="props" field="points" label="Poeng">
-					<div class="points-container">
-						<span 
-							v-for="(score, index) in props.row.scores"
-							:key="`score-${index}-${props.row.player._id}`" 
-							class="point"
-							:style="getColour(score, 200)">
-							{{ score > 0 ? score : '-' }} 
+					<b-table-column v-slot="props" field="points" label="Poeng">
+						<div class="points-container">
+							<span 
+								v-for="(score, index) in props.row.scores"
+								:key="`score-${index}-${props.row.player._id}`" 
+								class="point"
+								:style="getColour(score, 300)">
+								{{ score > 0 ? score : '-' }} 
+							</span>
+						</div>
+					</b-table-column>
+
+					<b-table-column v-slot="props" field="sum" label="SUM" centered>
+						<span class="sum-col" :style="getColour(props.row.sum, 1000)">
+							{{ props.row.sum }} 
 						</span>
-					</div>
-				</b-table-column>
-
-				<b-table-column v-slot="props" field="sum" label="SUM" centered>
-					<span class="sum-col" :style="getColour(props.row.sum, 1000)">
-						{{ props.row.sum }} 
-					</span>
-				</b-table-column>
+					</b-table-column>
+				</template>
+			</b-table>
+		</div>
+		
+		<b-collapse
+			v-if="!isLoading"
+			v-model="isOpen"
+			aria-id="contentIdForA11y2"
+			class="panel"
+			animation="slide">
+			<template #trigger>
+				<div
+					class="panel-heading"
+					role="button"
+					aria-controls="contentIdForA11y2">
+					Regler
+					<b-icon class="info-icon" icon="info" />
+				</div>
 			</template>
-		</b-table>
+			<div class="info-text">
+				<ul>
+					<li> De 5 beste rundene fra Parken Frisbeegolfbane teller. </li>
+					<li> Serien varer fra 1. mai til 1. september 2021. </li>
+					<li> En runde må minst ha 3 spillere med for å telle. </li>
+					<li> Man får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
+					<li> Det blir gitt 20 bonuspoeng til vinneren av en runde. </li>
+					<li> Hvis det er flere vinnere deles poengene likt blant dem. </li>
+				</ul>
+			</div>
+		</b-collapse>
+
 		<b-loading :active.sync="isLoading" :is-full-page="true" />
 	</div>
 </template>
@@ -55,7 +75,8 @@ export default {
 		return {
 			course: null,
 			isLoading: true,
-			isMobile: window.innerWidth < 600
+			isMobile: window.innerWidth < 600,
+			isOpen: false
 		};
 	},
 
@@ -112,6 +133,10 @@ export default {
 		width: 700px;
 	}
 
+	.table-wrapper {
+		box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+	}
+
 	.points-container {
 		display: flex;
 		justify-content: space-between;
@@ -129,6 +154,7 @@ export default {
 	}
 
 	.info-text {
+		background-color: white;
 		padding: 0px 10px 20px 10px;
 		font-weight: 500;
 
@@ -136,9 +162,27 @@ export default {
 			list-style-type: circle;
 			font-weight: 400;
 			font-size: 0.9rem;
-			padding-left: 15px;
+			padding-left: 30px;
 			color: $main-grey-900;
 		}
+	}
+
+	.panel {
+		margin-top: 20px;
+	}
+
+	.panel-heading {
+		background-color: white;
+		font-weight: 300;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.info-icon {
+		border: 2px solid #363636;
+		border-radius: 100%;
+		font-size: 1rem;
 	}
 
 	@media only screen and (max-width: 800px) {
