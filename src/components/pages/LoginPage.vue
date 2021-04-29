@@ -72,8 +72,8 @@ export default {
 
 <style lang="scss" scoped>
 	.container {
-		width: 400px;
-		padding: 20px;
+		width: 100%;
+		padding: 30px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -105,10 +105,10 @@ export default {
 		width: 100%;
 	}
 
-	@media only screen and (max-width: 600px) {
+	@media only screen and (min-width: 600px) {
 		.container {
-			width: 100%;
-			padding: 30px;
+			width: 400px;
+			padding: 20px;
 		}
 	}
 

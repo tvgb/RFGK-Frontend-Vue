@@ -1,6 +1,6 @@
 <template>
 	<div id="main-container">
-		<AppHeader v-if="!isMobile()" />
+		<AppHeader class="app-header" />
 		<Navigator />
 		<router-view />
 	</div>
@@ -15,12 +15,6 @@ export default {
 	components: {
 		AppHeader,
 		Navigator
-	},
-
-	methods: {
-		isMobile() {
-			return screen.width <= 600;
-		}
 	}
 };
 </script>
@@ -48,6 +42,5 @@ export default {
 
 	.navbar, .navbar-menu.is-active {
 		background-color: transparent !important;
-	}
-		
+	}		
 </style>

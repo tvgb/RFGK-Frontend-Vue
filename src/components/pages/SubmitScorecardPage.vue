@@ -184,7 +184,7 @@ export default {
 <style lang="scss" scoped>
 	.container {
 		width: 100%;
-		padding: 0px 30px;
+		padding: 0px 30px 30px 30px;
 	}
 	
 	.breaker {
