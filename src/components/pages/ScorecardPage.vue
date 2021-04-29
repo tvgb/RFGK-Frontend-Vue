@@ -187,17 +187,6 @@ export default {
 		margin: 0;
 	}
 
-	@media only screen and (min-width: 600px) {
-		.container {
-			width: 600px;
-			padding: 0;
-		}
-
-		.options-container {
-			padding: 0 0 20px 0;
-		}
-	}
-
 	.hide {
 		display: none;
 	}
@@ -208,5 +197,16 @@ export default {
 
 	div.select-container:nth-child(1) > div:nth-child(2) {
 		width: calc(100% - 100px);
+	}
+
+	@media only screen and (min-width: 600px) {
+		.container {
+			width: 600px;
+			padding: 0;
+		}
+
+		.options-container {
+			padding: 0 0 20px 0;
+		}
 	}
 </style>

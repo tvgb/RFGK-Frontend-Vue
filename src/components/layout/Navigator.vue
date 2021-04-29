@@ -1,21 +1,23 @@
 <template>
 	<div class="top-nav-bar">
-		<div class="header-row">
+		<div class="header-row" @click="toggleNavBar()">
 			<span class="icon-span" />
 			<h1 class="header" :class="{'league-page-header': currentRoute === 'LeaguePage', 'small-header': currentRoute === 'GetResetPasswordEmailPage'}">
 				{{ getCurrentHeader() }}
-				<b-icon v-if="!navBarExpanded" icon="chevron-down" class="nav-chevron" :class="{'league-page-chevron': currentRoute === 'LeaguePage'}" @click.native="toggleNavBar()" />
 			</h1>
-			<b-icon v-if="navBarExpanded" icon="chevron-up" class="nav-chevron" :class="{'league-page-chevron': currentRoute === 'LeaguePage'}" @click.native="toggleNavBar()" />
+			<b-icon 
+				icon="chevron-down" 
+				class="nav-chevron" 
+				:class="{'league-page-chevron': currentRoute === 'LeaguePage', 'active': navBarExpanded}" />
 		</div>
 		
-		<div v-if="navBarExpanded" class="scroll-div">
+		<div class="scroll-div" :class="{'active': navBarExpanded}">
 			<div class="nav-btns-wrapper">
 				<div class="spacer-nav-btn"> SPACER </div>
-				<div class="nav-btn" @click="goToRoute('/')"> Scorecards </div>
-				<div class="nav-btn" @click="goToRoute('/league')"> Serie </div>
-				<div class="nav-btn" @click="goToRoute('/submitscorecard')"> Legg til runde </div>
-				<div class="nav-btn" @click="goToRoute('/profile')"> Profil </div>
+				<div class="nav-btn" :class="{'active': currentRoute === 'Scorecard'}" @click="goToRoute('/')"> Scorecards </div>
+				<div class="nav-btn league-nav-btn" :class="{'active': currentRoute === 'LeaguePage'}" @click="goToRoute('/league')"> Serie </div>
+				<div class="nav-btn" :class="{'active': currentRoute === 'SubmitScorecardPage'}" @click="goToRoute('/submitscorecard')"> Legg til runde </div>
+				<div class="nav-btn" :class="{'active': currentRoute === 'ProfilePage'}" @click="goToRoute('/profile')"> Profil </div>
 				<div class="spacer-nav-btn"> SPACER </div>
 			</div>
 		</div>
@@ -85,6 +87,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		cursor: pointer;
 	}
 
 	.small-header {
@@ -111,7 +114,11 @@ export default {
 		font-weight: 900;
 		font-size: 20px;
 		cursor: pointer;
-		// animation: colour-animation 5s infinite alternate;
+		transition: transform 200ms ease-out;
+	}
+
+	.nav-chevron.active {
+		transform: rotate(180deg);
 	}
 
 	.league-page-chevron {
@@ -119,13 +126,19 @@ export default {
 	}
 
 	.scroll-div {
-		height: 60px;
+		height: 0px;
 		overflow-x: auto;
 		overflow-y: hidden;
 		display: flex;
 		align-items: center;
 		-ms-overflow-style: none;  /* IE and Edge */
 		scrollbar-width: none;  /* Firefox */
+
+		transition: height 100ms ease-out;
+	}
+
+	.scroll-div.active {
+		height: 40px;
 	}
 
 	.scoll-div::-webkit-scrollbar {
@@ -138,15 +151,39 @@ export default {
 	}
 
 	.nav-btn {
+		display: flex;
+		align-items: center;
 		text-transform: uppercase;
-		border: 1px solid $main-grey-200;
-		font-size: 0.9rem;
-		border-radius: 4px;
-		padding: 10px;
+		// border: 2px solid $main-grey-300;
+		color: $main-grey-300;
+		// box-shadow: 0px 2px 4px 0px rgba(130,130,130,0.1);
+		font-size: 1rem;
+		font-weight: 400;
+		padding: 2px 10px;
 		height: 40px;
 		margin: 0 8px;
 		white-space: nowrap;
 		cursor: pointer;
+	}
+
+	.nav-btn.active {
+		// background-color: $main-grey-100;
+		color: transparent;
+		font-weight: 500;
+		background-size: 300%;
+		background-position-x: 50%;
+		background-image: $main-gradient-blue;
+		background-clip: text;
+		// border-bottom: 1px solid $main-blue-200;
+	}
+
+	.nav-btn.league-nav-btn.active {
+		font-weight: 500;
+		color: transparent;
+		background-image: $main-gradient-yellow-red;
+		background-size: 300%;
+		background-position-x: 50%;
+		background-clip: text;
 	}
 
 	.spacer-nav-btn {
