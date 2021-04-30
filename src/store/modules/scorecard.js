@@ -38,9 +38,12 @@ const getters = {
 			}
 	
 			for (let player of players) {
-				const scores = calculateScores(player.rounds, state.scorecards[0].course).sort((a, b) => b - a);
-				Object.assign(player, {scores: scores.sort((a, b) => b - a), sum: scores.reduce((a, b) => a + b, 0)});
+				const scores = calculateScores(player.rounds, state.scorecards[0].course);
+				const roundSums = getRoundSums(player.rounds, state.scorecards[0].course);
+
+				Object.assign(player, {scores: scores, sum: scores.reduce((a, b) => a + b, 0), roundSums: roundSums});
 			}
+
 			return players.sort((a, b) => {
 				if (a.sum < b.sum) {
 					return 1;
@@ -148,6 +151,23 @@ function calculateScores(rounds, course) {
 	}
 
 	return scores;
+}
+
+function getRoundSums(rounds, course) {
+	const roundSums = [];
+	
+	rounds = rounds.sort((a, b) => a.numberOfThrows - b.numberOfThrows);
+	
+	for (let i = 0; i < 5; i++) {
+		if (i < rounds.length) {
+			const sum = rounds[i].numberOfThrows - course.par;
+			roundSums.push(sum);
+		} else {
+			roundSums.push(null);
+		}
+	}
+
+	return roundSums;
 }
 
 export default {

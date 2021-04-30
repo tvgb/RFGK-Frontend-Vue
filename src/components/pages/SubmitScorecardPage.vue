@@ -31,7 +31,7 @@
 		<div class="breaker" />
 
 		<b-field horizontal label="Spiller">
-			<b-select ref="playerSelector" v-model="selectedPlayer" expanded placeholder="Velg en spiller" @focus="playerSelectFocus()" @input="selectedPlayerChanged($event)">
+			<b-select ref="playerSelector" v-model="selectedPlayer" expanded placeholder="Velg en spiller" @input="selectedPlayerChanged($event)">
 				<option v-for="player in players" :key="player._id" :value="player">
 					{{ player.firstName }} {{ player.lastName }}
 				</option>
@@ -142,10 +142,6 @@ export default {
 
 		removeRound(round) {
 			this.rounds = this.rounds.filter(r => r.player._id !== round.player._id);
-		},
-
-		playerSelectFocus() {
-			this.selectedPlayer = this.players[0];
 		},
 
 		selectedPlayerChanged() {
