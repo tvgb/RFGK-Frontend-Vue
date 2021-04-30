@@ -1,9 +1,16 @@
 <template>
 	<div class="container">
-		<div class="table-wrapper">
+		<div v-if="!isLoading && players.length > 0" class="table-header">
+			Tabell
+			<span class="swith-wrapper">
+				<span style="margin-right: 10px;"> Vis poeng: </span>
+				<b-switch v-model="showPoints" type="pale-orange" />
+			</span>
+		</div>
+		<div class="league-table-wrapper">
 			<b-table v-if="!isLoading && players.length > 0" :data="players" :mobile-cards="false" :scrollable="false">
 				<template>
-					<b-table-column v-slot="props" class="t-col" field="posistion" label="Pos" centered>
+					<b-table-column v-slot="props" cell-class="pos-cell" header-class="pos-header" field="posistion" label="Pos" centered>
 						{{ getPlayerIndex(props.row.player) + 1 }} 
 					</b-table-column>
 					<b-table-column v-slot="props" field="firstName" label="Fornavn">
@@ -14,13 +21,23 @@
 					</b-table-column>
 
 					<b-table-column v-slot="props" field="points" label="Poeng">
-						<div class="points-container">
+						<div v-if="showPoints" class="points-container">
 							<span 
 								v-for="(score, index) in props.row.scores"
 								:key="`score-${index}-${props.row.player._id}`" 
 								class="point"
 								:style="getColour(score, 300)">
 								{{ score > 0 ? score : '-' }} 
+							</span>
+						</div>
+
+						<div v-if="!showPoints" class="round-sums-container">
+							<span 
+								v-for="(roundSum, index) in props.row.roundSums"
+								:key="`round-sum-${index}-${props.row.player._id}`" 
+								class="point"
+								:style="getRoundSumColour(roundSum)">
+								{{ formatRoundSum(roundSum) }} 
 							</span>
 						</div>
 					</b-table-column>
@@ -76,7 +93,8 @@ export default {
 			course: null,
 			isLoading: true,
 			isMobile: window.innerWidth < 600,
-			isOpen: false
+			isOpen: false,
+			showPoints: true
 		};
 	},
 
@@ -123,6 +141,39 @@ export default {
 			const s = 80;
 			const l = 60;
 			return `color: hsl(${h}, ${s}%, ${l}%)`;
+		},
+
+		getRoundSumColour(roundSum) {
+			if (roundSum === null) {
+				return 'color: #9A9A9A';
+			}
+
+			// const h = Math.max(-5 * roundSum + 140, 0);
+			// const s = 80;
+			// const l = 60;
+			// return `color: hsl(${h}, ${s}%, ${l}%)`;
+			const goodScoore = 4;
+			const okScore = 9;
+			
+			if (roundSum <= goodScoore) {
+				return 'color: #48c774';
+			} else if (roundSum <= okScore) {
+				return 'color: #ffdd57';
+			} else {
+				return 'color: #f14668';
+			}
+		},
+
+		formatRoundSum(roundSum) {
+			if (roundSum < 0) {
+				return roundSum;
+			} else if (roundSum === 0) {
+				return 'e';
+			} else if (roundSum > 0) {
+				return `+${roundSum}`;
+			} else {
+				return '-';
+			}
 		}
 	}
 };
@@ -133,11 +184,19 @@ export default {
 		width: 700px;
 	}
 
-	.table-wrapper {
-		box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+	.table-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-left: 5px;
+		font-weight: 500;
 	}
 
-	.points-container {
+	.league-table-wrapper {
+		padding-top: 5px;
+	}
+
+	.points-container, .round-sums-container {
 		display: flex;
 		justify-content: space-between;
 	}
@@ -154,7 +213,7 @@ export default {
 	}
 
 	.info-text {
-		background-color: white;
+		background-color: transparent;
 		padding: 0px 10px 20px 10px;
 		font-weight: 500;
 
@@ -172,7 +231,7 @@ export default {
 	}
 
 	.panel-heading {
-		background-color: white;
+		background-color: transparent;
 		font-weight: 300;
 		display: flex;
 		align-items: center;
@@ -185,19 +244,33 @@ export default {
 		font-size: 1rem;
 	}
 
+	.swith-wrapper {
+		display: flex;
+		align-items: center;
+		font-weight: 300;
+		color: $main-grey-500;
+	}
+
 	@media only screen and (max-width: 800px) {
 		.container {
 			width: 100%;
-			padding: 0px 5px;
+			padding: 0px 15px 30px 15px;
 		}
 
 		.b-table {
 			font-size: 0.9rem;
 		}
-
-		.t-col {
-			display: none;
-		}
 	}
 
+</style>
+
+<style lang="scss">
+	.league-table-wrapper .pos-header {
+		padding-left: 5px;
+		padding-right: 0px;
+	}
+
+	.switch.is-rounded {
+		margin: 0px;
+	}
 </style>

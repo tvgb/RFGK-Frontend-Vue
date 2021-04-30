@@ -14,10 +14,11 @@
 		<div class="scroll-div" :class="{'active': navBarExpanded}">
 			<div class="nav-btns-wrapper">
 				<div class="spacer-nav-btn"> SPACER </div>
-				<div class="nav-btn" :class="{'active': currentRoute === 'Scorecard'}" @click="goToRoute('/')"> Scorecards </div>
-				<div class="nav-btn league-nav-btn" :class="{'active': currentRoute === 'LeaguePage'}" @click="goToRoute('/league')"> Serie </div>
-				<div class="nav-btn" :class="{'active': currentRoute === 'SubmitScorecardPage'}" @click="goToRoute('/submitscorecard')"> Legg til runde </div>
-				<div class="nav-btn" :class="{'active': currentRoute === 'ProfilePage'}" @click="goToRoute('/profile')"> Profil </div>
+				<span v-if="!isAuthenticated" class="nav-btn" :class="{'active': currentRoute === 'LoginPage'}" @click="goToRoute('/login')"> Logg inn </span>
+				<span class="nav-btn" :class="{'active': currentRoute === 'Scorecard'}" @click="goToRoute('/')"> Scorecards </span>
+				<span class="nav-btn league-nav-btn" :class="{'active': currentRoute === 'LeaguePage'}" @click="goToRoute('/league')"> Serie </span>
+				<span v-if="isAuthenticated" class="nav-btn" :class="{'active': currentRoute === 'SubmitScorecardPage'}" @click="goToRoute('/submitscorecard')"> Legg til runde </span>
+				<span v-if="isAuthenticated" class="nav-btn" :class="{'active': currentRoute === 'ProfilePage'}" @click="goToRoute('/profile')"> Profil </span>
 				<div class="spacer-nav-btn"> SPACER </div>
 			</div>
 		</div>
@@ -25,6 +26,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
 	name: 'Navigator',
@@ -32,20 +34,31 @@ export default {
 	data: () => {
 		return {
 			currentRoute: null,
+			currentPath: null,
 			navBarExpanded: false
 		};
+	},
+
+	computed: {
+		...mapState({
+			isAuthenticated: state => state.player.isAuthenticated
+		})
 	},
 
 	watch:{
 		$route (to, from) {
 			this.navBarExpanded = false;
 			this.currentRoute = to.name;
+			this.currentPath = to.path;
 		}
 	},
 
 	methods: {
 		goToRoute(route) {
 			this.navBarExpanded = false;
+			if (route === this.currentPath) {
+				return;
+			}
 			this.$router.push({path: route});
 		},
 
@@ -133,16 +146,15 @@ export default {
 		align-items: center;
 		-ms-overflow-style: none;  /* IE and Edge */
 		scrollbar-width: none;  /* Firefox */
-
 		transition: height 100ms ease-out;
+	}
+
+	.scroll-div::-webkit-scrollbar {
+		display: none;
 	}
 
 	.scroll-div.active {
 		height: 40px;
-	}
-
-	.scoll-div::-webkit-scrollbar {
-		display: none;
 	}
 
 	.nav-btns-wrapper {
@@ -151,12 +163,10 @@ export default {
 	}
 
 	.nav-btn {
-		display: flex;
-		align-items: center;
+		line-height: 36px;
+		text-align: center;
 		text-transform: uppercase;
-		// border: 2px solid $main-grey-300;
 		color: $main-grey-300;
-		// box-shadow: 0px 2px 4px 0px rgba(130,130,130,0.1);
 		font-size: 1rem;
 		font-weight: 400;
 		padding: 2px 10px;
@@ -166,15 +176,13 @@ export default {
 		cursor: pointer;
 	}
 
-	.nav-btn.active {
-		// background-color: $main-grey-100;
-		color: transparent;
+	span.nav-btn.active {
 		font-weight: 500;
 		background-size: 300%;
 		background-position-x: 50%;
 		background-image: $main-gradient-blue;
 		background-clip: text;
-		// border-bottom: 1px solid $main-blue-200;
+		color: transparent;
 	}
 
 	.nav-btn.league-nav-btn.active {
@@ -187,6 +195,7 @@ export default {
 	}
 
 	.spacer-nav-btn {
+		width: 30px;
 		color: transparent;
 		cursor: default;
 	}

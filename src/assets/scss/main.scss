@@ -18,6 +18,10 @@ $custom-shades: null !default;
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: mergeColorMaps(
     (
+		"pale-orange": (
+			#EAAE54,
+			$main-grey-900
+		),
 		"light-grey": (
 			$main-grey-200,
 			$main-grey-900
@@ -90,6 +94,7 @@ $link-focus-border: $primary;
 
 $input-border-color: $main-grey-200;
 $family-primary: 'Montserrat', 'Poppins', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+$switch-active-background-color: #eab855;
 
 .b-numberinput .input.is-primary {
 	border-color: $main-grey-200;

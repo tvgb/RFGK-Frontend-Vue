@@ -1,11 +1,11 @@
 <template>
 	<div class="container">
 		<b-field label="Email">
-			<b-input v-model="email" type="email" />
+			<b-input ref="emailInput" v-model="email" type="email" @keyup.enter.native="emailInputEnter()" />
 		</b-field>
 
 		<b-field label="Passord">
-			<b-input v-model="password" type="password" />
+			<b-input ref="passwordInput" v-model="password" type="password" @keyup.enter.native="startLogin()" />
 		</b-field>
 
 		<div class="btn-row">
@@ -13,7 +13,7 @@
 				Glemt passordet?
 			</span>
 
-			<button class="button is-primary" @keyup.enter="startLogin()" @click="startLogin()">
+			<button class="button is-primary" @click="startLogin()">
 				Logg inn
 			</button>
 		</div>
@@ -61,6 +61,12 @@ export default {
 			}).catch(() => {
 				this.loginSuccessful = false;
 			});
+		},
+
+		emailInputEnter() {
+			if (this.$refs.emailInput.checkHtml5Validity()) {
+				this.$refs.passwordInput.focus();
+			}
 		},
 
 		forgotPwBtnClicked() {

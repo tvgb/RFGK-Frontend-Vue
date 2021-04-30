@@ -31,7 +31,7 @@
 				</b-table-column>
 
 				<b-table-column v-slot="props" width="12%" field="sum" label="SUM" centered>
-					<span class="tag" :class="getColor(props.row.sum)">
+					<span class="tag" :class="getColour(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 					</span>
 				</b-table-column>
@@ -77,9 +77,9 @@ export default {
 			return screen.width <= 600;
 		},
 
-		getColor(score) {
-			const goodScoore = 5;
-			const okScore = 10;
+		getColour(score) {
+			const goodScoore = 4;
+			const okScore = 9;
 
 			if (score <= goodScoore) {
 				return 'is-success';
