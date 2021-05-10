@@ -84,7 +84,9 @@ export default {
 		},
 
 		toggleNavBar() {
-			this.navBarExpanded = !this.navBarExpanded;
+			if (screen.width <= 600) {
+				this.navBarExpanded = !this.navBarExpanded;
+			}
 		}
 	}
 }
@@ -212,6 +214,10 @@ export default {
 	@media only screen and (min-width: 600px) {
 		.nav-chevron, .league-page-chevron, .icon-span {
 			display: none;
+		}
+
+		.header-row {
+			cursor: default;
 		}
 	}
 
