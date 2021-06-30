@@ -8,7 +8,9 @@ const state = {
 	favouriteCourse: 'all',
 	recieveAddedToScorecardMail: false,
 	showLatestYearOnly: false,
-	players: []
+	admin: false,
+	players: [],
+	unverifiedPlayers: []
 };
 
 const getters = {
@@ -52,6 +54,15 @@ const actions = {
 		commit('setPlayers', response.data);
 	},
 
+	async getUnverifiedPlayers({ commit }) {
+		const response = await repository.get(`/${endpoint}/unverified`, 
+			{
+				withCredentials: true
+			}
+		);
+		commit('setUnverifiedPlayers', response.data);
+	},
+
 	login({ dispatch }, {email, password}) {
 
 		return repository.post(`/${endpoint}/login`,
@@ -63,12 +74,13 @@ const actions = {
 				withCredentials: true
 			}
 		).then((res) => {
-			dispatch('setCookieValues', {
+			dispatch('setPlayerStateValues', {
 				isAuthenticated: true,
 				isVerified: res.data.isVerified,
 				favouriteCourse: res.data.favouriteCourse,
 				recieveAddedToScorecardMail: res.data.recieveAddedToScorecardMail,
-				showLatestYearOnly: res.data.showLatestYearOnly
+				showLatestYearOnly: res.data.showLatestYearOnly,
+				admin: res.data.admin
 			});	
 
 			router.push(router.currentRoute.query.redirect || '/');
@@ -87,7 +99,7 @@ const actions = {
 			VueCookies.remove('access_token');
 			VueCookies.remove('refresh_token');	
 
-			dispatch('setCookieValues', {
+			dispatch('setPlayerStateValues', {
 				isAuthenticated: false,
 				isVerified: false,
 				favouriteCourse: 'all',
@@ -198,41 +210,46 @@ const actions = {
 	refreshAccessToken({ dispatch }) {
 		return repository.post(`/${endpoint}/refreshToken`,{}, { withCredentials: true })
 			.then((res) => {
-				dispatch('setCookieValues', {
+				dispatch('setPlayerStateValues', {
 					isAuthenticated: true,
 					isVerified: res.data.isVerified,
 					favouriteCourse: res.data.favouriteCourse,
 					recieveAddedToScorecardMail: res.data.recieveAddedToScorecardMail,
-					showLatestYearOnly: res.data.showLatestYearOnly
+					showLatestYearOnly: res.data.showLatestYearOnly,
+					admin: res.data.admin
 				});				
 			})
 			.catch(() => {
-				dispatch('setCookieValues', {
+				dispatch('setPlayerStateValues', {
 					isAuthenticated: false,
 					isVerified: false,
 					favouriteCourse: 'all',
 					recieveAddedToScorecardMail: false,
-					showLatestYearOnly: false
+					showLatestYearOnly: false,
+					admin: false
 				});	
 			});
 	},
 
-	setCookieValues({ commit },  {isAuthenticated, isVerified, favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
+	setPlayerStateValues({ commit },  {isAuthenticated, isVerified, favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly, admin}) {
 		commit('setIsAuthenticated', isAuthenticated);
 		commit('setIsVerified', isVerified);
 		commit('setFavouriteCourse', favouriteCourse);
 		commit('setRecieveAddedToScorecardMail', recieveAddedToScorecardMail);
 		commit('setShowLatestYearOnly', showLatestYearOnly);
+		commit('setAdmin', admin);
 	}
 };
 
 const mutations = {
 	setPlayers: (state, players) => (state.players = players),
+	setUnverifiedPlayers: (state, unverifiedPlayers) => (state.unverifiedPlayers = unverifiedPlayers),
 	setIsAuthenticated: (state, value) => (state.isAuthenticated = value),
 	setFavouriteCourse: (state, course) => (state.favouriteCourse = course),
 	setRecieveAddedToScorecardMail: (state, value) => (state.recieveAddedToScorecardMail = value),
 	setShowLatestYearOnly: (state, value) => (state.showLatestYearOnly = value),
-	setIsVerified: (state, value) => (state.isVerified = value)
+	setIsVerified: (state, value) => (state.isVerified = value),
+	setAdmin: (state, value) => (state.admin = value)
 };
 
 export default {

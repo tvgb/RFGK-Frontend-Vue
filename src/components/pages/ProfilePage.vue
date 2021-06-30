@@ -53,6 +53,19 @@
 		<button class="btn save-button" @click="onUpdateSettings()">
 			LAGRE
 		</button>
+
+		<div v-if="admin" class="breaker" />
+
+		<div v-if="admin" class="unverified-player-container">
+			<div v-for="player in unverifiedPlayers" :key="player._id" class="unverified-player">
+				{{ player.firstName }} {{ player.lastName }}
+				<b-icon type="is-success"
+					pack="fas"
+					icon="check-square"
+					size="is-large" />
+			</div>			
+		</div>
+
 		<div class="breaker" />
 		<button class="btn log-out-btn" @click="logout()">
 			LOGG UT
@@ -89,12 +102,15 @@ export default {
 			favouriteCourse: state => state.player.favouriteCourse,
 			showLatestYearOnly: state => state.player.showLatestYearOnly,
 			recieveAddedToScorecardMail: state => state.player.recieveAddedToScorecardMail,
-			isVerified: state => state.player.isVerified
+			isVerified: state => state.player.isVerified,
+			admin: state => state.player.admin,
+			unverifiedPlayers: state => state.player.unverifiedPlayers
 		})
 	},
 
 	created() {
 		this.getCourses();
+		this.getUnverifiedPlayers();
 
 		if (this.favouriteCourse === null) {
 			this.selectedFavouriteCourse = 'all';
@@ -112,8 +128,8 @@ export default {
 			'updateSettings',
 			'updatePersonalInfo',
 			'sendVerificationMail',
-			'logout'
-
+			'logout',
+			'getUnverifiedPlayers'
 		]),
 
 		onUpdateSettings() {
@@ -213,6 +229,17 @@ export default {
 	border: 1px lightgray solid;
 	width: 100%;
 	margin: 20px 0;
+}
+
+.unverified-player {
+	width: 100%;
+	border: 1px solid lightgrey;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	padding-left: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 @media only screen and (min-width: 600px) {

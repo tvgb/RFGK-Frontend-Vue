@@ -49,7 +49,7 @@ export default {
 	
 	data() {
 		return {
-			email: 'tert@adsad',
+			email: 'tvgb@outlook.com',
 			emailMessage: '',
 			emailType: '',
 			firstName: 'tryn',
@@ -59,7 +59,7 @@ export default {
 			confirmPassword: '123123123',
 			confirmPasswordType: '',
 			confirmPasswordMessage: '',
-			signupSuccessful: true
+			signupSuccessful: false
 		};
 	},
 	
