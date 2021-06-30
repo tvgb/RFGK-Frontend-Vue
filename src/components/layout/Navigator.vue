@@ -78,6 +78,8 @@ export default {
 					return 'Lag nytt passord';
 				case 'GetResetPasswordEmailPage':
 					return 'Gjenopprett passordet';
+				case 'SignUpPage':
+					return 'Lag ny bruker';
 				default:
 					return 'SCORECARDS';
 			}

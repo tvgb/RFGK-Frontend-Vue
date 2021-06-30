@@ -76,6 +76,11 @@ let router = new Router({
 			name: 'ProfilePage',
 			component: () => import('./components/pages/ProfilePage'),
 			beforeEnter: ifAuthenticated
+		},
+		{
+			path: '/signup',
+			name: 'SignUpPage',
+			component: () => import('./components/pages/SignUpPage')
 		}
 	]
 });

@@ -21,6 +21,10 @@
 		<div v-if="!loginSuccessful" class="wrong-email-pw">
 			Feil email eller passord.
 		</div>
+
+		<div class="signup-text-container">
+			Ny her? <span @click="navToSignUpPage()"> Lag Bruker </span>
+		</div>
 	</div>
 </template>
 
@@ -35,6 +39,15 @@ export default {
 			email: '',
 			password: '',
 			loginSuccessful: true
+		};
+	},
+	
+	mounted() {
+		if (this.$route.query.email) {
+			this.email = this.$route.query.email;
+			this.$refs.passwordInput.focus();
+		} else {
+			this.$refs.emailInput.focus();
 		}
 	},
 	
@@ -43,12 +56,6 @@ export default {
 			'login',
 			'getPlayers'
 		]),
-
-		created() {
-			if (this.$route.query.email) {
-				this.email = this.$route.query.email;
-			}
-		},
 
 		startLogin() {
 			this.login({
@@ -61,6 +68,10 @@ export default {
 			}).catch(() => {
 				this.loginSuccessful = false;
 			});
+		},
+
+		navToSignUpPage() {
+			this.$router.push({path: 'signup'});
 		},
 
 		emailInputEnter() {
@@ -109,6 +120,21 @@ export default {
 		justify-content: space-between;
 		color: black;
 		width: 100%;
+	}
+
+	.signup-text-container {
+		width: 200px;
+		position: fixed;
+		text-align: center;
+		left: calc(50% - 100px);
+		bottom: 50px;
+	}
+
+	.signup-text-container > span {
+		color: $main-blue-100;
+		margin-left: 2px;
+		font-weight: 500;
+		cursor: pointer;
 	}
 
 	@media only screen and (min-width: 600px) {

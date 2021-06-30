@@ -101,6 +101,18 @@ const actions = {
 		});
 	},
 
+	signUp({ commit }, { email, firstName, lastName, birthday, password }) {
+		console.log('yes????');
+		return repository.post((`/${endpoint}/signup`),
+		{
+			email,
+			firstName,
+			lastName,
+			birthday,
+			password
+		});
+	},
+
 	updateSettings({ commit }, {favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly}) {
 		return new Promise((resolve, reject) => {
 			repository.put(`/${endpoint}/updateSettings`,

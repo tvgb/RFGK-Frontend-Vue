@@ -2,7 +2,7 @@
 <template>
 	<div class="container">
 		<b-field horizontal label="Bane">
-			<b-select v-model="selectedCourse" expanded>
+			<b-select v-model="selectedCourse" placeholder="Velg bane" expanded>
 				<option v-for="course in courses" :key="course._id" :value="course">
 					{{ course.name }}
 				</option>
@@ -31,7 +31,7 @@
 		<div class="breaker" />
 
 		<b-field horizontal label="Spiller">
-			<b-select ref="playerSelector" v-model="selectedPlayer" expanded placeholder="Velg en spiller" @input="selectedPlayerChanged($event)">
+			<b-select ref="playerSelector" v-model="selectedPlayer" expanded placeholder="Velg spiller" @input="selectedPlayerChanged($event)">
 				<option v-for="player in players" :key="player._id" :value="player">
 					{{ player.firstName }} {{ player.lastName }}
 				</option>
