@@ -54,15 +54,28 @@
 			LAGRE
 		</button>
 
-		<div v-if="admin" class="breaker" />
+		<div v-if="admin && unverifiedPlayers.length > 0" class="breaker" />
 
-		<div v-if="admin" class="unverified-player-container">
+		<div v-if="admin && unverifiedPlayers.length > 0" class="unverified-player-container">
+			<h2> Bekreft spillere </h2>
 			<div v-for="player in unverifiedPlayers" :key="player._id" class="unverified-player">
-				{{ player.firstName }} {{ player.lastName }}
-				<b-icon type="is-success"
-					pack="fas"
-					icon="check-square"
-					size="is-large" />
+				{{ fixName(player.firstName, player.lastName) }}
+				<span>
+					<b-icon 
+						class="player-button accept"
+						type="is-white"
+						pack="fas"
+						icon="check"
+						size="is-medium"
+						@click.native="acceptPlayer(player._id)" />
+					<b-icon 
+						class="player-button decline"
+						type="is-white"
+						pack="fas"
+						icon="times"
+						size="is-medium"
+						@click.native="declinePlayer(player._id)" />
+				</span>
 			</div>			
 		</div>
 
@@ -129,7 +142,9 @@ export default {
 			'updatePersonalInfo',
 			'sendVerificationMail',
 			'logout',
-			'getUnverifiedPlayers'
+			'getUnverifiedPlayers',
+			'verifyPlayer',
+			'deletePlayer'
 		]),
 
 		onUpdateSettings() {
@@ -195,6 +210,32 @@ export default {
 			});
 		},
 
+		acceptPlayer(playerId) {
+			this.verifyPlayer({playerId}).then(() => {
+				this.openToast('Verifiserte spiller', 'is-success');
+				this.getUnverifiedPlayers();
+			}).catch(() => {
+				this.openToast('Noe gikk galt...', 'is-danger');
+			});
+		},
+
+		declinePlayer(playerId) {
+			this.deletePlayer({playerId}).then(() => {
+				this.openToast('Slettet spiller', 'is-success');
+				this.getUnverifiedPlayers();
+			}).catch(() => {
+				this.openToast('Noe gikk galt under sletting av spiller...', 'is-danger');
+			});
+		},
+
+		fixName(firstName, lastName) {
+			if (firstName.length + lastName.length > 25) {
+				return lastName;
+			}
+
+			return `${firstName} ${lastName}`;
+		},
+
 		openToast(message, type) {
 			this.$buefy.toast.open({
 				message: message,
@@ -204,7 +245,6 @@ export default {
 			});
 		}
 	}
-
 }
 </script>
 
@@ -231,6 +271,10 @@ export default {
 	margin: 20px 0;
 }
 
+.unverified-player-container > h2 {
+	margin-bottom: 15px;
+}
+
 .unverified-player {
 	width: 100%;
 	border: 1px solid lightgrey;
@@ -240,6 +284,22 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.player-button {
+	cursor: pointer;
+	margin: 5px;
+	border-radius: 3px;
+	opacity: 70%;
+}
+
+.player-button.accept {
+	border: 3px solid #48c774;
+	background-color: #48c774;
+}
+.player-button.decline {
+	border: 3px solid #f14668;
+	background-color:  #f14668;
 }
 
 @media only screen and (min-width: 600px) {

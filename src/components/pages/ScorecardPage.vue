@@ -7,8 +7,8 @@
 				FILTER
 			</button>
 			<b-tooltip
-				v-if="!isVerified || !isAuthenticated"
-				label="Du må være logget inn og ha en verifisert epostadresse for å kunne legge til nye runder."
+				v-if="!isVerifiedByAdmin || !isAuthenticated"
+				label="Du må være logget inn og være verifisert av admin for å kunne legge til nye runder."
 				size="is-small"
 				multilined
 				position="is-bottom">
@@ -19,7 +19,7 @@
 				</button>
 			</b-tooltip>
 			<button
-				v-if="isVerified && isAuthenticated"
+				v-if="isVerifiedByAdmin && isAuthenticated"
 				class="btn add-scorecard-btn"
 				@click="navTo('/submitScorecard')">
 				LEGG TIL RUNDE
@@ -88,7 +88,8 @@ export default {
 			showLatestYearOnly: state => state.player.showLatestYearOnly,
 			favouriteCourse: state => state.player.favouriteCourse,
 			isVerified: state => state.player.isVerified,
-			isAuthenticated: state => state.player.isAuthenticated
+			isAuthenticated: state => state.player.isAuthenticated,
+			isVerifiedByAdmin: state => state.player.isVerifiedByAdmin
 		})
 	},
 

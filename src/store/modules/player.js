@@ -5,6 +5,7 @@ import VueCookies from 'vue-cookies';
 const state = {
 	isAuthenticated: false,
 	isVerified: false,
+	isVerifiedByAdmin: false, 
 	favouriteCourse: 'all',
 	recieveAddedToScorecardMail: false,
 	showLatestYearOnly: false,
@@ -80,7 +81,8 @@ const actions = {
 				favouriteCourse: res.data.favouriteCourse,
 				recieveAddedToScorecardMail: res.data.recieveAddedToScorecardMail,
 				showLatestYearOnly: res.data.showLatestYearOnly,
-				admin: res.data.admin
+				admin: res.data.admin,
+				isVerifiedByAdmin: res.data.isVerifiedByAdmin
 			});	
 
 			router.push(router.currentRoute.query.redirect || '/');
@@ -114,7 +116,6 @@ const actions = {
 	},
 
 	signUp({ commit }, { email, firstName, lastName, birthday, password }) {
-		console.log('yes????');
 		return repository.post((`/${endpoint}/signup`),
 		{
 			email,
@@ -146,6 +147,26 @@ const actions = {
 			}).catch(() => {
 				reject();
 			});
+		});
+	},
+
+	verifyPlayer({}, {playerId}) {
+		return repository.put(`${endpoint}/verifyplayer`,
+		{
+			_id: playerId
+		},
+		{
+			withCredentials: true
+		});
+	},
+
+	deletePlayer({}, {playerId}) {
+		return repository.put(`${endpoint}/deleteplayer`,
+		{
+			_id: playerId
+		},
+		{
+			withCredentials: true
 		});
 	},
 
@@ -216,7 +237,8 @@ const actions = {
 					favouriteCourse: res.data.favouriteCourse,
 					recieveAddedToScorecardMail: res.data.recieveAddedToScorecardMail,
 					showLatestYearOnly: res.data.showLatestYearOnly,
-					admin: res.data.admin
+					admin: res.data.admin,
+					isVerifiedByAdmin: res.data.isVerifiedByAdmin
 				});				
 			})
 			.catch(() => {
@@ -226,18 +248,20 @@ const actions = {
 					favouriteCourse: 'all',
 					recieveAddedToScorecardMail: false,
 					showLatestYearOnly: false,
-					admin: false
+					admin: false,
+					isVerifiedByAdmin: false
 				});	
 			});
 	},
 
-	setPlayerStateValues({ commit },  {isAuthenticated, isVerified, favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly, admin}) {
+	setPlayerStateValues({ commit },  {isAuthenticated, isVerified, favouriteCourse, recieveAddedToScorecardMail, showLatestYearOnly, admin, isVerifiedByAdmin}) {
 		commit('setIsAuthenticated', isAuthenticated);
 		commit('setIsVerified', isVerified);
 		commit('setFavouriteCourse', favouriteCourse);
 		commit('setRecieveAddedToScorecardMail', recieveAddedToScorecardMail);
 		commit('setShowLatestYearOnly', showLatestYearOnly);
 		commit('setAdmin', admin);
+		commit('setIsVerifiedByAdmin', isVerifiedByAdmin);
 	}
 };
 
@@ -249,7 +273,8 @@ const mutations = {
 	setRecieveAddedToScorecardMail: (state, value) => (state.recieveAddedToScorecardMail = value),
 	setShowLatestYearOnly: (state, value) => (state.showLatestYearOnly = value),
 	setIsVerified: (state, value) => (state.isVerified = value),
-	setAdmin: (state, value) => (state.admin = value)
+	setAdmin: (state, value) => (state.admin = value),
+	setIsVerifiedByAdmin: (state, value) => (state.isVerifiedByAdmin = value)
 };
 
 export default {

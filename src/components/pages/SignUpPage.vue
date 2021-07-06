@@ -49,14 +49,14 @@ export default {
 	
 	data() {
 		return {
-			email: 'tvgb@outlook.com',
+			email: '',
 			emailMessage: '',
 			emailType: '',
-			firstName: 'tryn',
-			lastName: 'borg',
-			birthday: new Date(),
-			password: '123123123',
-			confirmPassword: '123123123',
+			firstName: '',
+			lastName: '',
+			birthday: null,
+			password: '',
+			confirmPassword: '',
 			confirmPasswordType: '',
 			confirmPasswordMessage: '',
 			signupSuccessful: false
