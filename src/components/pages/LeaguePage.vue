@@ -69,7 +69,7 @@
 			<div class="info-text">
 				<ul>
 					<li> De 5 beste rundene fra Parken Frisbeegolfbane teller. </li>
-					<li> Serien varer fra 1. mai til 1. september 2021. </li>
+					<li> Serien varer fra 1. mai til 1. september 2022. </li>
 					<li> En runde må minst ha 3 spillere med for å telle. </li>
 					<li> Man får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
 					<li> Det blir gitt 20 bonuspoeng til vinneren av en runde. </li>
@@ -108,7 +108,7 @@ export default {
 		this.getCourses().then((courses) => {
 			const parken = courses.find(c => c.name === 'Parken Frisbeegolfbane');
 			this.course = parken;
-			this.getScorecards({ courseId: parken._id, year: 2021 }).then(() => {
+			this.getScorecards({ courseId: parken._id, year: 2022 }).then(() => {
 				this.isLoading = false;
 			});
 		});

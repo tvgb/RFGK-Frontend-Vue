@@ -13,9 +13,12 @@ const getters = {
 		if (state.scorecards.length > 0) {
 			const players = [];
 			const winnersBonus = 20;
-
+			const startTime = new Date(new Date().getFullYear(), 4, 30).getTime();
+			const endTime = new Date(new Date().getFullYear(), 9, 1).getTime();
+			
 			for (let scorecard of state.scorecards) {
-				if (scorecard.rounds.length > 2) {
+				const scorecardTime = new Date(scorecard.datetime).getTime();
+				if (scorecard.rounds.length > 2 && scorecardTime > startTime && scorecardTime < endTime) {
 					const rounds = scorecard.rounds.sort((a, b) => a.numberOfThrows - b.numberOfThrows);
 					const winningNumberOfThrows = rounds[0].numberOfThrows;
 					const winnersCount = rounds.filter(r => r.numberOfThrows === winningNumberOfThrows).length;

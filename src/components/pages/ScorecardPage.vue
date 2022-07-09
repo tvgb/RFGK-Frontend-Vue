@@ -40,10 +40,7 @@
 				<div class="select-label"> År </div>
 				<b-select v-model="selectedYear" @input="filterScorecards()">
 					<option value="all">Alle</option>
-					<option value="2021">2021</option>
-					<option value="2020">2020</option>
-					<option value="2019">2019</option>
-					<option value="2018">2018</option>
+					<option v-for="year in years" :key="year" :value="year"> {{ year }} </option>
 				</b-select>
 			</div>
 		</div>
@@ -74,7 +71,8 @@ export default {
 			hideFilter: true,
 			selectedCourse: 'all',
 			selectedYear: 'all',
-			isLoading: false
+			isLoading: false,
+			years: []
 		};
 	},
 
@@ -94,6 +92,13 @@ export default {
 
 	created() {
 		this.getCourses();
+
+		const startYear = 2018;
+		const thisYear = new Date().getFullYear();
+
+		for (let start = startYear - 1; start <= thisYear; start++) {
+			this.years.unshift(start);
+		}
 
 		if (this.favouriteCourse !== null) {
 			this.selectedCourse = this.favouriteCourse;
