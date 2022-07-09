@@ -7,7 +7,6 @@ module.exports = {
         browser: true
     },
     parserOptions: {
-        parser: "@babel/eslint-parser",
         // specifying a module sourcetype prevent eslint from marking import statements as errors
         sourceType: "module"
     },
@@ -28,6 +27,7 @@ module.exports = {
 		"no-unused-labels": "off",
     
         "vue/no-unused-components": "warn",
+        "vue/multi-word-component-names": "off",
       
         "vue/html-indent": ["error", "tab"],
         "vue/singleline-html-element-content-newline": "off",

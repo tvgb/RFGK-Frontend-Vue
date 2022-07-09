@@ -67,7 +67,7 @@ export default {
 				case 'Scorecard':
 					return 'SCORECARDS';
 				case 'LeaguePage':
-					return 'RFGK Serie 2021';
+					return 'RFGK Serie 2022';
 				case 'SubmitScorecardPage':
 					return 'Legg til runde';
 				case 'ProfilePage':
