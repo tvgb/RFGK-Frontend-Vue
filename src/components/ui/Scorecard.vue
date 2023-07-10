@@ -32,7 +32,7 @@
 				</b-table-column>
 
 				<b-table-column v-slot="props" width="12%" field="sum" label="SUM" centered>
-					<span class="tag" :class="getColour(props.row.sum)">
+					<span class="tag" :style="getRoundSumColour(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 					</span>
 				</b-table-column>
@@ -78,16 +78,23 @@ export default {
 			return screen.width <= 600;
 		},
 
-		getColour(score) {
+		getRoundSumColour(roundSum) {
+			if (roundSum === null) {
+				return 'color: #9A9A9A';
+			}
+
+			const superScore = 0;
 			const goodScoore = 4;
 			const okScore = 9;
 
-			if (score <= goodScoore) {
-				return 'is-success';
-			} else if (score <= okScore) {
-				return 'is-warning';
+			if (roundSum < superScore) {
+				return 'background-color: #3BB2E2; color: white;';
+			} else if (roundSum <= goodScoore) {
+				return 'background-color: #48c774; color: white;';
+			} else if (roundSum <= okScore) {
+				return 'background-color: #ffdd57; color: black;';
 			} else {
-				return 'is-danger';
+				return 'background-color: #f14668; color: white;';
 			}
 		},
 
