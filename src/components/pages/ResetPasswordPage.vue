@@ -30,13 +30,19 @@ import { mapActions } from 'vuex';
 export default {
 	name: 'ResetPasswordPage',
 	
+	beforeRouteLeave (to, from, next) {
+		this.$cookies.remove('access_token');
+		this.$cookies.remove('refresh_token');
+		next();
+	},
+
 	data() {
 		return {
 			newPassword: '',
 			repeatPassword: '',
 			resetFailed: false,
 			wrongRepeatPassword: false
-		}
+		};
 	},
 
 	methods: {
@@ -53,7 +59,7 @@ export default {
 			} else {
 				this.resetPassword({password: this.newPassword})
 					.then((res) => {
-						this.$router.push({path: '/login', query: {email: res.email}})
+						this.$router.push({path: '/login', query: {email: res.email}});
 					})
 					.catch(() => {
 						this.resetFailed = true;
@@ -65,13 +71,7 @@ export default {
 			}
 		},
 	},
-
-	beforeRouteLeave (to, from, next) {
-		this.$cookies.remove('access_token');
-		this.$cookies.remove('refresh_token');
-		next();
-	}
-}
+};
 </script>
 
 <style scoped>

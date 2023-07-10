@@ -7,7 +7,8 @@
 			</div>
 			<div>{{ scorecard.datetime | moment("DD-MM-YYYY") }}</div>
 		</div>
-		<b-table :data="rounds" 
+		<b-table
+			:data="rounds" 
 			:default-sort="'sum'"
 			:mobile-cards="false"
 			:scrollable="false">
@@ -97,7 +98,7 @@ export default {
 			return firstPart;
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>

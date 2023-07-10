@@ -35,7 +35,7 @@ export default {
 			email: '',
 			password: '',
 			loginSuccessful: true
-		}
+		};
 	},
 	
 	methods: {
@@ -73,7 +73,7 @@ export default {
 			this.$router.push({path: 'getResetPasswordEmail', query: {email: this.email}});
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>

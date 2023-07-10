@@ -8,30 +8,31 @@ module.exports = {
     },
     parserOptions: {
         // specifying a module sourcetype prevent eslint from marking import statements as errors
-        sourceType: "module"
+        sourceType: 'module'
     },
     extends: [
         // use the recommended rule set for both plain javascript and vue
-        "eslint:recommended",
-        "plugin:vue/recommended"
+        'eslint:recommended',
+        'plugin:vue/recommended'
     ],
     rules: {
         // we should always disable console logs and debugging in production
-        "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
-        "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
-		"no-empty-pattern": "off",
-		"semi": "warn",
+        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+		'no-empty-pattern': 'off',
+		'semi': 'warn',
 
-        "quotes": ["error", "single"],
-        "no-unused-vars": "warn",
-		"no-unused-labels": "off",
-    
-        "vue/no-unused-components": "warn",
-        "vue/multi-word-component-names": "off",
+        'quotes': ['error', 'single'],
+        'no-unused-vars': 'warn',
+		'no-unused-labels': 'off',
+        
+        'vue/no-lone-template': 'off',
+        'vue/no-unused-components': 'warn',
+        'vue/multi-word-component-names': 'off',
       
-        "vue/html-indent": ["error", "tab"],
-        "vue/singleline-html-element-content-newline": "off",
-        "vue/max-attributes-per-line": "off",
-        "vue/html-closing-bracket-newline": "off"
+        'vue/html-indent': ['error', 'tab'],
+        'vue/singleline-html-element-content-newline': 'off',
+        'vue/max-attributes-per-line': 'off',
+        'vue/html-closing-bracket-newline': 'off'
     }
   };
