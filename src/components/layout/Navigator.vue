@@ -46,7 +46,7 @@ export default {
 	},
 
 	watch:{
-		$route (to, from) {
+		$route (to) {
 			this.navBarExpanded = false;
 			this.currentRoute = to.name;
 			this.currentPath = to.path;
@@ -89,7 +89,7 @@ export default {
 			}
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>

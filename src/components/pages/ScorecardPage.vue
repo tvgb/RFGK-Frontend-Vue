@@ -138,7 +138,7 @@ export default {
 			this.$router.push({path: route});
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>

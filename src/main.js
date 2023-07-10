@@ -10,7 +10,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(fas);
-Vue.component('vue-fontawesome', FontAwesomeIcon);
+Vue.component('VueFontawesome', FontAwesomeIcon);
 Vue.use(Buefy, {
 	defaultIconComponent: 'vue-fontawesome',
 	defaultIconPack: 'fas'
@@ -28,7 +28,7 @@ if (VueCookies.isKey('refresh_token')) {
 			store,
 			render: h => h(App),
 		}).$mount('#app');
-	})
+	});
 } else {
 	new Vue({
 		router,
