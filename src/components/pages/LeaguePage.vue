@@ -68,12 +68,13 @@
 			</template>
 			<div class="info-text">
 				<ul>
-					<li> De 5 beste rundene fra Parken Frisbeegolfbane teller. </li>
-					<li> Serien varer fra 1. mai til 1. september 2022. </li>
+					<li> De 5 beste rundene fra Enga Frisbeegolfbane teller. </li>
+					<li> Serien varer fra 1. mai til 1. september {{ new Date().getFullYear() }} </li>
 					<li> En runde må minst ha 3 spillere med for å telle. </li>
 					<li> Man får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
 					<li> Det blir gitt 20 bonuspoeng til vinneren av en runde. </li>
 					<li> Hvis det er flere vinnere deles poengene likt blant dem. </li>
+					<li> Taperen av sesongen blir premiert med dårlig-runde-emoji til neste sesong. </li>
 				</ul>
 			</div>
 		</b-collapse>
@@ -106,9 +107,9 @@ export default {
 
 	created() {
 		this.getCourses().then((courses) => {
-			const parken = courses.find(c => c.name === 'Parken Frisbeegolfbane');
+			const parken = courses.find(c => c.name === 'Enga Frisbeegolfbane');
 			this.course = parken;
-			this.getScorecards({ courseId: parken._id, year: 2022 }).then(() => {
+			this.getScorecards({ courseId: parken._id, year: new Date().getFullYear() }).then(() => {
 				this.isLoading = false;
 			});
 		});
