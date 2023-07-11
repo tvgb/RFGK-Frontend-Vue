@@ -19,13 +19,24 @@ const getters = {
 			for (let scorecard of state.scorecards) {
 				const scorecardTime = new Date(scorecard.datetime).getTime();
 				if (scorecard.rounds.length > 2 && scorecardTime > startTime && scorecardTime < endTime) {
-					const rounds = scorecard.rounds.sort((a, b) => a.numberOfThrows - b.numberOfThrows);
-					const winningNumberOfThrows = rounds[0].numberOfThrows;
-					const winnersCount = rounds.filter(r => r.numberOfThrows === winningNumberOfThrows).length;
+					for (let round of scorecard.rounds) {
+						let scoreAdjustedForHandicap = round.numberOfThrows - scorecard.course.par;
+
+						if (round.handicapRating) {
+							scoreAdjustedForHandicap -= Math.round(round.handicapRating);
+						}
+
+						Object.assign(round, {scoreAdjustedForHandicap: scoreAdjustedForHandicap});
+					}
+
+					const rounds = scorecard.rounds.sort((a, b) => a.scoreAdjustedForHandicap - b.scoreAdjustedForHandicap);
+					const winningScore = rounds[0].scoreAdjustedForHandicap;
+
+					const winnersCount = rounds.filter(r => r.scoreAdjustedForHandicap === winningScore).length;
 					
 					for (let round of rounds) {
 						const existingPlayer = players.find(p => p.player._id === round.player._id);
-						Object.assign(round, {bonus: round.numberOfThrows === winningNumberOfThrows ? winnersBonus / winnersCount : 0});
+						Object.assign(round, {bonus: round.scoreAdjustedForHandicap === winningScore ? winnersBonus / winnersCount : 0});
 						if (existingPlayer) {
 							existingPlayer.rounds.push(round);
 						} else {
@@ -41,8 +52,8 @@ const getters = {
 			}
 	
 			for (let player of players) {
-				const scores = calculateScores(player.rounds, state.scorecards[0].course);
-				const roundSums = getRoundSums(player.rounds, state.scorecards[0].course);
+				const scores = calculateScores(player.rounds);
+				const roundSums = getRoundSums(player.rounds);
 
 				Object.assign(player, {scores: scores, sum: scores.reduce((a, b) => a + b, 0), roundSums: roundSums});
 			}
@@ -137,14 +148,14 @@ const mutations = {
  *	g(x) = 0.3x^2 - 13.5x + 180
  *	h(x) = -0.375x + 37.5
  */
-function calculateScores(rounds, course) {
+function calculateScores(rounds) {
 	const scores = [];
 
-	rounds = rounds.sort((a, b) => a.numberOfThrows - b.numberOfThrows);
+	rounds = rounds.sort((a, b) => a.scoreAdjustedForHandicap - b.scoreAdjustedForHandicap);
 
 	for (let i = 0; i < 5; i++) {
 		if (i < rounds.length) {
-			const sum = rounds[i].numberOfThrows - course.par;
+			let sum = rounds[i].scoreAdjustedForHandicap;
 			let score = sum <= 20 ? 0.3 * sum * sum - 13.5 * sum + 180 : -0.375 * sum + 37.5;
 			score += rounds[i].bonus;
 			scores.push(Math.floor(score));
@@ -156,15 +167,14 @@ function calculateScores(rounds, course) {
 	return scores;
 }
 
-function getRoundSums(rounds, course) {
+function getRoundSums(rounds) {
 	const roundSums = [];
 	
-	rounds = rounds.sort((a, b) => a.numberOfThrows - b.numberOfThrows);
+	rounds = rounds.sort((a, b) => a.scoreAdjustedForHandicap - b.scoreAdjustedForHandicap);
 	
 	for (let i = 0; i < 5; i++) {
 		if (i < rounds.length) {
-			const sum = rounds[i].numberOfThrows - course.par;
-			roundSums.push(sum);
+			roundSums.push(rounds[i].scoreAdjustedForHandicap);
 		} else {
 			roundSums.push(null);
 		}

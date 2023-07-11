@@ -17,23 +17,28 @@
 					{{ rounds.indexOf(props.row) + 1 }}
 				</b-table-column>
 
-				<b-table-column v-if="!isMobile()" v-slot="props" width="35%" field="firstName" label="Fornavn">
+				<b-table-column v-if="!isMobile()" v-slot="props" width="30%" field="firstName" label="Fornavn">
 					{{ props.row.firstName }}
 				</b-table-column>
 
-				<b-table-column v-slot="props" :width="isMobile() ? '70%' : '35%'" field="lastName" label="Etternavn">
+				<b-table-column v-slot="props" :width="isMobile() ? '60%' : '30%'" field="lastName" label="Etternavn">
 					{{ props.row.lastName }} 
-					<span v-if="props.row.sum <= 0" style="margin-left: 10px"> &#x1F525; </span>
-					<img v-if="props.row.sum >= 20" src="@/assets/images/richard_emoji.png" alt="Richard Emoji" width="13" style="vertical-align: bottom; margin-left: 10px;">
+					<span v-if="props.row.adjustedSum() <= 0" style="margin-left: 10px"> &#x1F525; </span>
+					<img v-if="props.row.adjustedSum() >= 20" src="@/assets/images/richard_emoji.png" alt="Richard Emoji" width="13" style="vertical-align: bottom; margin-left: 10px;">
 				</b-table-column>
 
-				<b-table-column v-slot="props" width="12%" field="numberOfThrows" label="Kast" centered>
+				<b-table-column v-slot="props" width="10%" field="numberOfThrows" label="Kast" centered>
 					{{ props.row.numberOfThrows }}
 				</b-table-column>
 
 				<b-table-column v-slot="props" width="12%" field="sum" label="SUM" centered>
 					<span class="tag" :style="getRoundSumColour(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
+					</span>
+				</b-table-column>
+				<b-table-column v-if="scorecard.course.name === 'Enga Frisbeegolfbane'" v-slot="props" width="12%" field="sum" label="HCS" centered>
+					<span v-if="props.row.adjustedSum" class="tag" :style="getRoundSumColour(props.row.adjustedSum())">
+						{{ props.row.adjustedSum() > 0 ? `+${props.row.adjustedSum()}` : props.row.adjustedSum() }}
 					</span>
 				</b-table-column>
 			</template>
@@ -61,13 +66,22 @@ export default {
 					firstName: round.player.firstName,
 					lastName: round.player.lastName,
 					numberOfThrows: round.numberOfThrows,
-					sum: (round.numberOfThrows - this.scorecard.course.par)
+					sum: (round.numberOfThrows - this.scorecard.course.par),
+					adjustedSum: () => {
+						let sum = round.numberOfThrows - this.scorecard.course.par;
+
+						if (round.handicapRating) {
+							sum -= Math.round(round.handicapRating);
+						}
+
+						return sum;
+					}
 				};
 
 				rounds.push(newRound);
 			}
 
-			rounds.sort((a, b) => a.sum - b.sum);
+			rounds.sort((a, b) => a.adjustedSum() - b.adjustedSum());
 
 			return rounds;
 		}

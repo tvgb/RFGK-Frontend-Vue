@@ -71,10 +71,11 @@
 					<li> De 5 beste rundene fra Enga Frisbeegolfbane teller. </li>
 					<li> Serien varer fra 1. mai til 1. september {{ new Date().getFullYear() }} </li>
 					<li> En runde må minst ha 3 spillere med for å telle. </li>
-					<li> Man får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
-					<li> Det blir gitt 20 bonuspoeng til vinneren av en runde. </li>
+					<li> Spilleren får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
+					<li> Scoren er justert ved hjelp av spillerens handicap for å jevne ut sesongen. </li>
+					<li> Det blir gitt 20 bonuspoeng til vinneren av en runde (etter justering med handicap). </li>
 					<li> Hvis det er flere vinnere deles poengene likt blant dem. </li>
-					<li> Taperen av sesongen blir premiert med dårlig-runde-emoji til neste sesong. </li>
+					<li> Taperen av sesongen blir premiert med dårlig-runde-emoji til neste sesong. (man må ha gjennomført 5 gyldige kamper å kunne anses som taper) </li>
 				</ul>
 			</div>
 		</b-collapse>
@@ -149,19 +150,18 @@ export default {
 				return 'color: #9A9A9A';
 			}
 
-			// const h = Math.max(-5 * roundSum + 140, 0);
-			// const s = 80;
-			// const l = 60;
-			// return `color: hsl(${h}, ${s}%, ${l}%)`;
+			const superScore = 0;
 			const goodScoore = 4;
 			const okScore = 9;
-			
-			if (roundSum <= goodScoore) {
-				return 'color: #48c774';
+
+			if (roundSum < superScore) {
+				return 'color: #3BB2E2;';
+			} else if (roundSum <= goodScoore) {
+				return 'color: #48c774;';
 			} else if (roundSum <= okScore) {
-				return 'color: #ffdd57';
+				return 'color: #ffdd57;';
 			} else {
-				return 'color: #f14668';
+				return 'color: #f14668;';
 			}
 		},
 

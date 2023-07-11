@@ -1,5 +1,12 @@
 <template>
 	<div class="container">
+		<div class="handicap-container">
+			<b-field label="Enga Handicap" />
+			<span>{{ player?.engaHandicapRating ? player.engaHandicapRating : 'Not calculated' }}</span>
+		</div>
+
+		<div class="breaker" />
+
 		<b-field label="Endre email">
 			<b-input ref="emailInput" v-model="newEmail" type="email" />
 		</b-field>
@@ -83,7 +90,8 @@ export default {
 
 	computed: {
 		...mapGetters({
-			courses: 'allCourses'
+			courses: 'allCourses',
+			player: 'currentPlayer'
 		}),
 		...mapState({
 			favouriteCourse: state => state.player.favouriteCourse,
@@ -95,6 +103,7 @@ export default {
 
 	created() {
 		this.getCourses();
+		this.getCurrentPlayer();
 
 		if (this.favouriteCourse === null) {
 			this.selectedFavouriteCourse = 'all';
@@ -109,11 +118,11 @@ export default {
 	methods: {
 		...mapActions([
 			'getCourses',
+			'getCurrentPlayer',
 			'updateSettings',
 			'updatePersonalInfo',
 			'sendVerificationMail',
 			'logout'
-
 		]),
 
 		onUpdateSettings() {
@@ -213,6 +222,16 @@ export default {
 	border: 1px lightgray solid;
 	width: 100%;
 	margin: 20px 0;
+}
+
+.handicap-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
+
+	span {
+		font-weight: 500;
+	}
 }
 
 @media only screen and (min-width: 600px) {
