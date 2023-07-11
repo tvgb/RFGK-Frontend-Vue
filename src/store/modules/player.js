@@ -8,7 +8,8 @@ const state = {
 	favouriteCourse: 'all',
 	recieveAddedToScorecardMail: false,
 	showLatestYearOnly: false,
-	players: []
+	players: [],
+	currentPlayer: null
 };
 
 const getters = {
@@ -37,7 +38,11 @@ const getters = {
 		}
 
 		return players;
-	} 
+	},
+
+	currentPlayer: state => {
+		return state.currentPlayer;
+	}
 };
 
 const endpoint = 'player';
@@ -50,6 +55,15 @@ const actions = {
 			}
 		);
 		commit('setPlayers', response.data);
+	},
+
+	async getCurrentPlayer({ commit }) {
+		const response = await repository.get(`/${endpoint}/current`, 
+			{
+				withCredentials: true
+			}
+		);
+		commit('setCurrentPlayer', response.data);
 	},
 
 	login({ dispatch }, {email, password}) {
@@ -216,6 +230,7 @@ const actions = {
 
 const mutations = {
 	setPlayers: (state, players) => (state.players = players),
+	setCurrentPlayer: (state, player) => (state.currentPlayer = player),
 	setIsAuthenticated: (state, value) => (state.isAuthenticated = value),
 	setFavouriteCourse: (state, course) => (state.favouriteCourse = course),
 	setRecieveAddedToScorecardMail: (state, value) => (state.recieveAddedToScorecardMail = value),

@@ -2,7 +2,7 @@
 <template>
 	<div class="container">
 		<b-field horizontal label="Bane">
-			<b-select v-model="selectedCourse" expanded>
+			<b-select v-model="selectedCourse" expanded :disabled="scorecardSubmitted">
 				<option v-for="course in courses" :key="course._id" :value="course">
 					{{ course.name }}
 				</option>
@@ -12,6 +12,7 @@
 		<b-field horizontal label="Dato">
 			<b-datetimepicker
 				v-model="datetime"
+				:disabled="scorecardSubmitted"
 				placeholder="Trykk for å velge dato..."
 				horizontal-time-picker
 				locale="no-NB" />
@@ -31,7 +32,7 @@
 		<div class="breaker" />
 
 		<b-field horizontal label="Spiller">
-			<b-select ref="playerSelector" v-model="selectedPlayer" expanded placeholder="Velg en spiller" @input="selectedPlayerChanged($event)">
+			<b-select ref="playerSelector" v-model="selectedPlayer" :disabled="scorecardSubmitted" expanded placeholder="Velg en spiller" @input="selectedPlayerChanged($event)">
 				<option v-for="player in players" :key="player._id" :value="player">
 					{{ player.firstName }} {{ player.lastName }}
 				</option>
@@ -40,8 +41,8 @@
 
 		<b-field horizontal label="Resultat">
 			<b-field grouped :type="numberInputType" :message="numberInputMessage">
-				<b-numberinput ref="resultInput" v-model.number="sum" type="light-grey" expanded :step="1" :exponential="0.5" controls-alignment="right" />
-				<b-button class="add-round-btn is-primary" @click="addRound()">
+				<b-numberinput ref="resultInput" v-model.number="sum" :disabled="scorecardSubmitted" type="light-grey" expanded :step="1" :exponential="0.5" controls-alignment="right" />
+				<b-button :disabled="scorecardSubmitted" class="add-round-btn is-primary" @click="addRound()">
 					<b-icon icon="user-plus" />
 				</b-button>
 			</b-field>
@@ -50,7 +51,7 @@
 		<div class="rounds-container">
 			<div v-for="round in rounds" :key="round.player._id" class="round">
 				<div>
-					<span class="tag" :class="getColor(round.sum)">
+					<span class="tag" :style="getColor(round.sum)">
 						{{ round.sum > 0 ? `+${round.sum}` : round.sum }}
 					</span>
 					{{ round.player.lastName }}
@@ -62,7 +63,7 @@
 		</div>
 		
 		<div v-if="rounds.length > 1" class="btn-wrapper">
-			<b-button class="button is-success" @click="submitRounds()">
+			<b-button :disabled="scorecardSubmitted" class="button is-success" @click="submitRounds()">
 				Send inn
 			</b-button>
 		</div>
@@ -84,7 +85,8 @@ export default {
 			rounds: [],
 			selectedWeather: 'cloud',
 			numberInputType: 'is-primary',
-			numberInputMessage: ''
+			numberInputMessage: '',
+			scorecardSubmitted: false
 		};
 	},
 
@@ -141,6 +143,10 @@ export default {
 		},
 
 		removeRound(round) {
+			if (this.scorecardSubmitted) {
+				return;
+			}
+
 			this.rounds = this.rounds.filter(r => r.player._id !== round.player._id);
 		},
 
@@ -148,24 +154,37 @@ export default {
 			this.$refs.resultInput.focus();
 		},
 
-		getColor(score) {
-			const goodScoore = 5;
-			const okScore = 10;
+		getColor(roundSum) {
+			if (roundSum === null) {
+				return 'color: #9A9A9A';
+			}
 
-			if (score <= goodScoore) {
-				return 'is-success';
-			} else if (score <= okScore) {
-				return 'is-warning';
+			const superScore = 0;
+			const goodScoore = 4;
+			const okScore = 9;
+
+			if (roundSum < superScore) {
+				return 'background-color: #3BB2E2; color: white;';
+			} else if (roundSum <= goodScoore) {
+				return 'background-color: #48c774; color: white;';
+			} else if (roundSum <= okScore) {
+				return 'background-color: #ffdd57; color: black;';
 			} else {
-				return 'is-danger';
+				return 'background-color: #f14668; color: white;';
 			}
 		},
 
 		selectWeather(weather) {
+			if (this.scorecardSubmitted) {
+				return;
+			}
+
 			this.selectedWeather = weather;
 		},
 
 		submitRounds() {
+			this.scorecardSubmitted = true;
+
 			this.postScorecard({
 				weather: this.selectedWeather,
 				datetime: this.datetime,
