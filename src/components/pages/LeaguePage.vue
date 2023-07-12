@@ -73,9 +73,10 @@
 					<li> En runde må minst ha 3 spillere med for å telle. </li>
 					<li> Spilleren får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
 					<li> Scoren er justert ved hjelp av spillerens handicap for å jevne ut sesongen. </li>
+					<li> Spillerens handicap er modelert etter <a href="https://www.randa.org/roh/the-rules-of-handicapping/rule-5">World Handicap System</a> og bruker bare runder spilt på Enga Frisbeegolfbane. (Regel 5.6 og 5.9 har ikke blitt implementert.)</li>
 					<li> Det blir gitt 20 bonuspoeng til vinneren av en runde (etter justering med handicap). </li>
 					<li> Hvis det er flere vinnere deles poengene likt blant dem. </li>
-					<li> Taperen av sesongen blir premiert med dårlig-runde-emoji til neste sesong. (man må ha gjennomført 5 gyldige kamper å kunne anses som taper) </li>
+					<li> Taperen av sesongen blir premiert med dårlig-runde-emoji til neste sesong. (Man må ha gjennomført 5 gyldige runder å kunne anses som taper.) </li>
 				</ul>
 			</div>
 		</b-collapse>
