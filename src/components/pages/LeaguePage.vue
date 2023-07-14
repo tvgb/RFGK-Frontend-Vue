@@ -69,7 +69,7 @@
 			<div class="info-text">
 				<ul>
 					<li> De 5 beste rundene fra Enga Frisbeegolfbane teller. </li>
-					<li> Serien varer fra 1. mai til 1. september {{ new Date().getFullYear() }} </li>
+					<li> Serien varer fra 1. mai til 1. september {{ new Date().getFullYear() }}. </li>
 					<li> En runde må minst ha 3 spillere med for å telle. </li>
 					<li> Spilleren får tildelt poeng avhening av scoren i en runde (e = 180 poeng). </li>
 					<li> Scoren er justert ved hjelp av spillerens handicap for å jevne ut sesongen. </li>
