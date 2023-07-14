@@ -231,6 +231,7 @@ export default {
 
 	span {
 		font-weight: 500;
+		margin-right: .25rem;
 	}
 }
 

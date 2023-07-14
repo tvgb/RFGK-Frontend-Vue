@@ -31,10 +31,13 @@
 					{{ props.row.numberOfThrows }}
 				</b-table-column>
 
-				<b-table-column v-slot="props" width="12%" field="sum" label="SUM" centered>
+				<b-table-column v-if="scorecard.course.name !== 'Enga Frisbeegolfbane'" v-slot="props" width="12%" field="sum" label="SUM" centered>
 					<span class="tag" :style="getRoundSumColour(props.row.sum)">
 						{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 					</span>
+				</b-table-column>
+				<b-table-column v-if="scorecard.course.name === 'Enga Frisbeegolfbane'" v-slot="props" width="12%" field="sum" label="SUM" centered>
+					{{ props.row.sum > 0 ? `+${props.row.sum}` : props.row.sum }}
 				</b-table-column>
 				<b-table-column v-if="scorecard.course.name === 'Enga Frisbeegolfbane'" v-slot="props" width="12%" field="sum" label="HCS" centered>
 					<span v-if="props.row.adjustedSum" class="tag" :style="getRoundSumColour(props.row.adjustedSum())">

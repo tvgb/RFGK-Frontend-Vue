@@ -206,7 +206,7 @@ export default {
 
 	@media only screen and (min-width: 600px) {
 		.container {
-			width: 600px;
+			width: 700px;
 			padding: 0;
 		}
 
